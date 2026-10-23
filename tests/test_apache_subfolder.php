@@ -60,8 +60,8 @@ curl_setopt($ch, CURLOPT_HEADER, false);
 $dashboardHtml = curl_exec($ch);
 $dashCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-if ($dashCode === 200 && str_contains($dashboardHtml, 'Ringkasan Operasional Gateway')) {
-    echo "PASS: GET /dashboard returned HTTP 200 with dashboard content!\n";
+if ($dashCode === 200 && str_contains($dashboardHtml, 'Dashboard Platform SaaS')) {
+    echo "PASS: GET /dashboard returned HTTP 200 with admin dashboard content!\n";
 } else {
     echo "FAIL: GET /dashboard returned HTTP $dashCode\n";
     exit(1);

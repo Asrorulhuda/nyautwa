@@ -52,11 +52,11 @@ curl_setopt($ch, CURLOPT_URL, $baseUrl . '/dashboard');
 $dashHtml = curl_exec($ch);
 $dashCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 assert($dashCode === 200, "Dashboard returned 200");
-assert(str_contains($dashHtml, 'Tren Pengiriman Pesan'), "Dashboard contains chart bento block");
-assert(str_contains($dashHtml, 'Status Sesi WhatsApp'), "Dashboard contains devices bento block");
-assert(str_contains($dashHtml, 'Kesehatan Webhook'), "Dashboard contains webhook bento block");
+assert(str_contains($dashHtml, 'Aktivitas & Trafik Gateway Seluruh Klien'), "Admin dashboard contains global chart bento block");
+assert(str_contains($dashHtml, 'Distribusi Paket SaaS'), "Admin dashboard contains plan distribution bento block");
+assert(str_contains($dashHtml, 'Klien Tenant Terbaru'), "Admin dashboard contains recent tenants bento block");
 assert(str_contains($dashHtml, 'sidebar-backdrop'), "Dashboard has responsive mobile drawer backdrop");
-echo "PASS: Dashboard Bento Grid rendered cleanly\n";
+echo "PASS: Admin Dashboard Bento Grid rendered cleanly\n";
 
 // 4. Test Clients Management Page
 curl_setopt($ch, CURLOPT_URL, $baseUrl . '/clients');

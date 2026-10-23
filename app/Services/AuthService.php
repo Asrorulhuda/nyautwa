@@ -49,7 +49,7 @@ class AuthService {
             'plan' => $planId,
         ]);
 
-        Database::query("INSERT INTO users (id, tenant_id, name, email, password_hash, role) VALUES (:id, :tenant_id, :name, :email, :pass, 'admin')", [
+        Database::query("INSERT INTO users (id, tenant_id, name, email, password_hash, role) VALUES (:id, :tenant_id, :name, :email, :pass, 'client')", [
             'id' => $userId,
             'tenant_id' => $tenantId,
             'name' => $userName,
@@ -65,13 +65,9 @@ class AuthService {
 
     public function logout(): void {
         unset(
-            $_SESSION['user_id'],
-            $_SESSION['user_name'],
-            $_SESSION['user_email'],
-            $_SESSION['user_role'],
-            $_SESSION['tenant_id'],
-            $_SESSION['tenant_name'],
-            $_SESSION['plan_id']
+            $_SESSION['user_id'], $_SESSION['user_name'], $_SESSION['user_email'],
+            $_SESSION['user_role'], $_SESSION['tenant_id'], $_SESSION['tenant_name'],
+            $_SESSION['plan_id'], $_SESSION['user'], $_SESSION['tenant']
         );
     }
 
@@ -81,5 +77,13 @@ class AuthService {
 
     public function tenantId(): string {
         return $_SESSION['tenant_id'] ?? 'tenant_demo_01';
+    }
+
+    public function role(): string {
+        return $_SESSION['user_role'] ?? 'client';
+    }
+
+    public function isAdmin(): bool {
+        return in_array($_SESSION['user_role'] ?? '', ['admin', 'superadmin'], true);
     }
 }

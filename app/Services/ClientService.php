@@ -39,7 +39,7 @@ class ClientService {
             $userName = trim($data['owner_name'] ?? $name);
             $passHash = password_hash($data['password'] ?? 'password123', PASSWORD_BCRYPT);
             Database::query(
-                "INSERT INTO users (id, tenant_id, name, email, password_hash, role) VALUES (:uid, :tid, :name, :email, :pass, 'admin')",
+                "INSERT INTO users (id, tenant_id, name, email, password_hash, role) VALUES (:uid, :tid, :name, :email, :pass, 'client')",
                 ['uid' => $userId, 'tid' => $id, 'name' => $userName, 'email' => $userEmail, 'pass' => $passHash]
             );
         }

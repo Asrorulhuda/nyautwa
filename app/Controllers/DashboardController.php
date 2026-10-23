@@ -8,15 +8,14 @@ use App\Core\Request;
 use App\Core\Response;
 use App\Core\View;
 use App\Services\AuthService;
-use App\Services\DashboardService;
+use App\Services\AdminDashboardService;
+use App\Services\ClientDashboardService;
 
 class DashboardController {
     private AuthService $auth;
-    private DashboardService $dashboard;
 
     public function __construct() {
         $this->auth = new AuthService();
-        $this->dashboard = new DashboardService();
     }
 
     public function index(Request $request): void {
@@ -24,11 +23,24 @@ class DashboardController {
             Response::redirect('/login');
         }
 
-        $tenantId = $this->auth->tenantId();
-        $data = $this->dashboard->getMetrics($tenantId);
+        if ($this->auth->isAdmin()) {
+            $adminService = new AdminDashboardService();
+            $data = $adminService->getMetrics();
+            View::render('dashboard/admin/index', array_merge($data, [
+                'title' => 'Dashboard Platform SaaS — NyautWa',
+                'isAdmin' => true,
+            ]), 'app');
+            return;
+        }
 
-        View::render('dashboard/index', array_merge($data, [
-            'title' => 'Ringkasan Operasional Gateway',
+        $tenantId = $this->auth->tenantId();
+        $clientService = new ClientDashboardService();
+        $data = $clientService->getMetrics($tenantId);
+
+        View::render('dashboard/client/index', array_merge($data, [
+            'title' => 'Workspace WhatsApp — NyautWa',
+            'isAdmin' => false,
         ]), 'app');
     }
 }
+
