@@ -1,31 +1,47 @@
-<header class="h-16 bg-[#FFFFFF] border-b border-[#E4EAE6] px-8 flex items-center justify-between sticky top-0 z-20">
-    <div class="flex items-center gap-4 flex-1 max-w-md">
-        <div class="relative w-full">
-            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#697570] text-sm pointer-events-none">search</span>
-            <input 
-                id="global-search" 
-                type="search" 
-                placeholder="Cari ID pesan, nomor tujuan, atau log... (Tekan /)" 
-                class="w-full pl-9 pr-10 py-1.5 bg-[#F6F8F7] border border-[#E4EAE6] rounded-md text-xs text-[#17211F] placeholder-[#697570] focus:outline-none focus:border-[#16A36A] focus:ring-1 focus:ring-[#16A36A] transition-all"
-            >
-            <kbd class="absolute right-2.5 top-1/2 -translate-y-1/2 border border-[#E4EAE6] bg-[#FFFFFF] text-[10px] text-[#697570] px-1.5 py-0.5 rounded font-mono shadow-xs">/</kbd>
+<?php
+$user = \App\Core\Session::get('user');
+?>
+<header class="fixed top-0 left-60 right-0 h-16 bg-surface/85 backdrop-blur-md z-40 border-b border-outline-variant/25 px-6 flex items-center justify-between">
+    <div class="flex items-center gap-4">
+        <div class="flex items-center gap-1.5 text-xs text-on-surface-variant font-medium">
+            <span class="hover:text-on-surface transition-colors">Platform</span>
+            <span class="text-outline-variant">/</span>
+            <span class="text-on-surface font-semibold">Gateway Manager</span>
+        </div>
+        <div class="h-4 w-[1px] bg-outline-variant/30"></div>
+        <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded font-mono text-[11px] font-medium bg-surface-container text-on-surface border border-outline-variant/40">Production</span>
+            <div class="flex items-center gap-1 px-2 py-0.5 rounded text-[11px] bg-surface-container-low text-primary border border-primary/20">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                <span>99.98% Uptime</span>
+            </div>
         </div>
     </div>
-
     <div class="flex items-center gap-3">
-        <!-- Live WhatsApp Device Telemetry -->
-        <div class="hidden md:flex items-center gap-3 px-3 py-1.5 bg-[#F6F8F7] border border-[#E4EAE6] rounded-md text-xs">
-            <span class="flex items-center gap-1.5 font-mono text-[#16865A] font-medium text-[11px]">
-                <span class="w-2 h-2 rounded-full bg-[#16A36A] status-pulse"></span>
-                CS Utama (+6281288990011)
-            </span>
-            <span class="text-[#E4EAE6]">|</span>
-            <span class="font-mono text-[11px] text-[#697570] tnum">Latensi: 42ms</span>
+        <div class="relative flex items-center">
+            <button class="flex items-center gap-2 h-9 px-3 rounded-lg bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant text-xs shadow-xs" type="button">
+                <span class="material-symbols-outlined text-[16px]">search</span>
+                <span>Cari endpoint, ID log...</span>
+                <kbd class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-surface-container text-secondary font-medium">⌘K</kbd>
+            </button>
         </div>
-
-        <a href="<?= url('/messages/send') ?>" class="inline-flex items-center gap-1.5 bg-[#16A36A] hover:bg-[#128557] text-white text-xs font-semibold px-3.5 py-2 rounded-md transition-colors shadow-xs">
-            <span class="material-symbols-outlined text-sm">send</span>
-            Kirim Pesan
+        <a class="h-9 px-2.5 flex items-center gap-1 text-xs text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" href="<?= url('/') ?>" target="_blank">
+            <span class="material-symbols-outlined text-[18px]">menu_book</span>
+            <span>Docs</span>
         </a>
+        <button class="relative p-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors" type="button">
+            <span class="material-symbols-outlined text-[20px]">notifications</span>
+            <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-error ring-2 ring-surface"></span>
+        </button>
+        <div class="h-6 w-[1px] bg-outline-variant/30"></div>
+        <div class="flex items-center gap-2.5 pl-1">
+            <div class="w-8 h-8 rounded-full bg-emerald-800/20 text-emerald-700 font-bold flex items-center justify-center text-xs border border-outline-variant/40 ring-1 ring-surface">
+                <?= strtoupper(substr($user['name'] ?? 'B', 0, 1)) ?>
+            </div>
+            <div class="hidden xl:block text-left">
+                <div class="text-xs font-semibold text-on-surface leading-tight"><?= e($user['name'] ?? 'Budi Pratama') ?></div>
+                <div class="font-mono text-[10px] text-secondary leading-none">#ID-82910</div>
+            </div>
+        </div>
     </div>
 </header>

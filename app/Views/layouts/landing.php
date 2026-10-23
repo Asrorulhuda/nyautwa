@@ -4,86 +4,77 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= e($title ?? 'NyautWa — WhatsApp Gateway SaaS Indonesia') ?></title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2316A36A'><path d='M12 2C6.48 2 2 6.48 2 12c0 1.82.49 3.53 1.34 5L2 22l5.2-1.31A9.95 9.95 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z'/></svg>">
-    
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: '#16A36A',
-                        'primary-hover': '#128557',
-                        'primary-tint': '#EAF7F0',
-                        canvas: '#F6F8F7',
-                        surface: '#FFFFFF',
-                        'surface-dark': '#17211F',
-                        border: '#E4EAE6',
-                        'text-primary': '#17211F',
-                        'text-secondary': '#697570',
+                        "background": "#f0fcf6", "surface": "#f0fcf6",
+                        "surface-container-lowest": "#ffffff", "surface-container-low": "#eaf7f0",
+                        "surface-container": "#e4f1ea", "surface-container-high": "#deebe5",
+                        "surface-container-highest": "#d9e5df",
+                        "primary": "#006a42", "primary-container": "#008655", "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#62dd9e", "primary-fixed": "#80fab9",
+                        "on-surface": "#131e1a", "on-surface-variant": "#3d4a41",
+                        "outline": "#6d7a70", "outline-variant": "#bccabf",
+                        "inverse-surface": "#28332f", "inverse-on-surface": "#e7f4ed",
+                        "secondary": "#56615e", "secondary-fixed": "#dae5e1", "secondary-fixed-dim": "#bec9c5",
+                        "tertiary-fixed-dim": "#bdc9c3",
+                        "error": "#ba1a1a", "error-container": "#ffdad6", "on-error-container": "#93000a"
                     },
                     fontFamily: {
                         sans: ['Geist', 'sans-serif'],
                         mono: ['JetBrains Mono', 'monospace'],
+                        display: ['Geist', 'sans-serif'],
+                        'body-md': ['Geist', 'sans-serif'],
+                        'headline-sm': ['Geist', 'sans-serif'],
+                        'headline-lg': ['Geist', 'sans-serif'],
+                        'label-md': ['Geist', 'sans-serif'],
+                        'label-sm': ['Geist', 'sans-serif'],
+                        'code-sm': ['JetBrains Mono', 'monospace'],
+                        'code-md': ['JetBrains Mono', 'monospace'],
                     }
                 }
             }
-        }
+        };
     </script>
     <link rel="stylesheet" href="<?= url('/assets/css/app.css') ?>">
 </head>
-<body class="bg-[#F6F8F7] text-[#17211F] selection:bg-[#16A36A]/20">
-    <!-- Navigation Header -->
-    <header class="border-b border-[#E4EAE6] bg-[#FFFFFF]/90 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-            <a href="<?= url('/') ?>" class="flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-md bg-[#16A36A] flex items-center justify-center text-white shadow-xs">
-                    <span class="material-symbols-outlined text-lg">chat</span>
-                </div>
-                <span class="text-lg font-bold tracking-tight text-[#17211F]">NyautWa</span>
-            </a>
-
-            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-[#697570]">
-                <a href="#fitur" class="hover:text-[#17211F] transition-colors">Fitur Utama</a>
-                <a href="#api" class="hover:text-[#17211F] transition-colors">REST API</a>
-                <a href="#harga" class="hover:text-[#17211F] transition-colors">Harga Paket</a>
-                <a href="#risiko" class="hover:text-[#17211F] transition-colors">Transparansi Risiko</a>
-            </nav>
-
-            <div class="flex items-center gap-3">
-                <a href="<?= url('/login') ?>" class="text-sm font-medium text-[#17211F] hover:text-[#16A36A] px-3 py-2 transition-colors">
+<body class="bg-surface font-sans text-on-surface antialiased min-h-screen">
+    <!-- Sticky Navigation Header -->
+    <header class="sticky top-0 z-50 w-full bg-surface-container-lowest/95 backdrop-blur-md border-b border-surface-container-high/60 shadow-sm">
+        <div class="max-w-7xl mx-auto px-6 md:px-12 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-10">
+                <a class="flex items-center gap-2.5" href="<?= url('/') ?>">
+                    <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white shadow-sm">
+                        <span class="material-symbols-outlined text-lg">chat</span>
+                    </div>
+                    <span class="text-lg font-bold tracking-tight text-on-surface font-sans">Nyaut<span class="text-primary font-semibold">Wa</span></span>
+                </a>
+                <nav class="hidden md:flex items-center gap-8">
+                    <a class="text-sm text-on-surface-variant hover:text-primary transition-colors font-medium" href="#fitur">Fitur</a>
+                    <a class="text-sm text-on-surface-variant hover:text-primary transition-colors font-medium" href="#api">Dokumentasi API</a>
+                    <a class="text-sm text-on-surface-variant hover:text-primary transition-colors font-medium" href="#harga">Harga</a>
+                    <a class="text-sm text-on-surface-variant hover:text-primary transition-colors font-medium" href="#faq">FAQ</a>
+                </nav>
+            </div>
+            <div class="flex items-center gap-4">
+                <a class="hidden sm:inline-flex px-3.5 py-2 text-sm text-on-surface hover:text-primary transition-colors font-medium" href="<?= url('/login') ?>">
                     Masuk
                 </a>
-                <a href="<?= url('/register') ?>" class="bg-[#16A36A] hover:bg-[#128557] text-white text-sm font-semibold px-4 py-2 rounded-md transition-colors shadow-xs">
-                    Mulai Uji Coba Gratis
+                <a class="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg shadow-sm hover:bg-primary-container transition-all" href="<?= url('/register') ?>">
+                    <span>Mulai Gratis</span>
+                    <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
                 </a>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main>
+    <main class="w-full">
         <?= $content ?>
     </main>
-
-    <!-- Footer -->
-    <footer class="border-t border-[#E4EAE6] bg-[#FFFFFF] py-12">
-        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="flex items-center gap-2">
-                <div class="w-6 h-6 rounded bg-[#16A36A] flex items-center justify-center text-white text-xs">
-                    <span class="material-symbols-outlined text-sm">chat</span>
-                </div>
-                <span class="font-bold text-sm text-[#17211F]">NyautWa Gateway</span>
-                <span class="text-xs text-[#697570] ml-2">© <?= date('Y') ?> PT Teknologi Berkah Indonesia.</span>
-            </div>
-            <div class="flex gap-6 text-xs text-[#697570]">
-                <a href="#risiko" class="hover:text-[#17211F]">Pernyataan Risiko Anti-Ban</a>
-                <a href="<?= url('/login') ?>" class="hover:text-[#17211F]">Dashboard Konsol</a>
-                <a href="<?= url('/api-keys') ?>" class="hover:text-[#17211F]">Spesifikasi API</a>
-            </div>
-        </div>
-    </footer>
 
     <script src="<?= url('/assets/js/app.js') ?>"></script>
 </body>

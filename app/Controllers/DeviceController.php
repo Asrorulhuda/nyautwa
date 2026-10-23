@@ -19,38 +19,29 @@ class DeviceController {
         $this->devices = new DeviceService();
     }
 
-    public function index(Request $request): void {
+    private function requireAuth(): string {
         if (!$this->auth->check()) {
             Response::redirect('/login');
         }
+        return $this->auth->tenantId();
+    }
 
-        $tenantId = $this->auth->tenantId();
-        $allDevices = $this->devices->getDevices($tenantId);
-
+    public function index(Request $request): void {
+        $tenantId = $this->requireAuth();
         View::render('devices/index', [
             'title' => 'Koneksi Perangkat WhatsApp',
-            'devices' => $allDevices,
+            'devices' => $this->devices->getDevices($tenantId),
         ], 'app');
     }
 
     public function connect(Request $request): void {
-        if (!$this->auth->check()) {
-            Response::redirect('/login');
-        }
-
-        $tenantId = $this->auth->tenantId();
+        $tenantId = $this->requireAuth();
         $deviceId = $request->input('id');
-        $device = null;
-
-        if ($deviceId) {
-            $device = $this->devices->find($deviceId, $tenantId);
-        }
-
+        $device = $deviceId ? $this->devices->find($deviceId, $tenantId) : null;
         if (!$device) {
             $all = $this->devices->getDevices($tenantId);
             $device = $all[0] ?? $this->devices->createDevice($tenantId, 'Nomor CS Default');
         }
-
         View::render('devices/connect', [
             'title' => 'Scan QR Perangkat WhatsApp',
             'device' => $device,
@@ -58,39 +49,28 @@ class DeviceController {
     }
 
     public function create(Request $request): void {
-        if (!$this->auth->check()) {
-            Response::redirect('/login');
-        }
-
+        $tenantId = $this->requireAuth();
         if (!$request->validateCsrf()) {
             Response::withFlash('error', 'Sesi Anda telah kedaluwarsa.', '/devices');
         }
-
-        $tenantId = $this->auth->tenantId();
         $label = trim((string) $request->input('label', 'WhatsApp Node Baru'));
         $webhook = trim((string) $request->input('webhook_url', ''));
         $dailyLimit = (int) $request->input('daily_limit', 1000);
-
         if (empty($label)) {
             Response::withFlash('error', 'Nama/Label perangkat wajib diisi.', '/devices');
         }
-
         $device = $this->devices->createDevice($tenantId, $label, $webhook ?: null, $dailyLimit);
-        Response::withFlash('success', "Perangkat '{$label}' berhasil dibuat. Silakan scan kode QR untuk menghubungkan.", "/devices/connect?id={$device['id']}");
+        Response::withFlash('success', "Perangkat '{$label}' berhasil dibuat. Silakan scan QR.", "/devices/connect?id={$device['id']}");
     }
 
     public function status(Request $request, string $id): void {
         if (!$this->auth->check()) {
             Response::json(['error' => 'Unauthorized'], 401);
         }
-
-        $tenantId = $this->auth->tenantId();
-        $device = $this->devices->find($id, $tenantId);
-
+        $device = $this->devices->find($id, $this->auth->tenantId());
         if (!$device) {
             Response::json(['error' => 'Device not found'], 404);
         }
-
         Response::json([
             'status' => $device['status'],
             'phone' => $device['phone'],
@@ -100,16 +80,11 @@ class DeviceController {
     }
 
     public function disconnect(Request $request, string $id): void {
-        if (!$this->auth->check()) {
-            Response::redirect('/login');
-        }
-
+        $tenantId = $this->requireAuth();
         if ($request->validateCsrf()) {
-            $tenantId = $this->auth->tenantId();
             $this->devices->disconnect($id, $tenantId);
-            Response::withFlash('success', 'Perangkat WhatsApp berhasil diputuskan dari sesi gateway.', '/devices');
+            Response::withFlash('success', 'Perangkat berhasil diputuskan.', '/devices');
         }
-
         Response::redirect('/devices');
     }
 }

@@ -4,49 +4,54 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= e($title ?? 'Dashboard') ?> — NyautWa Gateway</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2316A36A'><path d='M12 2C6.48 2 2 6.48 2 12c0 1.82.49 3.53 1.34 5L2 22l5.2-1.31A9.95 9.95 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z'/></svg>">
-    
-    <!-- Design System Typography & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS (Utility Framework) -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: '#16A36A',
-                        'primary-hover': '#128557',
-                        'primary-tint': '#EAF7F0',
-                        canvas: '#F6F8F7',
-                        surface: '#FFFFFF',
-                        'surface-dark': '#17211F',
-                        border: '#E4EAE6',
-                        'text-primary': '#17211F',
-                        'text-secondary': '#697570',
+                        "background": "#f0fcf6", "surface": "#f0fcf6",
+                        "surface-container-lowest": "#ffffff", "surface-container-low": "#eaf7f0",
+                        "surface-container": "#e4f1ea", "surface-container-high": "#deebe5",
+                        "surface-container-highest": "#d9e5df",
+                        "primary": "#006a42", "primary-container": "#008655", "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#62dd9e", "primary-fixed": "#80fab9",
+                        "on-surface": "#131e1a", "on-surface-variant": "#3d4a41",
+                        "outline": "#6d7a70", "outline-variant": "#bccabf",
+                        "inverse-surface": "#0c1513", "inverse-on-surface": "#e7f4ed",
+                        "secondary": "#56615e", "secondary-container": "#d7e2de", "on-secondary-container": "#5a6562",
+                        "error": "#ba1a1a", "error-container": "#ffdad6", "on-error-container": "#93000a",
+                        canvas: '#F6F8F7'
                     },
                     fontFamily: {
                         sans: ['Geist', 'sans-serif'],
                         mono: ['JetBrains Mono', 'monospace'],
+                        'body-md': ['Geist', 'sans-serif'],
+                        'headline-sm': ['Geist', 'sans-serif'],
+                        'headline-lg': ['Geist', 'sans-serif'],
+                        'label-sm': ['Geist', 'sans-serif'],
+                        'label-md': ['Geist', 'sans-serif'],
+                        'code-sm': ['JetBrains Mono', 'monospace'],
+                        'code-md': ['JetBrains Mono', 'monospace'],
                     }
                 }
             }
-        }
+        };
     </script>
     <link rel="stylesheet" href="<?= url('/assets/css/app.css') ?>">
 </head>
-<body class="bg-[#F6F8F7] text-[#17211F] flex min-h-screen">
+<body class="bg-surface font-sans text-on-surface antialiased flex min-h-screen">
     <!-- Main Left Sidebar -->
     <?php \App\Core\View::partial('partials/sidebar'); ?>
 
     <!-- Main Content Container -->
-    <div class="flex-1 flex flex-col min-w-0">
+    <div class="pl-60 flex-1 flex flex-col min-w-0 min-h-screen">
         <!-- Top Sticky Header -->
         <?php \App\Core\View::partial('partials/header'); ?>
 
         <!-- Page View Body -->
-        <main class="flex-1 p-8 overflow-y-auto">
+        <main class="w-full pt-16 flex-1 bg-surface-container-low/40 p-6 md:p-8">
             <!-- Flash Message Alerts -->
             <?php \App\Core\View::partial('partials/flash'); ?>
 

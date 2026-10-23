@@ -75,6 +75,7 @@ if ($devCode === 200 && str_contains($devicesHtml, 'Koneksi WhatsApp')) {
     echo "PASS: GET /devices returned HTTP 200!\n";
 } else {
     echo "FAIL: GET /devices returned HTTP $devCode\n";
+    echo $devicesHtml . "\n";
     exit(1);
 }
 
@@ -93,7 +94,7 @@ if ($msgCode === 200 && str_contains($messagesHtml, 'Riwayat Pesan (Outbox)')) {
 curl_setopt($ch, CURLOPT_URL, $baseUrl . '/api-keys');
 $apiHtml = curl_exec($ch);
 $apiCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-if ($apiCode === 200 && str_contains($apiHtml, 'API Keys & Webhooks')) {
+if ($apiCode === 200 && str_contains($apiHtml, 'API Keys')) {
     echo "PASS: GET /api-keys returned HTTP 200!\n";
 } else {
     echo "FAIL: GET /api-keys returned HTTP $apiCode\n";

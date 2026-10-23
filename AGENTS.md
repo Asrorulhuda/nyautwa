@@ -28,6 +28,7 @@ Semua pengerjaan **WAJIB** tunduk 100% pada dokumentasi di dalam folder:
 - Mengarang fitur, halaman, atau dependensi di luar PRD tanpa persetujuan eksplisit.
 - Menghasilkan antarmuka generik "AI-slop" (gradasi ungu/biru, glassmorphism, blob neon, ilustrasi kartun 3D, kartu metrik hiasan tanpa aksi).
 - Memakai copywriting robotik atau klise ("Revolusi bisnis Anda", "All-in-one powerful solution", "Oops, something went wrong").
+- **FILE MELEBIHI 100 BARIS**: Seluruh file di dalam repositori (baik PHP Controller, Service, Model, View template, Component, JavaScript, maupun CSS/HTML) **TIDAK BOLEH LEBIH DARI 100 BARIS KODE** (`<= 100 lines per file`). Jika mendekati/melebihi 100 baris, **WAJIB DIPENDEKKAN & DIPECAH** menjadi sub-komponen, partial views, traits, atau sub-services modular.
 
 ---
 
@@ -168,3 +169,4 @@ Setiap task wajib melalui checklist ini:
 - [ ] Apakah seluruh interaksi form mempertahankan state (`old_inputs`) dan aman dari CSRF & XSS?
 - [ ] Apakah seluruh query database menggunakan PDO parameter binding?
 - [ ] Apakah copywriting sudah menggunakan Bahasa Indonesia yang manusiawi, informatif, dan jelas?
+- [ ] **Apakah setiap file yang dibuat/dimodifikasi TIDAK MELEBIHI 100 BARIS?** (Wajib split menjadi sub-komponen / partials jika > 100 baris).
