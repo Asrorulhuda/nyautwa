@@ -1,0 +1,10 @@
+/vendor/
+/node_modules/
+/engine/node_modules/
+/engine/sessions/
+/storage/sessions/
+/storage/logs/
+.env
+*.log
+.DS_Store
+Thumbs.db
