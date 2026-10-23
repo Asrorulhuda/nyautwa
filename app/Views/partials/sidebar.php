@@ -2,7 +2,7 @@
     <div>
         <!-- Brand Logo -->
         <div class="h-16 flex items-center px-6 border-b border-[#E4EAE6]">
-            <a href="/dashboard" class="flex items-center gap-2.5">
+            <a href="<?= url('/dashboard') ?>" class="flex items-center gap-2.5">
                 <div class="w-8 h-8 rounded-md bg-[#16A36A] flex items-center justify-center text-white shadow-sm">
                     <span class="material-symbols-outlined text-lg">chat</span>
                 </div>
@@ -19,22 +19,22 @@
                 Operasional
             </div>
 
-            <a href="/dashboard" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors <?= is_active('/dashboard') ? 'bg-[#EAF7F0] text-[#16865A]' : 'text-[#17211F] hover:bg-[#F6F8F7]' ?>">
+            <a href="<?= url('/dashboard') ?>" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors <?= is_active('/dashboard') ? 'bg-[#EAF7F0] text-[#16865A]' : 'text-[#17211F] hover:bg-[#F6F8F7]' ?>">
                 <span class="material-symbols-outlined text-lg <?= is_active('/dashboard') ? 'fill text-[#16865A]' : 'text-[#697570]' ?>">dashboard</span>
                 <span>Ringkasan</span>
             </a>
 
-            <a href="/devices" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors <?= is_active('/devices') ? 'bg-[#EAF7F0] text-[#16865A]' : 'text-[#17211F] hover:bg-[#F6F8F7]' ?>">
+            <a href="<?= url('/devices') ?>" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors <?= is_active('/devices') ? 'bg-[#EAF7F0] text-[#16865A]' : 'text-[#17211F] hover:bg-[#F6F8F7]' ?>">
                 <span class="material-symbols-outlined text-lg <?= is_active('/devices') ? 'fill text-[#16865A]' : 'text-[#697570]' ?>">phonelink_ring</span>
                 <span>Koneksi WhatsApp</span>
             </a>
 
-            <a href="/messages" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors <?= is_active('/messages') && !is_active('/messages/send') ? 'bg-[#EAF7F0] text-[#16865A]' : 'text-[#17211F] hover:bg-[#F6F8F7]' ?>">
+            <a href="<?= url('/messages') ?>" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors <?= is_active('/messages') && !is_active('/messages/send') ? 'bg-[#EAF7F0] text-[#16865A]' : 'text-[#17211F] hover:bg-[#F6F8F7]' ?>">
                 <span class="material-symbols-outlined text-lg <?= is_active('/messages') && !is_active('/messages/send') ? 'fill text-[#16865A]' : 'text-[#697570]' ?>">history</span>
                 <span>Riwayat Pesan</span>
             </a>
 
-            <a href="/messages/send" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors <?= is_active('/messages/send') ? 'bg-[#EAF7F0] text-[#16865A]' : 'text-[#17211F] hover:bg-[#F6F8F7]' ?>">
+            <a href="<?= url('/messages/send') ?>" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors <?= is_active('/messages/send') ? 'bg-[#EAF7F0] text-[#16865A]' : 'text-[#17211F] hover:bg-[#F6F8F7]' ?>">
                 <span class="material-symbols-outlined text-lg <?= is_active('/messages/send') ? 'fill text-[#16865A]' : 'text-[#697570]' ?>">send</span>
                 <span>Kirim Pesan Uji</span>
             </a>
@@ -43,12 +43,12 @@
                 Integrasi Pengembang
             </div>
 
-            <a href="/api-keys" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors <?= is_active('/api-keys') ? 'bg-[#EAF7F0] text-[#16865A]' : 'text-[#17211F] hover:bg-[#F6F8F7]' ?>">
+            <a href="<?= url('/api-keys') ?>" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors <?= is_active('/api-keys') ? 'bg-[#EAF7F0] text-[#16865A]' : 'text-[#17211F] hover:bg-[#F6F8F7]' ?>">
                 <span class="material-symbols-outlined text-lg <?= is_active('/api-keys') ? 'fill text-[#16865A]' : 'text-[#697570]' ?>">key</span>
                 <span>API Keys & Webhook</span>
             </a>
 
-            <a href="/" target="_blank" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium text-[#17211F] hover:bg-[#F6F8F7] transition-colors">
+            <a href="<?= url('/') ?>" target="_blank" class="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium text-[#17211F] hover:bg-[#F6F8F7] transition-colors">
                 <span class="material-symbols-outlined text-lg text-[#697570]">open_in_new</span>
                 <span>Landing Publik</span>
             </a>
@@ -84,7 +84,7 @@
                     <p class="text-[11px] text-[#697570] truncate"><?= e($_SESSION['tenant_name'] ?? 'PT Teknologi Berkah') ?></p>
                 </div>
             </div>
-            <form action="/logout" method="POST" class="inline">
+            <form action="<?= url('/logout') ?>" method="POST" class="inline">
                 <?= csrf_field() ?>
                 <button type="submit" title="Keluar dari akun" class="text-[#697570] hover:text-[#D84B4B] p-1 rounded hover:bg-[#FDF0F0] transition-colors">
                     <span class="material-symbols-outlined text-base">logout</span>

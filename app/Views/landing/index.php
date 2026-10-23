@@ -13,11 +13,11 @@
                 Kirim notifikasi transaksi, verifikasi OTP, dan integrasi webhook dua arah tanpa biaya per-pesan yang mahal. Mudah diintegrasikan dengan cURL, PHP, Node.js, atau Python dalam waktu kurang dari 5 menit.
             </p>
             <div class="flex flex-wrap items-center gap-4">
-                <a href="/register" class="bg-[#16A36A] hover:bg-[#128557] text-white text-sm font-semibold px-6 py-3 rounded-md transition-colors shadow-sm inline-flex items-center gap-2">
+                <a href="<?= url('/register') ?>" class="bg-[#16A36A] hover:bg-[#128557] text-white text-sm font-semibold px-6 py-3 rounded-md transition-colors shadow-sm inline-flex items-center gap-2">
                     <span>Mulai Uji Coba Gratis</span>
                     <span class="material-symbols-outlined text-sm">arrow_forward</span>
                 </a>
-                <a href="/login" class="bg-[#FFFFFF] hover:bg-[#F6F8F7] border border-[#E4EAE6] text-[#17211F] text-sm font-medium px-5 py-3 rounded-md transition-colors inline-flex items-center gap-2">
+                <a href="<?= url('/login') ?>" class="bg-[#FFFFFF] hover:bg-[#F6F8F7] border border-[#E4EAE6] text-[#17211F] text-sm font-medium px-5 py-3 rounded-md transition-colors inline-flex items-center gap-2">
                     <span class="material-symbols-outlined text-sm">terminal</span>
                     Buka Dashboard Demo
                 </a>
@@ -131,7 +131,7 @@
                 </ul>
             </div>
 
-            <a href="/register?plan=starter" class="w-full text-center bg-[#F6F8F7] hover:bg-[#EAF7F0] hover:text-[#16865A] text-[#17211F] border border-[#E4EAE6] text-xs font-semibold py-2.5 rounded-md transition-colors block">
+            <a href="<?= url('/register?plan=starter') ?>" class="w-full text-center bg-[#F6F8F7] hover:bg-[#EAF7F0] hover:text-[#16865A] text-[#17211F] border border-[#E4EAE6] text-xs font-semibold py-2.5 rounded-md transition-colors block">
                 Pilih Starter
             </a>
         </div>
@@ -173,7 +173,7 @@
                 </ul>
             </div>
 
-            <a href="/register?plan=pro" class="w-full text-center bg-[#16A36A] hover:bg-[#128557] text-white text-xs font-semibold py-2.5 rounded-md transition-colors block shadow-xs">
+            <a href="<?= url('/register?plan=pro') ?>" class="w-full text-center bg-[#16A36A] hover:bg-[#128557] text-white text-xs font-semibold py-2.5 rounded-md transition-colors block shadow-xs">
                 Mulai Uji Coba Pro
             </a>
         </div>
@@ -208,7 +208,7 @@
                 </ul>
             </div>
 
-            <a href="/register?plan=enterprise" class="w-full text-center bg-[#F6F8F7] hover:bg-[#EAF7F0] hover:text-[#16865A] text-[#17211F] border border-[#E4EAE6] text-xs font-semibold py-2.5 rounded-md transition-colors block">
+            <a href="<?= url('/register?plan=enterprise') ?>" class="w-full text-center bg-[#F6F8F7] hover:bg-[#EAF7F0] hover:text-[#16865A] text-[#17211F] border border-[#E4EAE6] text-xs font-semibold py-2.5 rounded-md transition-colors block">
                 Pilih Enterprise
             </a>
         </div>

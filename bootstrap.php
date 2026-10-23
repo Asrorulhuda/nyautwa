@@ -43,9 +43,22 @@ if (!function_exists('old')) {
     }
 }
 
+if (!function_exists('url')) {
+    function url(string $path = '/'): string {
+        static $base = null;
+        if ($base === null) {
+            $req = new \App\Core\Request();
+            $base = $req->getBasePath();
+        }
+        $normalizedPath = '/' . ltrim($path, '/');
+        return $base . $normalizedPath;
+    }
+}
+
 if (!function_exists('is_active')) {
     function is_active(string $path): bool {
-        $current = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
+        $req = new \App\Core\Request();
+        $current = $req->getPath();
         if ($path === '/' && $current === '/') return true;
         return $path !== '/' && str_starts_with($current, $path);
     }

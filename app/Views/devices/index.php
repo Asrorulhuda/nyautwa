@@ -77,18 +77,18 @@
 
                 <div class="pt-4 border-t border-[#E4EAE6] flex items-center justify-between gap-3">
                     <div class="flex items-center gap-2">
-                        <a href="/devices/connect?id=<?= e($dev['id']) ?>" class="bg-[#FFFFFF] hover:bg-[#F6F8F7] border border-[#E4EAE6] text-[#17211F] text-xs font-semibold px-3 py-2 rounded-md transition-colors inline-flex items-center gap-1.5">
+                        <a href="<?= url('/devices/connect?id=' . e($dev['id'])) ?>" class="bg-[#FFFFFF] hover:bg-[#F6F8F7] border border-[#E4EAE6] text-[#17211F] text-xs font-semibold px-3 py-2 rounded-md transition-colors inline-flex items-center gap-1.5">
                             <span class="material-symbols-outlined text-sm text-[#16A36A]">qr_code_scanner</span>
                             Scan QR
                         </a>
-                        <a href="/messages/send" class="bg-[#FFFFFF] hover:bg-[#F6F8F7] border border-[#E4EAE6] text-[#17211F] text-xs font-semibold px-3 py-2 rounded-md transition-colors inline-flex items-center gap-1.5">
+                        <a href="<?= url('/messages/send') ?>" class="bg-[#FFFFFF] hover:bg-[#F6F8F7] border border-[#E4EAE6] text-[#17211F] text-xs font-semibold px-3 py-2 rounded-md transition-colors inline-flex items-center gap-1.5">
                             <span class="material-symbols-outlined text-sm">send</span>
                             Uji Kirim
                         </a>
                     </div>
 
                     <?php if ($dev['status'] === 'connected'): ?>
-                        <form action="/devices/<?= e($dev['id']) ?>/disconnect" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin memutuskan sambungan sesi WhatsApp ini?')">
+                        <form action="<?= url('/devices/' . e($dev['id']) . '/disconnect') ?>" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin memutuskan sambungan sesi WhatsApp ini?')">
                             <?= csrf_field() ?>
                             <button type="submit" class="text-[#D84B4B] hover:bg-[#FDF0F0] border border-transparent hover:border-[#F2D0D0] text-xs font-semibold px-2.5 py-1.5 rounded-md transition-colors inline-flex items-center gap-1">
                                 <span class="material-symbols-outlined text-sm">power_settings_new</span>
@@ -112,7 +112,7 @@
             </button>
         </div>
 
-        <form action="/devices/create" method="POST" class="space-y-4">
+        <form action="<?= url('/devices/create') ?>" method="POST" class="space-y-4">
             <?= csrf_field() ?>
 
             <div>

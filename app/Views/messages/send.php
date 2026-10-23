@@ -1,7 +1,7 @@
 <div class="max-w-4xl mx-auto space-y-8">
     <!-- Header -->
     <div>
-        <a href="/messages" class="text-xs font-semibold text-[#16A36A] hover:underline flex items-center gap-1 mb-2">
+        <a href="<?= url('/messages') ?>" class="text-xs font-semibold text-[#16A36A] hover:underline flex items-center gap-1 mb-2">
             <span class="material-symbols-outlined text-sm">arrow_back</span>
             Kembali ke Riwayat Pesan
         </a>
@@ -12,7 +12,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         <!-- Send Form -->
         <div class="lg:col-span-7 bg-[#FFFFFF] border border-[#E4EAE6] rounded-xl p-6 shadow-xs">
-            <form action="/messages/send" method="POST" class="space-y-4">
+            <form action="<?= url('/messages/send') ?>" method="POST" class="space-y-4">
                 <?= csrf_field() ?>
 
                 <div>

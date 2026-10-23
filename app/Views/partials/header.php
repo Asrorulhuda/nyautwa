@@ -23,7 +23,7 @@
             <span class="font-mono text-[11px] text-[#697570] tnum">Latensi: 42ms</span>
         </div>
 
-        <a href="/messages/send" class="inline-flex items-center gap-1.5 bg-[#16A36A] hover:bg-[#128557] text-white text-xs font-semibold px-3.5 py-2 rounded-md transition-colors shadow-xs">
+        <a href="<?= url('/messages/send') ?>" class="inline-flex items-center gap-1.5 bg-[#16A36A] hover:bg-[#128557] text-white text-xs font-semibold px-3.5 py-2 rounded-md transition-colors shadow-xs">
             <span class="material-symbols-outlined text-sm">send</span>
             Kirim Pesan
         </a>

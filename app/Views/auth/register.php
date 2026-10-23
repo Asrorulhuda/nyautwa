@@ -3,7 +3,7 @@
     <p class="text-xs text-[#697570]">Mulai hubungkan nomor WhatsApp bisnis Anda dalam hitungan menit.</p>
 </div>
 
-<form action="/register" method="POST" class="space-y-4">
+<form action="<?= url('/register') ?>" method="POST" class="space-y-4">
     <?= csrf_field() ?>
 
     <div>
@@ -77,5 +77,5 @@
 
 <div class="mt-6 pt-6 border-t border-[#E4EAE6] text-center text-xs text-[#697570]">
     Sudah memiliki akun? 
-    <a href="/login" class="text-[#16A36A] hover:underline font-semibold">Masuk di sini</a>
+    <a href="<?= url('/login') ?>" class="text-[#16A36A] hover:underline font-semibold">Masuk di sini</a>
 </div>

@@ -12,7 +12,7 @@
         </div>
 
         <div class="flex items-center gap-3">
-            <a href="/messages/send" class="inline-flex items-center gap-2 bg-[#16A36A] hover:bg-[#128557] text-white text-xs font-semibold px-4 py-2.5 rounded-md transition-colors shadow-xs">
+            <a href="<?= url('/messages/send') ?>" class="inline-flex items-center gap-2 bg-[#16A36A] hover:bg-[#128557] text-white text-xs font-semibold px-4 py-2.5 rounded-md transition-colors shadow-xs">
                 <span class="material-symbols-outlined text-sm">send</span>
                 Kirim Pesan Baru
             </a>
@@ -23,22 +23,22 @@
     <div class="bg-[#FFFFFF] border border-[#E4EAE6] rounded-xl p-4 shadow-xs flex flex-col md:flex-row items-center justify-between gap-4">
         <!-- Status Filter Chips -->
         <div class="flex flex-wrap items-center gap-2">
-            <a href="/messages?status=all<?= $searchQuery ? '&q=' . urlencode($searchQuery) : '' ?>" class="px-3 py-1.5 rounded-md text-xs font-medium transition-colors <?= ($currentStatus ?? 'all') === 'all' ? 'bg-[#17211F] text-white' : 'bg-[#F6F8F7] text-[#697570] hover:text-[#17211F]' ?>">
+            <a href="<?= url('/messages?status=all' . ($searchQuery ? '&q=' . urlencode($searchQuery) : '')) ?>" class="px-3 py-1.5 rounded-md text-xs font-medium transition-colors <?= ($currentStatus ?? 'all') === 'all' ? 'bg-[#17211F] text-white' : 'bg-[#F6F8F7] text-[#697570] hover:text-[#17211F]' ?>">
                 Semua Status
             </a>
-            <a href="/messages?status=delivered<?= $searchQuery ? '&q=' . urlencode($searchQuery) : '' ?>" class="px-3 py-1.5 rounded-md text-xs font-medium transition-colors <?= ($currentStatus ?? '') === 'delivered' ? 'bg-[#16A36A] text-white' : 'bg-[#F6F8F7] text-[#697570] hover:text-[#17211F]' ?>">
+            <a href="<?= url('/messages?status=delivered' . ($searchQuery ? '&q=' . urlencode($searchQuery) : '')) ?>" class="px-3 py-1.5 rounded-md text-xs font-medium transition-colors <?= ($currentStatus ?? '') === 'delivered' ? 'bg-[#16A36A] text-white' : 'bg-[#F6F8F7] text-[#697570] hover:text-[#17211F]' ?>">
                 Terkirim / Terbaca
             </a>
-            <a href="/messages?status=queued<?= $searchQuery ? '&q=' . urlencode($searchQuery) : '' ?>" class="px-3 py-1.5 rounded-md text-xs font-medium transition-colors <?= ($currentStatus ?? '') === 'queued' ? 'bg-[#D99124] text-white' : 'bg-[#F6F8F7] text-[#697570] hover:text-[#17211F]' ?>">
+            <a href="<?= url('/messages?status=queued' . ($searchQuery ? '&q=' . urlencode($searchQuery) : '')) ?>" class="px-3 py-1.5 rounded-md text-xs font-medium transition-colors <?= ($currentStatus ?? '') === 'queued' ? 'bg-[#D99124] text-white' : 'bg-[#F6F8F7] text-[#697570] hover:text-[#17211F]' ?>">
                 Antrean Jitter
             </a>
-            <a href="/messages?status=failed<?= $searchQuery ? '&q=' . urlencode($searchQuery) : '' ?>" class="px-3 py-1.5 rounded-md text-xs font-medium transition-colors <?= ($currentStatus ?? '') === 'failed' ? 'bg-[#D84B4B] text-white' : 'bg-[#F6F8F7] text-[#697570] hover:text-[#17211F]' ?>">
+            <a href="<?= url('/messages?status=failed' . ($searchQuery ? '&q=' . urlencode($searchQuery) : '')) ?>" class="px-3 py-1.5 rounded-md text-xs font-medium transition-colors <?= ($currentStatus ?? '') === 'failed' ? 'bg-[#D84B4B] text-white' : 'bg-[#F6F8F7] text-[#697570] hover:text-[#17211F]' ?>">
                 Gagal Kirim
             </a>
         </div>
 
         <!-- Search Form -->
-        <form action="/messages" method="GET" class="relative w-full md:w-72">
+        <form action="<?= url('/messages') ?>" method="GET" class="relative w-full md:w-72">
             <?php if (!empty($currentStatus) && $currentStatus !== 'all'): ?>
                 <input type="hidden" name="status" value="<?= e($currentStatus) ?>">
             <?php endif; ?>

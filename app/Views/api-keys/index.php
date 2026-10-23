@@ -107,7 +107,7 @@
                             </td>
                             <td class="py-3 px-5 text-right">
                                 <?php if (!$k['revoked_at']): ?>
-                                    <form action="/api-keys/<?= e($k['id']) ?>/revoke" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin mencabut (revoke) API Key ini?')">
+                                    <form action="<?= url('/api-keys/' . e($k['id']) . '/revoke') ?>" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin mencabut (revoke) API Key ini?')">
                                         <?= csrf_field() ?>
                                         <button type="submit" class="text-[#D84B4B] hover:bg-[#FDF0F0] px-2 py-1 rounded text-xs font-semibold transition-colors">
                                             Cabut Kunci
@@ -136,7 +136,7 @@
             </span>
         </div>
 
-        <form action="/webhook/update" method="POST" class="space-y-4">
+        <form action="<?= url('/webhook/update') ?>" method="POST" class="space-y-4">
             <?= csrf_field() ?>
             <div>
                 <label for="webhook_url" class="block text-xs font-semibold text-[#17211F] mb-1.5">Target Webhook Endpoint URL</label>
@@ -187,7 +187,7 @@
             </button>
         </div>
 
-        <form action="/api-keys/create" method="POST" class="space-y-4">
+        <form action="<?= url('/api-keys/create') ?>" method="POST" class="space-y-4">
             <?= csrf_field() ?>
 
             <div>

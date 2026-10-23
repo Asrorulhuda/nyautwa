@@ -2,7 +2,7 @@
     <!-- Header -->
     <div class="flex items-center justify-between">
         <div>
-            <a href="/devices" class="text-xs font-semibold text-[#16A36A] hover:underline flex items-center gap-1 mb-2">
+            <a href="<?= url('/devices') ?>" class="text-xs font-semibold text-[#16A36A] hover:underline flex items-center gap-1 mb-2">
                 <span class="material-symbols-outlined text-sm">arrow_back</span>
                 Kembali ke Daftar Perangkat
             </a>
@@ -172,7 +172,7 @@ setInterval(() => {
 
 async function checkDeviceStatus() {
     try {
-        const res = await fetch(`/devices/${deviceId}/status`);
+        const res = await fetch(`<?= url('/devices/') ?>${deviceId}/status`);
         if (res.ok) {
             const data = await res.json();
             if (data.status === 'connected') {
@@ -180,7 +180,7 @@ async function checkDeviceStatus() {
                 statusBadge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#EAF7F0] text-[#16865A]';
                 statusBadge.innerHTML = '<span class="w-2 h-2 rounded-full bg-[#16A36A] status-pulse"></span>Berhasil Terhubung! Mengalihkan...';
                 setTimeout(() => {
-                    window.location.href = '/dashboard';
+                    window.location.href = '<?= url('/dashboard') ?>';
                 }, 1200);
             }
         }

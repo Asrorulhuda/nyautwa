@@ -3,7 +3,7 @@
     <p class="text-xs text-[#697570]">Kelola device WhatsApp, antrean pesan, dan API key bisnis Anda.</p>
 </div>
 
-<form action="/login" method="POST" class="space-y-4">
+<form action="<?= url('/login') ?>" method="POST" class="space-y-4">
     <?= csrf_field() ?>
 
     <div>
@@ -42,5 +42,5 @@
 
 <div class="mt-6 pt-6 border-t border-[#E4EAE6] text-center text-xs text-[#697570]">
     Belum memiliki akun? 
-    <a href="/register" class="text-[#16A36A] hover:underline font-semibold">Daftar akun baru gratis</a>
+    <a href="<?= url('/register') ?>" class="text-[#16A36A] hover:underline font-semibold">Daftar akun baru gratis</a>
 </div>

@@ -23,13 +23,13 @@
             }
         }
     </script>
-    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="stylesheet" href="<?= url('/assets/css/app.css') ?>">
 </head>
 <body class="bg-[#F6F8F7] text-[#17211F] min-h-screen flex items-center justify-center p-4">
     <div class="w-full max-w-md">
         <!-- Logo Header -->
         <div class="text-center mb-8">
-            <a href="/" class="inline-flex items-center gap-2.5">
+            <a href="<?= url('/') ?>" class="inline-flex items-center gap-2.5">
                 <div class="w-10 h-10 rounded-lg bg-[#16A36A] flex items-center justify-center text-white shadow-sm">
                     <span class="material-symbols-outlined text-2xl">chat</span>
                 </div>

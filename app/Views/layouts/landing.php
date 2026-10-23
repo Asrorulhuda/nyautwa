@@ -31,13 +31,13 @@
             }
         }
     </script>
-    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="stylesheet" href="<?= url('/assets/css/app.css') ?>">
 </head>
 <body class="bg-[#F6F8F7] text-[#17211F] selection:bg-[#16A36A]/20">
     <!-- Navigation Header -->
     <header class="border-b border-[#E4EAE6] bg-[#FFFFFF]/90 backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-            <a href="/" class="flex items-center gap-2.5">
+            <a href="<?= url('/') ?>" class="flex items-center gap-2.5">
                 <div class="w-8 h-8 rounded-md bg-[#16A36A] flex items-center justify-center text-white shadow-xs">
                     <span class="material-symbols-outlined text-lg">chat</span>
                 </div>
@@ -52,10 +52,10 @@
             </nav>
 
             <div class="flex items-center gap-3">
-                <a href="/login" class="text-sm font-medium text-[#17211F] hover:text-[#16A36A] px-3 py-2 transition-colors">
+                <a href="<?= url('/login') ?>" class="text-sm font-medium text-[#17211F] hover:text-[#16A36A] px-3 py-2 transition-colors">
                     Masuk
                 </a>
-                <a href="/register" class="bg-[#16A36A] hover:bg-[#128557] text-white text-sm font-semibold px-4 py-2 rounded-md transition-colors shadow-xs">
+                <a href="<?= url('/register') ?>" class="bg-[#16A36A] hover:bg-[#128557] text-white text-sm font-semibold px-4 py-2 rounded-md transition-colors shadow-xs">
                     Mulai Uji Coba Gratis
                 </a>
             </div>
@@ -79,12 +79,12 @@
             </div>
             <div class="flex gap-6 text-xs text-[#697570]">
                 <a href="#risiko" class="hover:text-[#17211F]">Pernyataan Risiko Anti-Ban</a>
-                <a href="/login" class="hover:text-[#17211F]">Dashboard Konsol</a>
-                <a href="/api-keys" class="hover:text-[#17211F]">Spesifikasi API</a>
+                <a href="<?= url('/login') ?>" class="hover:text-[#17211F]">Dashboard Konsol</a>
+                <a href="<?= url('/api-keys') ?>" class="hover:text-[#17211F]">Spesifikasi API</a>
             </div>
         </div>
     </footer>
 
-    <script src="/assets/js/app.js"></script>
+    <script src="<?= url('/assets/js/app.js') ?>"></script>
 </body>
 </html>

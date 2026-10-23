@@ -6,11 +6,11 @@
             <p class="text-xs text-[#697570] mt-1">Pemantauan telemetri real-time, status engine Baileys, dan throughput antrean pesan.</p>
         </div>
         <div class="flex items-center gap-3">
-            <a href="/devices/connect" class="inline-flex items-center gap-2 bg-[#FFFFFF] hover:bg-[#F6F8F7] border border-[#E4EAE6] text-xs font-semibold px-3.5 py-2 rounded-md transition-colors text-[#17211F]">
+            <a href="<?= url('/devices/connect') ?>" class="inline-flex items-center gap-2 bg-[#FFFFFF] hover:bg-[#F6F8F7] border border-[#E4EAE6] text-xs font-semibold px-3.5 py-2 rounded-md transition-colors text-[#17211F]">
                 <span class="material-symbols-outlined text-sm text-[#16A36A]">qr_code_scanner</span>
                 Scan QR Device Baru
             </a>
-            <a href="/messages/send" class="inline-flex items-center gap-2 bg-[#16A36A] hover:bg-[#128557] text-white text-xs font-semibold px-4 py-2 rounded-md transition-colors shadow-xs">
+            <a href="<?= url('/messages/send') ?>" class="inline-flex items-center gap-2 bg-[#16A36A] hover:bg-[#128557] text-white text-xs font-semibold px-4 py-2 rounded-md transition-colors shadow-xs">
                 <span class="material-symbols-outlined text-sm">send</span>
                 Kirim Pesan Uji
             </a>
@@ -123,11 +123,11 @@
             </div>
 
             <div class="flex items-center gap-3">
-                <a href="/devices/connect?id=<?= e($primary_device['id']) ?>" class="bg-[#FFFFFF] hover:bg-[#F6F8F7] border border-[#E4EAE6] text-[#17211F] text-xs font-semibold px-3 py-2 rounded-md transition-colors inline-flex items-center gap-1.5">
+                <a href="<?= url('/devices/connect?id=' . e($primary_device['id'])) ?>" class="bg-[#FFFFFF] hover:bg-[#F6F8F7] border border-[#E4EAE6] text-[#17211F] text-xs font-semibold px-3 py-2 rounded-md transition-colors inline-flex items-center gap-1.5">
                     <span class="material-symbols-outlined text-sm">refresh</span>
                     Scan Ulang QR
                 </a>
-                <form action="/devices/<?= e($primary_device['id']) ?>/disconnect" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin memutuskan sambungan sesi WhatsApp ini?')">
+                <form action="<?= url('/devices/' . e($primary_device['id']) . '/disconnect') ?>" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin memutuskan sambungan sesi WhatsApp ini?')">
                     <?= csrf_field() ?>
                     <button type="submit" class="bg-[#FFFFFF] hover:bg-[#FDF0F0] text-[#D84B4B] border border-[#F2D0D0] text-xs font-semibold px-3 py-2 rounded-md transition-colors inline-flex items-center gap-1.5">
                         <span class="material-symbols-outlined text-sm">power_settings_new</span>
@@ -167,7 +167,7 @@
                 <h3 class="text-sm font-bold text-[#17211F]">Riwayat Pengiriman Pesan Terakhir</h3>
                 <p class="text-xs text-[#697570]">Log outbox real-time dengan status pengiriman ack dari WhatsApp server.</p>
             </div>
-            <a href="/messages" class="text-xs font-semibold text-[#16A36A] hover:underline flex items-center gap-1">
+            <a href="<?= url('/messages') ?>" class="text-xs font-semibold text-[#16A36A] hover:underline flex items-center gap-1">
                 Lihat Seluruh Log
                 <span class="material-symbols-outlined text-sm">arrow_forward</span>
             </a>

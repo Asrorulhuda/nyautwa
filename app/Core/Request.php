@@ -25,11 +25,45 @@ class Request {
     public function getPath(): string {
         $uri = $this->server['REQUEST_URI'] ?? '/';
         $path = parse_url($uri, PHP_URL_PATH) ?? '/';
+
+        $basePath = $this->getBasePath();
+        if ($basePath !== '' && str_starts_with($path, $basePath)) {
+            $path = substr($path, strlen($basePath));
+            if ($path === '' || !str_starts_with($path, '/')) {
+                $path = '/' . $path;
+            }
+        }
+
+        // If public is in path, strip it
+        if (str_starts_with($path, '/public/')) {
+            $path = substr($path, 7);
+        } elseif ($path === '/public') {
+            $path = '/';
+        }
+
         // Normalize trailing slash (except root)
         if ($path !== '/' && str_ends_with($path, '/')) {
             $path = rtrim($path, '/');
         }
         return $path;
+    }
+
+    public function getBasePath(): string {
+        // Auto-detect from SCRIPT_NAME (e.g. /nyautwa/public/index.php or /nyautwa/index.php)
+        $scriptName = str_replace('\\', '/', $this->server['SCRIPT_NAME'] ?? '');
+        $dir = dirname($scriptName);
+        if ($dir !== '/' && $dir !== '\\' && $dir !== '.') {
+            $dir = preg_replace('#/public$#', '', $dir);
+            return rtrim($dir, '/');
+        }
+
+        $appUrl = env('APP_URL', '');
+        $configuredPath = parse_url((string) $appUrl, PHP_URL_PATH);
+        if ($configuredPath && $configuredPath !== '/') {
+            return rtrim($configuredPath, '/');
+        }
+
+        return '';
     }
 
     public function input(string $key, mixed $default = null): mixed {

@@ -34,7 +34,7 @@
             }
         }
     </script>
-    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="stylesheet" href="<?= url('/assets/css/app.css') ?>">
 </head>
 <body class="bg-[#F6F8F7] text-[#17211F] flex min-h-screen">
     <!-- Main Left Sidebar -->
@@ -56,6 +56,6 @@
     </div>
 
     <!-- Application Vanilla JS -->
-    <script src="/assets/js/app.js"></script>
+    <script src="<?= url('/assets/js/app.js') ?>"></script>
 </body>
 </html>
