@@ -117,8 +117,8 @@ $apiMsgRes = curl_exec($apiCh);
 $apiMsgCode = curl_getinfo($apiCh, CURLINFO_HTTP_CODE);
 $apiMsgData = json_decode($apiMsgRes, true);
 
-if ($apiMsgCode === 202 && ($apiMsgData['success'] ?? false) === true) {
-    echo "PASS: POST /api/v1/messages returned HTTP 202 Accepted (Message ID: " . ($apiMsgData['data']['message_id'] ?? '') . ", Normalized: " . ($apiMsgData['data']['phone'] ?? '') . ")!\n";
+if ($apiMsgCode === 202 && ($apiMsgData['status'] ?? '') === 'queued') {
+    echo "PASS: POST /api/v1/messages returned HTTP 202 Accepted (Message ID: " . ($apiMsgData['id'] ?? '') . ")!\n";
 } else {
     echo "FAIL: POST /api/v1/messages returned HTTP $apiMsgCode: $apiMsgRes\n";
     exit(1);

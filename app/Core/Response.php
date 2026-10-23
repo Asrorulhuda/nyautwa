@@ -15,6 +15,10 @@ class Response {
         exit;
     }
 
+    public static function apiError(string $code, string $message, int $status = 400, array $headers = []): void {
+        self::json(['error' => ['code' => $code, 'message' => $message]], $status, $headers);
+    }
+
     public static function redirect(string $url, int $status = 302): void {
         if (str_starts_with($url, '/') && !str_starts_with($url, '//')) {
             $url = url($url);

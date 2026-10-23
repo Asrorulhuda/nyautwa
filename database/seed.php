@@ -10,26 +10,47 @@ echo "=== Menjalankan Database Seeder NyautWa ===\n";
 
 $db = Database::getInstance()->getConnection();
 
-// 1. Seed Plans
+// 1. Seed Plans (Sesuai 05-saas-billing.md)
 $plans = [
+    [
+        'id' => 'trial',
+        'name' => 'Trial 7 Hari',
+        'limits_json' => json_encode(['devices' => 1, 'monthly_messages' => 200, 'daily_messages' => 30, 'api_rpm' => 30, 'media' => false, 'webhooks' => true]),
+        'price_monthly' => 0,
+        'price_yearly' => 0,
+    ],
     [
         'id' => 'starter',
         'name' => 'Starter',
-        'limits_json' => json_encode(['devices' => 1, 'daily_messages' => 1000, 'webhooks' => true]),
+        'limits_json' => json_encode(['devices' => 2, 'monthly_messages' => 5000, 'daily_messages' => 500, 'api_rpm' => 120, 'media' => true, 'webhooks' => true]),
         'price_monthly' => 99000,
         'price_yearly' => 990000,
     ],
     [
-        'id' => 'pro',
-        'name' => 'Professional',
-        'limits_json' => json_encode(['devices' => 5, 'daily_messages' => 10000, 'webhooks' => true]),
+        'id' => 'business',
+        'name' => 'Business',
+        'limits_json' => json_encode(['devices' => 10, 'monthly_messages' => 50000, 'daily_messages' => 2500, 'api_rpm' => 600, 'media' => true, 'webhooks' => true]),
         'price_monthly' => 249000,
         'price_yearly' => 2490000,
     ],
     [
+        'id' => 'pro',
+        'name' => 'Professional (Legacy)',
+        'limits_json' => json_encode(['devices' => 10, 'monthly_messages' => 50000, 'daily_messages' => 2500, 'api_rpm' => 600, 'media' => true, 'webhooks' => true]),
+        'price_monthly' => 249000,
+        'price_yearly' => 2490000,
+    ],
+    [
+        'id' => 'reseller',
+        'name' => 'Reseller',
+        'limits_json' => json_encode(['devices' => 50, 'monthly_messages' => 150000, 'daily_messages' => 10000, 'api_rpm' => 1200, 'media' => true, 'webhooks' => true]),
+        'price_monthly' => 799000,
+        'price_yearly' => 7990000,
+    ],
+    [
         'id' => 'enterprise',
-        'name' => 'Enterprise',
-        'limits_json' => json_encode(['devices' => 20, 'daily_messages' => 50000, 'webhooks' => true]),
+        'name' => 'Enterprise (Legacy)',
+        'limits_json' => json_encode(['devices' => 50, 'monthly_messages' => 150000, 'daily_messages' => 10000, 'api_rpm' => 1200, 'media' => true, 'webhooks' => true]),
         'price_monthly' => 799000,
         'price_yearly' => 7990000,
     ],

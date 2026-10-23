@@ -52,10 +52,11 @@ class MessageService {
                 'tenant_id' => $tenantId,
                 'device_id' => $deviceId,
                 'to' => $normalizedPhone,
-                'body' => $body,
+                'body' => $this->parseSpintax($body),
                 'key' => $idempotencyKey,
             ]
         );
+        Database::query("INSERT INTO message_events (id, message_id, status) VALUES (:id, :mid, 'queued')", ['id' => 'evt_' . bin2hex(random_bytes(8)), 'mid' => $id]);
 
         // In a real environment, this pushes to Redis queue or notifies the engine.
         // We will also simulate fast local delivery ack if Baileys engine is in mock mode.
@@ -78,14 +79,18 @@ class MessageService {
         return '+' . $clean;
     }
 
+    public function parseSpintax(string $text): string {
+        return (string) preg_replace_callback('/\{([^{}]+)\}/', fn($m) => explode('|', $m[1])[array_rand(explode('|', $m[1]))], $text);
+    }
+
     private function simulateEngineAck(string $msgId): void {
-        // Automatically mark as delivered after a realistic delay
         Database::query(
             "UPDATE messages SET status = 'delivered', wa_message_id = :wamid, sent_at = CURRENT_TIMESTAMP WHERE id = :id",
-            [
-                'id' => $msgId,
-                'wamid' => 'wamid_' . strtoupper(bin2hex(random_bytes(8))),
-            ]
+            ['id' => $msgId, 'wamid' => 'wamid_' . strtoupper(bin2hex(random_bytes(8)))]
+        );
+        Database::query(
+            "INSERT INTO message_events (id, message_id, status) VALUES (:id, :mid, 'delivered')",
+            ['id' => 'evt_' . bin2hex(random_bytes(8)), 'mid' => $msgId]
         );
     }
 }

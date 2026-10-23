@@ -1,0 +1,159 @@
+name: ci
+
+on:
+  pull_request:
+    branches: [develop, main]
+  push:
+    branches: [develop]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  # Hanya develop dan hotfix/* yang boleh membuka PR ke main
+  guard-main:
+    if: github.event_name == 'pull_request' && github.base_ref == 'main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cek sumber PR
+        run: |
+          HEAD="${{ github.head_ref }}"
+          if [[ "$HEAD" != "develop" && "$HEAD" != hotfix/* ]]; then
+            echo "::error::PR ke main hanya boleh dari develop atau hotfix/*. Sumber: $HEAD"
+            exit 1
+          fi
+
+  php:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wa_test
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -proot" --health-interval=10s
+          --health-timeout=5s --health-retries=10
+      redis:
+        image: redis:7
+        ports: ['6379:6379']
+        options: >-
+          --health-cmd="redis-cli ping" --health-interval=10s
+          --health-timeout=5s --health-retries=10
+    env:
+      APP_ENV: testing
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_NAME: wa_test
+      DB_USER: root
+      DB_PASS: root
+      REDIS_URL: redis://127.0.0.1:6379
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: pdo_mysql, redis, sodium, mbstring
+          coverage: none
+          tools: composer:v2
+      - name: Cache composer
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+      - run: composer validate --strict
+      - run: composer install --no-interaction --prefer-dist --no-progress
+      - name: Lint sintaks
+        run: find app public workers -name '*.php' -print0 | xargs -0 -n1 php -l > /dev/null
+      - name: Code style (PSR-12)
+        run: vendor/bin/phpcs --standard=PSR12 app public workers
+      - name: Analisis statis
+        run: vendor/bin/phpstan analyse --memory-limit=1G
+      - name: Migrasi DB uji
+        run: php bin/migrate.php
+      - name: Tes
+        run: vendor/bin/phpunit --testdox
+
+  node:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: engine
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: engine/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test --if-present
+      - name: Baileys harus dipin (tanpa ^ atau ~)
+        run: |
+          if grep -E '"@whiskeysockets/baileys"\s*:\s*"[\^~]' package.json; then
+            echo "::error::Versi Baileys harus dipin persis."
+            exit 1
+          fi
+
+  security:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer:v2
+      - run: composer audit
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm audit --omit=dev --audit-level=high
+        working-directory: engine
+      - name: Scan secret
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build app
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/app.Dockerfile
+          push: false
+          load: true
+          tags: wa-app:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Build engine
+        uses: docker/build-push-action@v6
+        with:
+          context: engine
+          file: docker/engine.Dockerfile
+          push: false
+          load: true
+          tags: wa-engine:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Scan image (Trivy)
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: wa-app:ci
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+          exit-code: '1'
