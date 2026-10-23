@@ -43,3 +43,6 @@ $router->post('/clients/{id}/toggle', [\App\Controllers\ClientController::class,
 // Admin Landing Page Configuration
 $router->get('/settings/landing', [\App\Controllers\LandingConfigController::class, 'index']);
 $router->post('/settings/landing', [\App\Controllers\LandingConfigController::class, 'update']);
+
+// Developer API Documentation
+$router->get('/docs', [\App\Controllers\DocsController::class, 'index']);

@@ -13,7 +13,17 @@ echo "=== Menjalankan Test Kepatuhan Spesifikasi API & Arsitektur ===\n";
 
 $rawKey = 'nyaut_live_test_compliance_key';
 $keyHash = hash('sha256', $rawKey);
-$tenantId = 'tenant_demo_01';
+$tenant = Database::fetchOne("SELECT id FROM tenants LIMIT 1");
+$tenantId = $tenant['id'] ?? 'tenant_hq_master';
+
+// Ensure at least 1 device exists for tests
+$existingDev = Database::fetchOne("SELECT id FROM devices WHERE tenant_id = :tid", ['tid' => $tenantId]);
+if (!$existingDev) {
+    Database::query(
+        "INSERT INTO devices (id, tenant_id, label, status, session_ref, daily_limit) VALUES ('dev_test_01', :tid, 'Primary Device', 'connected', 'sess_test', 1000)",
+        ['tid' => $tenantId]
+    );
+}
 
 // Seed temporary test key
 Database::query("INSERT OR REPLACE INTO api_keys (id, tenant_id, name, key_hash, prefix, created_at) VALUES ('key_test_comp', :tid, 'Comp Key', :kh, 'nyaut_live', CURRENT_TIMESTAMP)", [
