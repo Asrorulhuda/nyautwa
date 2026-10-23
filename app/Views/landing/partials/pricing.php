@@ -1,5 +1,5 @@
 <!-- Pricing Comparison Section -->
-<section class="py-20 lg:py-24 bg-surface" id="harga">
+<section class="py-20 lg:py-24 bg-surface scroll-mt-20" id="harga">
     <div class="max-w-7xl mx-auto px-6 md:px-12">
         <div class="flex flex-col items-center text-center max-w-2xl mx-auto mb-16">
             <span class="text-xs uppercase tracking-wider text-primary font-semibold mb-2">Pilihan Paket</span>

@@ -1,5 +1,5 @@
 <!-- Developer Experience Section -->
-<section class="py-20 lg:py-24 bg-surface-container-lowest" id="api">
+<section class="py-20 lg:py-24 bg-surface-container-lowest scroll-mt-20" id="api">
     <div class="max-w-7xl mx-auto px-6 md:px-12">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
             <!-- Text details -->

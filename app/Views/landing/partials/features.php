@@ -1,5 +1,5 @@
 <!-- Product Benefits Section -->
-<section class="py-20 lg:py-24 bg-surface-container-lowest" id="fitur">
+<section class="py-20 lg:py-24 bg-surface-container-lowest scroll-mt-20" id="fitur">
     <div class="max-w-7xl mx-auto px-6 md:px-12">
         <div class="flex flex-col items-center text-center max-w-2xl mx-auto mb-16">
             <span class="text-xs uppercase tracking-wider text-primary font-semibold mb-2">Keandalan Utama</span>

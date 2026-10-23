@@ -54,7 +54,7 @@
         <?php \App\Core\View::partial('partials/header'); ?>
 
         <!-- Page View Body -->
-        <main class="w-full pt-16 flex-1 bg-surface-container-low/40 p-4 sm:p-6 md:p-8">
+        <main class="w-full flex-1 bg-surface-container-low/40 p-4 sm:p-6 md:p-8">
             <!-- Flash Message Alerts -->
             <?php \App\Core\View::partial('partials/flash'); ?>
 

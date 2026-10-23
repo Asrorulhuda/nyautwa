@@ -1,5 +1,5 @@
 <!-- FAQ Section (Interactive Accordion) -->
-<section class="py-20 lg:py-24 bg-surface-container-lowest" id="faq">
+<section class="py-20 lg:py-24 bg-surface-container-lowest scroll-mt-20" id="faq">
     <div class="max-w-4xl mx-auto px-6 md:px-12">
         <div class="flex flex-col items-center text-center mb-14">
             <span class="text-xs uppercase tracking-wider text-primary font-semibold mb-2">Pertanyaan Umum</span>

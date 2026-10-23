@@ -63,6 +63,13 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     if (closeBtn) closeBtn.addEventListener('click', hideDrawer);
     if (backdrop) backdrop.addEventListener('click', hideDrawer);
+
+    // 5. Landing Mobile Navigation Toggle
+    const landingToggle = document.getElementById('landing-menu-toggle');
+    const landingNav = document.getElementById('landing-mobile-nav');
+    if (landingToggle && landingNav) {
+        landingToggle.addEventListener('click', () => landingNav.classList.toggle('hidden'));
+    }
 });
 
 // Modal Helpers

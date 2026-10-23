@@ -60,14 +60,24 @@
                     <a class="text-sm text-on-surface-variant hover:text-primary transition-colors font-medium" href="#faq">FAQ</a>
                 </nav>
             </div>
-            <div class="flex items-center gap-4">
-                <a class="hidden sm:inline-flex px-3.5 py-2 text-sm text-on-surface hover:text-primary transition-colors font-medium" href="<?= url('/login') ?>">
-                    Masuk
-                </a>
+            <div class="flex items-center gap-3">
+                <a class="hidden sm:inline-flex px-3.5 py-2 text-sm text-on-surface hover:text-primary transition-colors font-medium" href="<?= url('/login') ?>">Masuk</a>
                 <a class="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg shadow-sm hover:bg-primary-container transition-all" href="<?= url('/register') ?>">
                     <span>Mulai Gratis</span>
                     <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
                 </a>
+                <button id="landing-menu-toggle" class="md:hidden p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container" type="button" aria-label="Menu">
+                    <span class="material-symbols-outlined text-[22px]">menu</span>
+                </button>
+            </div>
+        </div>
+        <div id="landing-mobile-nav" class="hidden md:hidden border-t border-surface-container-high bg-surface-container-lowest px-6 py-3 space-y-2">
+            <a class="block text-xs text-on-surface hover:text-primary font-medium py-1" href="#fitur">Fitur</a>
+            <a class="block text-xs text-on-surface hover:text-primary font-medium py-1" href="#api">Dokumentasi API</a>
+            <a class="block text-xs text-on-surface hover:text-primary font-medium py-1" href="#harga">Harga</a>
+            <a class="block text-xs text-on-surface hover:text-primary font-medium py-1" href="#faq">FAQ</a>
+            <div class="pt-2 border-t border-surface-container flex items-center justify-between sm:hidden">
+                <a class="text-xs text-on-surface font-medium hover:text-primary" href="<?= url('/login') ?>">Masuk</a>
             </div>
         </div>
     </header>

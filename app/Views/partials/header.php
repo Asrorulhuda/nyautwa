@@ -1,7 +1,7 @@
 <?php
 $user = \App\Core\Session::get('user');
 ?>
-<header class="fixed top-0 left-0 lg:left-60 right-0 h-16 bg-surface/85 backdrop-blur-md z-30 border-b border-outline-variant/25 px-4 sm:px-6 flex items-center justify-between">
+<header class="sticky top-0 z-30 w-full h-16 bg-surface/85 backdrop-blur-md border-b border-outline-variant/25 px-4 sm:px-6 flex items-center justify-between shrink-0">
     <div class="flex items-center gap-3 sm:gap-4">
         <button id="mobile-sidebar-toggle" class="lg:hidden p-1.5 -ml-1 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors" type="button" aria-label="Buka Menu">
             <span class="material-symbols-outlined text-[22px]">menu</span>
