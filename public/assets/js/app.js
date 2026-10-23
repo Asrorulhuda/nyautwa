@@ -45,6 +45,24 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => alert.remove(), 300);
         }, 5000);
     });
+
+    // 4. Mobile Sidebar Drawer Toggle
+    const sidebar = document.getElementById('app-sidebar');
+    const toggleBtn = document.getElementById('mobile-sidebar-toggle');
+    const closeBtn = document.getElementById('mobile-sidebar-close');
+    const backdrop = document.getElementById('sidebar-backdrop');
+
+    if (toggleBtn) toggleBtn.addEventListener('click', () => {
+        sidebar?.classList.remove('-translate-x-full');
+        backdrop?.classList.remove('hidden');
+    });
+
+    const hideDrawer = () => {
+        sidebar?.classList.add('-translate-x-full');
+        backdrop?.classList.add('hidden');
+    };
+    if (closeBtn) closeBtn.addEventListener('click', hideDrawer);
+    if (backdrop) backdrop.addEventListener('click', hideDrawer);
 });
 
 // Modal Helpers

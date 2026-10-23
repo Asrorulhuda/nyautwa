@@ -11,19 +11,19 @@
         <p class="text-xs text-secondary">Pantau koneksi dan aktivitas pesan WhatsApp Anda secara realtime.</p>
     </div>
     <!-- Controls -->
-    <div class="flex flex-wrap items-center gap-2.5">
-        <div class="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-surface-container-lowest shadow-xs text-on-surface border border-outline-variant/30 text-xs">
+    <div class="flex flex-wrap items-center gap-2 sm:gap-2.5">
+        <div class="hidden sm:inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-surface-container-lowest shadow-xs text-on-surface border border-outline-variant/30 text-xs">
             <span class="material-symbols-outlined text-[16px] text-secondary">calendar_today</span>
-            <span class="font-medium">7 Hari Terakhir: <?= date('d M', strtotime('-7 days')) ?> - <?= date('d M Y') ?></span>
+            <span class="font-medium">7 Hari: <?= date('d M', strtotime('-7 days')) ?> - <?= date('d M Y') ?></span>
         </div>
         <button onclick="window.location.reload()" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface-container-lowest shadow-xs hover:bg-surface-container-low text-on-surface border border-outline-variant/30 text-xs transition-all active:scale-95" type="button">
             <span class="material-symbols-outlined text-[16px] text-secondary">refresh</span>
             <span class="font-medium">Muat Ulang</span>
-            <span class="font-mono text-secondary text-[11px] ml-1"><?= date('H:i:s') ?> WIB</span>
+            <span class="font-mono text-secondary text-[10px] hidden sm:inline ml-0.5"><?= date('H:i') ?></span>
         </button>
-        <a class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-primary-container shadow-xs transition-colors" href="<?= url('/messages/send') ?>">
+        <a class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-primary-container shadow-xs transition-colors ml-auto sm:ml-0" href="<?= url('/messages/send') ?>">
             <span class="material-symbols-outlined text-[16px]">add_circle</span>
-            Kirim Pesan
+            <span>Kirim Pesan</span>
         </a>
     </div>
 </div>

@@ -9,15 +9,15 @@
                 </div>
                 <div>
                     <div class="flex items-center gap-2">
-                        <span class="text-sm font-semibold text-on-surface">Server Node Jakarta 01</span>
+                        <span class="text-sm font-semibold text-on-surface"><?= e($settings['node_name'] ?? 'Server Node Jakarta 01') ?></span>
                         <span class="px-2 py-0.5 rounded bg-surface-container-low text-primary text-xs font-mono font-medium">Aktif</span>
                     </div>
-                    <span class="text-xs text-on-surface-variant font-mono">Terhubung (+62 812-9843-XXXX)</span>
+                    <span class="text-xs text-on-surface-variant font-mono"><?= e($settings['node_phone'] ?? 'Terhubung (+62 812-9843-XXXX)') ?></span>
                 </div>
             </div>
             <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-low text-on-surface border border-surface-container">
                 <span class="material-symbols-outlined text-[14px] text-primary">bolt</span>
-                <span class="text-xs font-mono">99.8% (1.2s avg)</span>
+                <span class="text-xs font-mono"><?= e($settings['node_uptime'] ?? '99.8% (1.2s avg)') ?></span>
             </div>
         </div>
         <!-- Code Simulation Card -->

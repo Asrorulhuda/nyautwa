@@ -33,3 +33,13 @@ $router->get('/api-keys', [\App\Controllers\ApiKeyController::class, 'index']);
 $router->post('/api-keys/create', [\App\Controllers\ApiKeyController::class, 'create']);
 $router->post('/api-keys/{id}/revoke', [\App\Controllers\ApiKeyController::class, 'revoke']);
 $router->post('/webhook/update', [\App\Controllers\ApiKeyController::class, 'updateWebhook']);
+
+// Admin SaaS Client Management
+$router->get('/clients', [\App\Controllers\ClientController::class, 'index']);
+$router->post('/clients/create', [\App\Controllers\ClientController::class, 'create']);
+$router->post('/clients/{id}', [\App\Controllers\ClientController::class, 'update']);
+$router->post('/clients/{id}/toggle', [\App\Controllers\ClientController::class, 'toggle']);
+
+// Admin Landing Page Configuration
+$router->get('/settings/landing', [\App\Controllers\LandingConfigController::class, 'index']);
+$router->post('/settings/landing', [\App\Controllers\LandingConfigController::class, 'update']);

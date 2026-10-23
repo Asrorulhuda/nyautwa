@@ -27,6 +27,8 @@ class AuthService {
         $_SESSION['tenant_id'] = $user['tenant_id'];
         $_SESSION['tenant_name'] = $tenant['name'] ?? 'Akun Bisnis';
         $_SESSION['plan_id'] = $tenant['plan_id'] ?? 'starter';
+        $_SESSION['user'] = $user;
+        $_SESSION['tenant'] = $tenant;
 
         return true;
     }

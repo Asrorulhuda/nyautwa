@@ -45,13 +45,16 @@
     <!-- Main Left Sidebar -->
     <?php \App\Core\View::partial('partials/sidebar'); ?>
 
+    <!-- Mobile Sidebar Backdrop Overlay -->
+    <div id="sidebar-backdrop" class="fixed inset-0 bg-black/60 z-40 hidden lg:hidden transition-opacity"></div>
+
     <!-- Main Content Container -->
-    <div class="pl-60 flex-1 flex flex-col min-w-0 min-h-screen">
+    <div class="pl-0 lg:pl-60 flex-1 flex flex-col min-w-0 min-h-screen">
         <!-- Top Sticky Header -->
         <?php \App\Core\View::partial('partials/header'); ?>
 
         <!-- Page View Body -->
-        <main class="w-full pt-16 flex-1 bg-surface-container-low/40 p-6 md:p-8">
+        <main class="w-full pt-16 flex-1 bg-surface-container-low/40 p-4 sm:p-6 md:p-8">
             <!-- Flash Message Alerts -->
             <?php \App\Core\View::partial('partials/flash'); ?>
 

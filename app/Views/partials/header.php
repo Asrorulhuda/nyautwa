@@ -1,19 +1,22 @@
 <?php
 $user = \App\Core\Session::get('user');
 ?>
-<header class="fixed top-0 left-60 right-0 h-16 bg-surface/85 backdrop-blur-md z-40 border-b border-outline-variant/25 px-6 flex items-center justify-between">
-    <div class="flex items-center gap-4">
-        <div class="flex items-center gap-1.5 text-xs text-on-surface-variant font-medium">
+<header class="fixed top-0 left-0 lg:left-60 right-0 h-16 bg-surface/85 backdrop-blur-md z-30 border-b border-outline-variant/25 px-4 sm:px-6 flex items-center justify-between">
+    <div class="flex items-center gap-3 sm:gap-4">
+        <button id="mobile-sidebar-toggle" class="lg:hidden p-1.5 -ml-1 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors" type="button" aria-label="Buka Menu">
+            <span class="material-symbols-outlined text-[22px]">menu</span>
+        </button>
+        <div class="hidden sm:flex items-center gap-1.5 text-xs text-on-surface-variant font-medium">
             <span class="hover:text-on-surface transition-colors">Platform</span>
             <span class="text-outline-variant">/</span>
             <span class="text-on-surface font-semibold">Gateway Manager</span>
         </div>
-        <div class="h-4 w-[1px] bg-outline-variant/30"></div>
+        <div class="hidden sm:block h-4 w-[1px] bg-outline-variant/30"></div>
         <div class="flex items-center gap-2">
             <span class="px-2 py-0.5 rounded font-mono text-[11px] font-medium bg-surface-container text-on-surface border border-outline-variant/40">Production</span>
             <div class="flex items-center gap-1 px-2 py-0.5 rounded text-[11px] bg-surface-container-low text-primary border border-primary/20">
                 <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
-                <span>99.98% Uptime</span>
+                <span class="hidden md:inline">99.98% Uptime</span>
             </div>
         </div>
     </div>

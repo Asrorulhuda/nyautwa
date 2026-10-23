@@ -11,7 +11,7 @@
                     <span class="text-xl font-bold text-on-surface">Nyaut<span class="text-primary font-semibold">Wa</span></span>
                 </div>
                 <p class="text-xs text-on-surface-variant max-w-sm mb-6 leading-relaxed">
-                    Infrastruktur WhatsApp Gateway API berkecepatan tinggi untuk kebutuhan notifikasi aplikasi, sistem verifikasi OTP, dan automasi obrolan bisnis.
+                    <?= e($settings['footer_tagline'] ?? 'Infrastruktur WhatsApp Gateway API berkecepatan tinggi untuk kebutuhan notifikasi aplikasi, sistem verifikasi OTP, dan automasi obrolan bisnis.') ?>
                 </p>
                 <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container-low text-primary text-xs font-mono border border-surface-container">
                     <span class="w-2 h-2 rounded-full bg-primary"></span>

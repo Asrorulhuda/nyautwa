@@ -12,11 +12,8 @@ $db = Database::getInstance()->getConnection();
 $driver = $db->getAttribute(PDO::ATTR_DRIVER_NAME);
 echo "Driver Database aktif: {$driver}\n";
 
-$migrationFiles = [
-    __DIR__ . '/migrations/001_create_tenants_and_users.sql',
-    __DIR__ . '/migrations/002_create_devices_and_api_keys.sql',
-    __DIR__ . '/migrations/003_create_messages_and_webhooks.sql',
-];
+$migrationFiles = glob(__DIR__ . '/migrations/*.sql');
+sort($migrationFiles);
 
 foreach ($migrationFiles as $file) {
     $filename = basename($file);

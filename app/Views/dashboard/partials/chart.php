@@ -77,8 +77,7 @@
                 <text class="text-[11px] fill-current text-secondary" text-anchor="middle" x="628" y="212">Min (25)</text>
             </g>
         </svg>
-    </div>
-    <div class="mt-6 pt-3 grid grid-cols-3 gap-2 bg-surface-container-low/60 p-3 rounded-lg text-xs">
+    <div class="mt-6 pt-3 grid grid-cols-1 sm:grid-cols-3 gap-2 bg-surface-container-low/60 p-3 rounded-lg text-xs">
         <div><span class="text-secondary block">Puncak Tertinggi (Jumat)</span><span class="font-semibold text-on-surface">9.830 pesan</span></div>
         <div><span class="text-secondary block">Rata-rata Harian</span><span class="font-semibold text-on-surface">6.988 pesan/hari</span></div>
         <div><span class="text-secondary block">Error Terbanyak</span><span class="font-semibold text-error">WhatsApp 400 Bad Num</span></div>

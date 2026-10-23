@@ -2,7 +2,7 @@
 $user = \App\Core\Session::get('user');
 $tenant = \App\Core\Session::get('tenant');
 ?>
-<aside class="fixed left-0 top-0 h-screen w-60 bg-[#0c1513] text-inverse-on-surface z-50 flex flex-col justify-between border-r border-white/10 select-none">
+<aside id="app-sidebar" class="fixed left-0 top-0 h-screen w-60 bg-[#0c1513] text-inverse-on-surface z-50 flex flex-col justify-between border-r border-white/10 select-none -translate-x-full lg:translate-x-0 transition-transform duration-200 ease-in-out">
     <div class="relative flex flex-col flex-1 min-h-0 overflow-hidden">
         <!-- Subtle ambient glow -->
         <div class="absolute -top-10 -left-10 w-44 h-44 rounded-full bg-emerald-500/10 blur-2xl pointer-events-none"></div>
@@ -19,9 +19,14 @@ $tenant = \App\Core\Session::get('tenant');
                     <span class="text-[10px] text-emerald-400/80 font-mono font-medium tracking-wide mt-1">WA GATEWAY</span>
                 </div>
             </a>
-            <div class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 text-[11px] font-mono font-semibold">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>v1.4</span>
+            <div class="flex items-center gap-1.5">
+                <div class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 text-[11px] font-mono font-semibold">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>v1.4</span>
+                </div>
+                <button id="mobile-sidebar-close" class="lg:hidden p-1 rounded-lg text-outline-variant hover:text-white" type="button" aria-label="Tutup Menu">
+                    <span class="material-symbols-outlined text-[18px]">close</span>
+                </button>
             </div>
         </div>
 

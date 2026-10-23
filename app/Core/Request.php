@@ -47,6 +47,8 @@ class Request {
         return ($conf && $conf !== '/') ? rtrim($conf, '/') : '';
     }
 
+    public function get(string $key, mixed $default = null): mixed { return $this->get[$key] ?? $default; }
+    public function post(string $key, mixed $default = null): mixed { return $this->post[$key] ?? $default; }
     public function input(string $key, mixed $default = null): mixed { return $this->all()[$key] ?? $default; }
     public function all(): array { return array_merge($this->get, $this->post, $this->json()); }
     public function isJson(): bool { return str_contains(strtolower($this->header('content-type') ?? ''), 'application/json'); }

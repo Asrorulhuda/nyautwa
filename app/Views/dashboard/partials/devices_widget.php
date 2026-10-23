@@ -40,22 +40,4 @@
             + Tambah Sesi Node Baru
         </a>
     </div>
-
-    <!-- Webhook Health Card -->
-    <div class="p-5 rounded-xl bg-surface-container-lowest shadow-xs border border-surface-container-high/60 space-y-3">
-        <div class="flex items-center justify-between">
-            <span class="text-xs font-semibold text-on-surface flex items-center gap-1.5">
-                <span class="material-symbols-outlined text-[16px] text-primary">webhook</span>
-                Kesehatan Webhook
-            </span>
-            <span class="px-2 py-0.5 rounded-full bg-surface-container-low text-primary font-mono text-[10px] font-bold">99.8%</span>
-        </div>
-        <p class="text-xs text-secondary leading-relaxed">
-            Callback event pesan masuk dan ACK status berhasil diterima oleh endpoint bisnis Anda tanpa antrean tertunda.
-        </p>
-        <div class="pt-2 border-t border-surface-container flex items-center justify-between text-xs">
-            <span class="text-secondary">Rata-rata waktu respon:</span>
-            <span class="font-mono font-semibold text-primary">84ms</span>
-        </div>
-    </div>
 </div>

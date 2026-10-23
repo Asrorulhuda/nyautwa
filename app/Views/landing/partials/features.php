@@ -13,9 +13,9 @@
                     <div class="w-12 h-12 rounded-xl bg-surface-container-low flex items-center justify-center text-primary mb-6">
                         <span class="material-symbols-outlined text-[24px]">code</span>
                     </div>
-                    <h3 class="text-base text-on-surface mb-3 font-semibold">Integrasi API yang sederhana</h3>
+                    <h3 class="text-base text-on-surface mb-3 font-semibold"><?= e($settings['feature_1_title'] ?? 'Integrasi API yang sederhana') ?></h3>
                     <p class="text-xs text-on-surface-variant leading-relaxed">
-                        REST API standar dengan dokumentasi interaktif, SDK, dan contoh kode curl, Node.js, Python, & PHP.
+                        <?= e($settings['feature_1_desc'] ?? 'REST API standar dengan dokumentasi interaktif, SDK, dan contoh kode curl, Node.js, Python, & PHP.') ?>
                     </p>
                 </div>
                 <div class="mt-8 pt-4 flex items-center text-primary text-xs font-semibold border-t border-surface-container/60">
@@ -29,9 +29,9 @@
                     <div class="w-12 h-12 rounded-xl bg-surface-container-low flex items-center justify-center text-primary mb-6">
                         <span class="material-symbols-outlined text-[24px]">done_all</span>
                     </div>
-                    <h3 class="text-base text-on-surface mb-3 font-semibold">Pantau status pengiriman pesan</h3>
+                    <h3 class="text-base text-on-surface mb-3 font-semibold"><?= e($settings['feature_2_title'] ?? 'Pantau status pengiriman pesan') ?></h3>
                     <p class="text-xs text-on-surface-variant leading-relaxed">
-                        Real-time webhook delivery callback untuk status pending, sent, delivered, dan read tanpa polling manual.
+                        <?= e($settings['feature_2_desc'] ?? 'Real-time webhook delivery callback untuk status pending, sent, delivered, dan read tanpa polling manual.') ?>
                     </p>
                 </div>
                 <div class="mt-8 pt-4 flex items-center text-primary text-xs font-semibold border-t border-surface-container/60">
@@ -45,9 +45,9 @@
                     <div class="w-12 h-12 rounded-xl bg-surface-container-low flex items-center justify-center text-primary mb-6">
                         <span class="material-symbols-outlined text-[24px]">smartphone</span>
                     </div>
-                    <h3 class="text-base text-on-surface mb-3 font-semibold">Kelola koneksi WhatsApp</h3>
+                    <h3 class="text-base text-on-surface mb-3 font-semibold"><?= e($settings['feature_3_title'] ?? 'Kelola koneksi WhatsApp') ?></h3>
                     <p class="text-xs text-on-surface-variant leading-relaxed">
-                        Multi-device session manager dengan instant QR code pairing dan auto-reconnect failover otomatis.
+                        <?= e($settings['feature_3_desc'] ?? 'Multi-device session manager dengan instant QR code pairing dan auto-reconnect failover otomatis.') ?>
                     </p>
                 </div>
                 <div class="mt-8 pt-4 flex items-center text-primary text-xs font-semibold border-t border-surface-container/60">
@@ -59,11 +59,11 @@
             <div class="bg-surface p-7 rounded-xl shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between border border-surface-container-high/60">
                 <div>
                     <div class="w-12 h-12 rounded-xl bg-surface-container-low flex items-center justify-center text-primary mb-6">
-                        <span class="material-symbols-outlined text-[24px]">manage_search</span>
+                        <span class="material-symbols-outlined text-[24px]">security</span>
                     </div>
-                    <h3 class="text-base text-on-surface mb-3 font-semibold">Riwayat aktivitas yang mudah ditelusuri</h3>
+                    <h3 class="text-base text-on-surface mb-3 font-semibold"><?= e($settings['feature_4_title'] ?? 'Anti-blokir & rate limit cerdas') ?></h3>
                     <p class="text-xs text-on-surface-variant leading-relaxed">
-                        Logging terperinci per request ID, timestamp presisi milidetik, dan payload inspektor untuk kemudahan debugging.
+                        <?= e($settings['feature_4_desc'] ?? 'Algoritma antrean pesan dengan dynamic delay acak dan proteksi lonjakan trafik untuk menjaga keamanan nomor.') ?>
                     </p>
                 </div>
                 <div class="mt-8 pt-4 flex items-center text-primary text-xs font-semibold border-t border-surface-container/60">

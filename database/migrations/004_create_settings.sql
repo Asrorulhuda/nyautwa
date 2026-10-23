@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS settings (
+    `key` VARCHAR(100) PRIMARY KEY,
+    `value` LONGTEXT NOT NULL,
+    `category` VARCHAR(50) NOT NULL DEFAULT 'general',
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

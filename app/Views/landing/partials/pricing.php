@@ -13,11 +13,11 @@
                     <h3 class="text-2xl text-on-surface font-semibold mb-3">Starter</h3>
                     <p class="text-xs text-on-surface-variant mb-6 leading-relaxed">Cocok untuk eksplorasi teknis, pembuatan prototipe, dan testing integrasi.</p>
                     <div class="mb-6 pb-6 border-b border-surface-container">
-                        <span class="text-4xl text-on-surface font-bold">Rp 99.000</span>
+                        <span class="text-4xl text-on-surface font-bold"><?= e($settings['pricing_starter_price'] ?? 'Rp 149.000') ?></span>
                         <span class="text-xs text-on-surface-variant">/ bulan</span>
                     </div>
                     <ul class="space-y-3.5 mb-8 text-xs text-on-surface">
-                        <li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary text-[18px]">check</span><span>Hingga 5.000 pesan / bulan</span></li>
+                        <li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary text-[18px]">check</span><span><?= e($settings['pricing_starter_quota'] ?? '10.000 pesan / bulan') ?></span></li>
                         <li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary text-[18px]">check</span><span>1 Koneksi nomor WhatsApp aktif</span></li>
                         <li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary text-[18px]">check</span><span>Webhooks callback standar</span></li>
                         <li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary text-[18px]">check</span><span>Community & Forum Support</span></li>
@@ -36,11 +36,11 @@
                     <h3 class="text-2xl text-on-surface font-semibold mb-3">Pro</h3>
                     <p class="text-xs text-on-surface-variant mb-6 leading-relaxed">Dirancang untuk bisnis bertumbuh dengan kebutuhan notifikasi rutin transaksi.</p>
                     <div class="mb-6 pb-6 border-b border-surface-container">
-                        <span class="text-4xl text-on-surface font-bold">Rp 349.000</span>
+                        <span class="text-4xl text-on-surface font-bold"><?= e($settings['pricing_pro_price'] ?? 'Rp 349.000') ?></span>
                         <span class="text-xs text-on-surface-variant">/ bulan</span>
                     </div>
                     <ul class="space-y-3.5 mb-8 text-xs text-on-surface">
-                        <li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary text-[18px]">check</span><span>Hingga 50.000 pesan / bulan</span></li>
+                        <li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary text-[18px]">check</span><span><?= e($settings['pricing_pro_quota'] ?? '50.000 pesan / bulan') ?></span></li>
                         <li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary text-[18px]">check</span><span>3 Koneksi nomor WhatsApp simultan</span></li>
                         <li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary text-[18px]">check</span><span>Priority instant webhooks</span></li>
                         <li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary text-[18px]">check</span><span>SLA Uptime 99.9%</span></li>
@@ -57,11 +57,11 @@
                     <h3 class="text-2xl text-on-surface font-semibold mb-3">Business</h3>
                     <p class="text-xs text-on-surface-variant mb-6 leading-relaxed">Skala enterprise dengan volume jutaan pesan, keandalan khusus, & SLA.</p>
                     <div class="mb-6 pb-6 border-b border-surface-container">
-                        <span class="text-4xl text-on-surface font-bold">Kustom</span>
-                        <span class="text-xs text-on-surface-variant">/ disesuaikan</span>
+                        <span class="text-4xl text-on-surface font-bold"><?= e($settings['pricing_biz_price'] ?? 'Rp 899.000') ?></span>
+                        <span class="text-xs text-on-surface-variant">/ bulan</span>
                     </div>
                     <ul class="space-y-3.5 mb-8 text-xs text-on-surface">
-                        <li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary text-[18px]">check</span><span>Volume pesan kustom tanpa batas</span></li>
+                        <li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary text-[18px]">check</span><span><?= e($settings['pricing_biz_quota'] ?? 'Kuota Unlimited') ?></span></li>
                         <li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary text-[18px]">check</span><span>Unlimited multi-device instances</span></li>
                         <li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary text-[18px]">check</span><span>Dedicated gateway IP & custom limit</span></li>
                         <li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary text-[18px]">check</span><span>Dedicated Account Manager 24/7</span></li>

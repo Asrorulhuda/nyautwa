@@ -8,29 +8,29 @@
         <div class="space-y-4" id="faq-accordion">
             <div class="rounded-xl bg-surface shadow-sm overflow-hidden border border-surface-container-high/60">
                 <button class="faq-toggle w-full px-6 py-5 flex items-center justify-between text-left text-base text-on-surface font-medium hover:text-primary transition-colors">
-                    <span>Apa itu NyautWa?</span>
+                    <span><?= e($settings['faq_1_q'] ?? 'Apa itu NyautWa?') ?></span>
                     <span class="material-symbols-outlined text-on-surface-variant transition-transform duration-200">expand_more</span>
                 </button>
                 <div class="faq-content px-6 pb-5 text-on-surface-variant text-sm leading-relaxed border-t border-surface-container/50 pt-3">
-                    NyautWa adalah platform WhatsApp Gateway API yang memungkinkan developer dan pemilik bisnis mengintegrasikan pengiriman pesan, notifikasi otomatis, dan penerimaan webhook dari aplikasi mereka langsung ke pengguna WhatsApp secara efisien dan andal.
+                    <?= e($settings['faq_1_a'] ?? 'NyautWa adalah platform WhatsApp Gateway API yang memungkinkan developer dan pemilik bisnis mengintegrasikan pengiriman pesan, notifikasi otomatis, dan penerimaan webhook dari aplikasi mereka langsung ke pengguna WhatsApp secara efisien dan andal.') ?>
                 </div>
             </div>
             <div class="rounded-xl bg-surface shadow-sm overflow-hidden border border-surface-container-high/60">
                 <button class="faq-toggle w-full px-6 py-5 flex items-center justify-between text-left text-base text-on-surface font-medium hover:text-primary transition-colors">
-                    <span>Bagaimana cara menghubungkan WhatsApp?</span>
+                    <span><?= e($settings['faq_2_q'] ?? 'Apakah mendukung multi-device dan multi-nomor WhatsApp?') ?></span>
                     <span class="material-symbols-outlined text-on-surface-variant transition-transform duration-200">expand_more</span>
                 </button>
                 <div class="faq-content hidden px-6 pb-5 text-on-surface-variant text-sm leading-relaxed border-t border-surface-container/50 pt-3">
-                    Anda cukup masuk ke dashboard NyautWa, buat sesi baru (Node Instance), lalu scan QR Code yang disediakan menggunakan aplikasi WhatsApp pada ponsel Anda seperti halnya menghubungkan WhatsApp Web. Sesi Anda akan aktif seketika.
+                    <?= e($settings['faq_2_a'] ?? 'Ya, paket Pro dan Business mendukung pengelolaan multi-device untuk nomor CS, notifikasi transaksi, dan marketing terpisah.') ?>
                 </div>
             </div>
             <div class="rounded-xl bg-surface shadow-sm overflow-hidden border border-surface-container-high/60">
                 <button class="faq-toggle w-full px-6 py-5 flex items-center justify-between text-left text-base text-on-surface font-medium hover:text-primary transition-colors">
-                    <span>Apakah NyautWa menyediakan REST API?</span>
+                    <span><?= e($settings['faq_3_q'] ?? 'Bagaimana sistem mencegah nomor WhatsApp terblokir (Anti-Ban)?') ?></span>
                     <span class="material-symbols-outlined text-on-surface-variant transition-transform duration-200">expand_more</span>
                 </button>
                 <div class="faq-content hidden px-6 pb-5 text-on-surface-variant text-sm leading-relaxed border-t border-surface-container/50 pt-3">
-                    Ya. NyautWa sepenuhnya berbasis REST API standar. Kami menyediakan endpoint terstruktur dengan otentikasi Bearer Token untuk pengiriman pesan teks, verifikasi status pengiriman, hingga webhooks callback otomatis.
+                    <?= e($settings['faq_3_a'] ?? 'NyautWa menerapkan human-like delay acak, batch throttling otomatis, dan rekomendasi rotasi nomor.') ?>
                 </div>
             </div>
             <div class="rounded-xl bg-surface shadow-sm overflow-hidden border border-surface-container-high/60">
