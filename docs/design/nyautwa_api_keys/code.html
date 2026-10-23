@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+
+<html lang="id"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "tertiary-container": "#6b7772",
+          "on-secondary-fixed-variant": "#3e4946",
+          "on-tertiary": "#ffffff",
+          "on-error": "#ffffff",
+          "background": "#f0fcf6",
+          "surface-container": "#e4f1ea",
+          "inverse-primary": "#62dd9e",
+          "surface-dim": "#d0ddd7",
+          "on-secondary-fixed": "#131d1c",
+          "error": "#ba1a1a",
+          "on-background": "#131e1a",
+          "on-tertiary-fixed-variant": "#3d4944",
+          "secondary-container": "#d7e2de",
+          "outline-variant": "#bccabf",
+          "surface-bright": "#f0fcf6",
+          "secondary": "#56615e",
+          "tertiary-fixed-dim": "#bdc9c3",
+          "surface": "#f0fcf6",
+          "on-primary-fixed": "#002111",
+          "primary-container": "#008655",
+          "primary": "#006a42",
+          "surface-container-highest": "#d9e5df",
+          "on-surface": "#131e1a",
+          "on-primary": "#ffffff",
+          "secondary-fixed-dim": "#bec9c5",
+          "on-secondary-container": "#5a6562",
+          "primary-fixed": "#80fab9",
+          "surface-container-low": "#eaf7f0",
+          "surface-container-lowest": "#ffffff",
+          "on-tertiary-container": "#f5fff9",
+          "inverse-surface": "#28332f",
+          "outline": "#6d7a70",
+          "on-error-container": "#93000a",
+          "on-surface-variant": "#3d4a41",
+          "tertiary-fixed": "#d9e5df",
+          "primary-fixed-dim": "#62dd9e",
+          "surface-variant": "#d9e5df",
+          "on-secondary": "#ffffff",
+          "inverse-on-surface": "#e7f4ed",
+          "error-container": "#ffdad6",
+          "secondary-fixed": "#dae5e1",
+          "surface-tint": "#006d44",
+          "on-primary-fixed-variant": "#005232",
+          "surface-container-high": "#deebe5",
+          "tertiary": "#535f59",
+          "on-tertiary-fixed": "#131e1a",
+          "on-primary-container": "#f6fff6"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "space-xl": "2rem",
+          "space-xs": "0.25rem",
+          "gutter-mobile": "0.75rem",
+          "margin-mobile": "1rem",
+          "space-sm": "0.5rem",
+          "gutter": "1rem",
+          "space-lg": "1.5rem",
+          "space-md": "1rem",
+          "margin": "1.5rem"
+        },
+        "fontFamily": {
+          "display-mobile": [
+            "Geist"
+          ],
+          "code-sm": [
+            "JetBrains Mono"
+          ],
+          "body-lg": [
+            "Geist"
+          ],
+          "headline-lg": [
+            "Geist"
+          ],
+          "headline-md": [
+            "Geist"
+          ],
+          "headline-lg-mobile": [
+            "Geist"
+          ],
+          "body-md": [
+            "Geist"
+          ],
+          "display": [
+            "Geist"
+          ],
+          "label-sm": [
+            "Geist"
+          ],
+          "code-md": [
+            "JetBrains Mono"
+          ],
+          "headline-sm": [
+            "Geist"
+          ],
+          "label-md": [
+            "Geist"
+          ],
+          "body-sm": [
+            "Geist"
+          ]
+        },
+        "fontSize": {
+          "display-mobile": [
+            "28px",
+            {
+              "lineHeight": "36px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "600"
+            }
+          ],
+          "code-sm": [
+            "11px",
+            {
+              "lineHeight": "16px",
+              "letterSpacing": "0em",
+              "fontWeight": "400"
+            }
+          ],
+          "body-lg": [
+            "16px",
+            {
+              "lineHeight": "24px",
+              "letterSpacing": "0em",
+              "fontWeight": "400"
+            }
+          ],
+          "headline-lg": [
+            "28px",
+            {
+              "lineHeight": "36px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-md": [
+            "20px",
+            {
+              "lineHeight": "28px",
+              "letterSpacing": "-0.015em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-lg-mobile": [
+            "22px",
+            {
+              "lineHeight": "30px",
+              "letterSpacing": "-0.015em",
+              "fontWeight": "600"
+            }
+          ],
+          "body-md": [
+            "14px",
+            {
+              "lineHeight": "20px",
+              "letterSpacing": "0em",
+              "fontWeight": "400"
+            }
+          ],
+          "display": [
+            "36px",
+            {
+              "lineHeight": "44px",
+              "letterSpacing": "-0.025em",
+              "fontWeight": "600"
+            }
+          ],
+          "label-sm": [
+            "11px",
+            {
+              "lineHeight": "16px",
+              "letterSpacing": "0.02em",
+              "fontWeight": "500"
+            }
+          ],
+          "code-md": [
+            "13px",
+            {
+              "lineHeight": "20px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "400"
+            }
+          ],
+          "headline-sm": [
+            "16px",
+            {
+              "lineHeight": "24px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "label-md": [
+            "13px",
+            {
+              "lineHeight": "18px",
+              "letterSpacing": "0.01em",
+              "fontWeight": "500"
+            }
+          ],
+          "body-sm": [
+            "12px",
+            {
+              "lineHeight": "18px",
+              "letterSpacing": "0.005em",
+              "fontWeight": "400"
+            }
+          ]
+        }
+      },
+    },
+  };</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-screen w-60 bg-inverse-surface text-inverse-on-surface z-50 flex flex-col justify-between border-r border-outline-variant/20 select-none"><div class="flex flex-col flex-1 min-h-0"><div class="h-16 px-space-md flex items-center justify-between border-b border-outline-variant/15"><div class="flex items-center gap-space-sm"><img alt="NyautWa Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1Uostw45lb-lb-MGDWO3crJAx8EejR11amBE0RTKHpuSNipCbm6se_6fjWReepJRj4xZufUVe1zxs-DW6_8LNWhv4Rb7V7JKEx_9mYPXz-1wNue6StprscClX7tbF7wydBQOSXGDcY4uOWR6rncro2vQvvj9w1b00pdB6FcE7FYTt1gaAXM6ljGTDd7duvcW2v-zPLwtYgnYDjtQ1bZIbRFq0iDeJ3ytBJAz6T4Qv81PEeqrDY6PaAmSIc"/><span class="font-headline-sm text-headline-sm tracking-tight text-surface-container-lowest font-semibold">NyautWa</span></div><span class="font-code-sm text-code-sm px-space-xs py-0.5 rounded bg-surface-container-high/20 text-inverse-primary border border-surface-container-high/30 font-medium">v1.4</span></div><div class="flex-1 overflow-y-auto px-space-sm py-space-md space-y-space-md"><div class="space-y-space-xs"><div class="px-space-sm font-label-sm text-label-sm uppercase tracking-wider text-outline-variant/80 font-medium">Workspace</div><nav class="space-y-0.5" data-active-classes="bg-primary-container text-on-primary-container font-semibold shadow-sm"><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-inverse-on-surface/80 hover:bg-surface-variant/20 hover:text-surface-container-lowest transition-colors" data-path="dashboard" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">dashboard</span><span class="font-body-md text-body-md">Dashboard</span></div></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-inverse-on-surface/80 hover:bg-surface-variant/20 hover:text-surface-container-lowest transition-colors" data-path="koneksi-whatsapp" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">cell_tower</span><span class="font-body-md text-body-md">Koneksi WhatsApp</span></div><span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-primary/30 text-primary-fixed font-semibold">3 Online</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-inverse-on-surface/80 hover:bg-surface-variant/20 hover:text-surface-container-lowest transition-colors" data-path="pesan" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">send</span><span class="font-body-md text-body-md">Pesan</span></div></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-inverse-on-surface/80 hover:bg-surface-variant/20 hover:text-surface-container-lowest transition-colors" data-path="riwayat-pesan" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">history_edu</span><span class="font-body-md text-body-md">Riwayat Pesan</span></div></a></nav></div><div class="space-y-space-xs"><div class="px-space-sm font-label-sm text-label-sm uppercase tracking-wider text-outline-variant/80 font-medium">Developer</div><nav class="space-y-0.5" data-active-classes="bg-primary-container text-on-primary-container font-semibold shadow-sm"><a aria-current="page" class="flex items-center justify-between px-space-sm py-2 rounded-lg transition-colors bg-primary-container text-on-primary-container font-semibold shadow-sm" data-path="api-keys" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">key</span><span class="font-body-md text-body-md">API Keys</span></div></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-inverse-on-surface/80 hover:bg-surface-variant/20 hover:text-surface-container-lowest transition-colors" data-path="dokumentasi-api" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">terminal</span><span class="font-body-md text-body-md">Dokumentasi API</span></div></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-inverse-on-surface/80 hover:bg-surface-variant/20 hover:text-surface-container-lowest transition-colors" data-path="webhooks" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">webhook</span><span class="font-body-md text-body-md">Webhooks</span></div></a></nav></div><div class="space-y-space-xs"><div class="px-space-sm font-label-sm text-label-sm uppercase tracking-wider text-outline-variant/80 font-medium">Account</div><nav class="space-y-0.5" data-active-classes="bg-primary-container text-on-primary-container font-semibold shadow-sm"><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-inverse-on-surface/80 hover:bg-surface-variant/20 hover:text-surface-container-lowest transition-colors" data-path="penggunaan" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">bar_chart</span><span class="font-body-md text-body-md">Penggunaan</span></div><span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-tertiary-container/40 text-surface-container-lowest font-medium">Pro Tier</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-inverse-on-surface/80 hover:bg-surface-variant/20 hover:text-surface-container-lowest transition-colors" data-path="pengaturan" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[18px]">settings</span><span class="font-body-md text-body-md">Pengaturan</span></div></a></nav></div></div></div><div class="p-space-sm border-t border-outline-variant/15 space-y-space-sm"><div class="px-space-sm py-1.5 rounded-lg bg-surface-variant/10 border border-outline-variant/10 flex items-center justify-between"><div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-primary-fixed animate-pulse"></span><span class="font-code-sm text-code-sm text-inverse-on-surface/90">Gateway Engine</span></div><span class="font-code-sm text-code-sm text-primary-fixed-dim">24ms</span></div><div class="flex items-center gap-space-sm px-space-sm py-1 rounded-lg hover:bg-surface-variant/15 transition-colors cursor-pointer"><img alt="Profile" class="w-8 h-8 rounded-full object-cover border border-outline-variant/30" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOU83QmdEvxWgMNq_KulArRq3m51kEpOMcVwzoStr-lXQMbdfd4MAkEjzc7GfcmbSkcdjy0T8ZZ2Dvq41nhdZPqSmEjy3niZ2YYGSV98D7QWRnL0SJOUef_Ozc0srBU9xiW8XEZUw6y37SGvqJD_4p-nL-OuZ7NdgAE8E8FOE_RQbmwCM7ylnoiOuFZzRRzS-9rq5ydTF-nTa5EUHqkItFqB4GusHGQN968l32KuJxauaoTejbkbcA"/><div class="flex-1 min-w-0"><div class="font-label-md text-label-md text-surface-container-lowest font-medium truncate">Budi Pratama</div><div class="font-body-sm text-body-sm text-outline-variant truncate">PT Solusi Finansial</div></div><span class="material-symbols-outlined text-outline-variant text-[16px]">unfold_more</span></div></div></aside><div class="pl-60 min-h-screen flex flex-col"><header class="fixed top-0 left-60 right-0 h-16 bg-surface/85 backdrop-blur-md z-40 border-b border-outline-variant/25 px-space-lg flex items-center justify-between"><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs font-label-md text-label-md text-on-surface-variant"><span class="hover:text-on-surface transition-colors cursor-pointer">Platform</span><span class="text-outline-variant">/</span><span class="font-medium text-on-surface">Gateway Manager</span></div><div class="h-4 w-[1px] bg-outline-variant/30"></div><div class="flex items-center gap-space-xs"><span class="px-2 py-0.5 rounded font-code-sm text-code-sm font-medium bg-surface-container text-on-surface border border-outline-variant/40">Production</span><div class="flex items-center gap-1 px-2 py-0.5 rounded font-label-sm text-label-sm bg-surface-container-low text-primary border border-primary/20"><span class="w-1.5 h-1.5 rounded-full bg-primary"></span><span>99.98% Uptime</span></div></div></div><div class="flex items-center gap-space-sm"><button class="flex items-center gap-2 h-9 px-space-md rounded-lg bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant hover:text-on-surface hover:border-outline-variant transition-colors shadow-[0_1px_2px_rgba(0,0,0,0.02)]" type="button"><span class="material-symbols-outlined text-[18px]">search</span><span class="font-body-sm text-body-sm">Cari endpoint, ID log...</span><kbd class="font-code-sm text-code-sm px-1.5 py-0.5 rounded bg-surface-container text-secondary font-medium">⌘K</kbd></button><a class="h-9 px-space-sm flex items-center gap-1 font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low rounded-lg transition-colors" href="#"><span class="material-symbols-outlined text-[18px]">menu_book</span><span>Docs</span></a><button class="relative p-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-error ring-2 ring-surface"></span></button><div class="h-6 w-[1px] bg-outline-variant/30"></div><div class="flex items-center gap-space-sm pl-space-xs"><img alt="Profile" class="w-8 h-8 rounded-full object-cover border border-outline-variant/40 ring-1 ring-surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOU83QmdEvxWgMNq_KulArRq3m51kEpOMcVwzoStr-lXQMbdfd4MAkEjzc7GfcmbSkcdjy0T8ZZ2Dvq41nhdZPqSmEjy3niZ2YYGSV98D7QWRnL0SJOUef_Ozc0srBU9xiW8XEZUw6y37SGvqJD_4p-nL-OuZ7NdgAE8E8FOE_RQbmwCM7ylnoiOuFZzRRzS-9rq5ydTF-nTa5EUHqkItFqB4GusHGQN968l32KuJxauaoTejbkbcA"/><div class="hidden xl:block text-left"><div class="font-label-md text-label-md font-medium text-on-surface leading-tight">Budi Pratama</div><div class="font-code-sm text-code-sm text-secondary leading-none">#ID-82910</div></div><span class="material-symbols-outlined text-on-surface-variant text-[18px] cursor-pointer">keyboard_arrow_down</span></div></div></header><main class="w-full pt-16 flex-1 bg-surface-container-low/40 p-space-lg"><div class="flex flex-col w-full">
+<!-- Top Command Ribbon -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md mb-space-lg">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-space-xs font-label-sm text-label-sm text-primary uppercase tracking-wider font-semibold">
+<span class="w-2 h-2 rounded-full bg-primary-fixed-dim"></span>
+<span>Credentials &amp; Security</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight">API Keys</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+        Kelola token autentikasi rahasia untuk mengirim pesan dan mengakses REST API NyautWa secara aman.
+      </p>
+</div>
+<div class="flex items-center gap-space-sm self-start md:self-center">
+<button class="h-10 px-space-lg rounded-lg bg-primary-container text-on-primary-container font-headline-sm text-headline-sm font-semibold flex items-center gap-2 hover:bg-primary shadow-sm active:scale-[0.98] transition-all cursor-pointer" onclick="openGenerateModal()" type="button">
+<span class="material-symbols-outlined text-[20px]">add</span>
+<span>Buat API Key Baru</span>
+</button>
+</div>
+</div>
+<!-- Developer Security Guidance Banner -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-low p-space-md mb-space-lg shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-md">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-primary-container"></div>
+<div class="flex items-start gap-space-md pl-2">
+<div class="p-2 rounded-lg bg-surface-container-lowest text-primary shadow-sm flex-shrink-0">
+<span class="material-symbols-outlined text-[24px]">gshield</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold tracking-tight">
+          Praktik Keamanan Kunci Rahasia
+        </span>
+<p class="font-body-md text-body-md text-on-surface-variant mt-0.5 leading-relaxed">
+          Jaga kerahasiaan API Key Anda. Jangan pernah membagikan atau menyimpan kunci rahasia ini di kode frontend publik (seperti GitHub client-side repository). Gunakan environment variable pada server backend Anda.
+        </p>
+</div>
+</div>
+<a class="inline-flex items-center gap-1.5 px-space-md py-2 rounded-lg bg-surface-container-lowest text-primary font-label-md text-label-md font-semibold hover:bg-surface-container transition-colors shadow-sm flex-shrink-0 whitespace-nowrap self-end sm:self-auto" href="#">
+<span>Security Guide</span>
+<span class="material-symbols-outlined text-[16px]">north_east</span>
+</a>
+</div>
+<!-- Main Split Architecture: Keys Table & Analytics Sidebar -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-lg mb-space-xl">
+<!-- Keys Management View (8 cols on XL) -->
+<div class="xl:col-span-8 flex flex-col gap-space-md">
+<!-- Filter & Search Bar Header -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm bg-surface-container-lowest p-space-sm rounded-xl shadow-sm">
+<div class="flex items-center gap-space-xs flex-1 max-w-md bg-surface-container-low px-space-sm py-1.5 rounded-lg">
+<span class="material-symbols-outlined text-secondary text-[18px]">search</span>
+<input class="bg-transparent border-0 outline-none text-body-md font-body-md text-on-surface placeholder:text-secondary w-full" placeholder="Cari nama token atau identifier..." type="text"/>
+</div>
+<div class="flex items-center gap-space-xs self-end sm:self-auto">
+<div class="flex items-center bg-surface-container-low p-0.5 rounded-lg">
+<button class="px-2.5 py-1 rounded-md text-label-sm font-label-sm font-semibold bg-surface-container-lowest text-on-surface shadow-sm" type="button">Semua (3)</button>
+<button class="px-2.5 py-1 rounded-md text-label-sm font-label-sm font-medium text-secondary hover:text-on-surface transition-colors" type="button">Production (2)</button>
+<button class="px-2.5 py-1 rounded-md text-label-sm font-label-sm font-medium text-secondary hover:text-on-surface transition-colors" type="button">Staging (1)</button>
+</div>
+</div>
+</div>
+<!-- Keys Cards Grid / Stack -->
+<div class="space-y-space-md">
+<!-- Key Card 1: Production Backend Server -->
+<div class="group bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col gap-space-md">
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-space-sm">
+<div class="flex items-start gap-space-sm">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-primary flex-shrink-0">
+<span class="material-symbols-outlined text-[22px]">dns</span>
+</div>
+<div>
+<div class="flex items-center gap-space-xs flex-wrap">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Production Backend Server</h3>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-code-sm text-code-sm bg-surface-container-low text-primary font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                    Production
+                  </span>
+</div>
+<div class="flex items-center gap-2 mt-1 flex-wrap">
+<span class="font-label-sm text-label-sm text-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">lock_open</span>
+                    Full Access (Send, Read, Webhooks)
+                  </span>
+<span class="text-secondary text-[10px]">•</span>
+<span class="font-code-sm text-code-sm text-secondary">
+                    Dibuat 12 Sep 2025 oleh Budi Pratama
+                  </span>
+</div>
+</div>
+</div>
+<!-- Quick Status Badge -->
+<div class="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-surface-container-low self-start">
+<span class="material-symbols-outlined text-primary text-[14px]">network_ping</span>
+<span class="font-code-sm text-code-sm text-on-surface">Terakhir: <strong class="text-primary font-semibold">Baru saja</strong> (IP 103.145.22.8)</span>
+</div>
+</div>
+<!-- Token String Panel -->
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-space-sm bg-surface-container-low/60 p-space-sm rounded-lg">
+<div class="flex items-center gap-space-sm min-w-0">
+<span class="font-code-sm text-code-sm text-secondary select-none">TOKEN:</span>
+<code class="font-code-md text-code-md text-on-surface font-semibold tracking-wider truncate">
+                nwt_live_9a8f••••••••••••••••••••••••3b9c
+              </code>
+</div>
+<div class="flex items-center gap-space-xs self-end sm:self-auto flex-shrink-0">
+<button class="px-space-sm py-1.5 rounded-md bg-surface-container-lowest text-on-surface hover:text-primary font-label-sm text-label-sm font-semibold shadow-sm flex items-center gap-1 transition-colors cursor-pointer" onclick="copyFeedback(this, 'nwt_live_9a8f4c2d8e7b1a20947264103b9c')" type="button">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+<span>Salin Key</span>
+</button>
+<button class="px-space-sm py-1.5 rounded-md bg-surface-container-lowest text-on-surface hover:bg-surface-container font-label-sm text-label-sm font-medium shadow-sm transition-colors" title="Edit Nama &amp; Scope" type="button">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+<button class="px-space-sm py-1.5 rounded-md bg-surface-container-lowest text-on-surface hover:text-error hover:bg-error-container/20 font-label-sm text-label-sm font-medium shadow-sm transition-colors" title="Roll Token" type="button">
+<span class="material-symbols-outlined text-[16px]">cached</span>
+</button>
+<button class="px-space-sm py-1.5 rounded-md bg-error-container text-on-error-container hover:bg-error hover:text-on-error font-label-sm text-label-sm font-medium transition-colors cursor-pointer flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">delete_sweep</span>
+<span class="hidden md:inline">Cabut Kunci</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Key Card 2: Staging & Testing Bot -->
+<div class="group bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col gap-space-md">
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-space-sm">
+<div class="flex items-start gap-space-sm">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-secondary flex-shrink-0">
+<span class="material-symbols-outlined text-[22px]">smart_toy</span>
+</div>
+<div>
+<div class="flex items-center gap-space-xs flex-wrap">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Staging &amp; Testing Bot</h3>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-code-sm text-code-sm bg-secondary-container text-on-secondary-container font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                    Staging
+                  </span>
+</div>
+<div class="flex items-center gap-2 mt-1 flex-wrap">
+<span class="font-label-sm text-label-sm text-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">send</span>
+                    Send Only (Restricted)
+                  </span>
+<span class="text-secondary text-[10px]">•</span>
+<span class="font-code-sm text-code-sm text-secondary">
+                    Dibuat 01 Okt 2025
+                  </span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-surface-container-low self-start">
+<span class="material-symbols-outlined text-secondary text-[14px]">history</span>
+<span class="font-code-sm text-code-sm text-on-surface">Terakhir: <strong>2 hari lalu</strong></span>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-space-sm bg-surface-container-low/60 p-space-sm rounded-lg">
+<div class="flex items-center gap-space-sm min-w-0">
+<span class="font-code-sm text-code-sm text-secondary select-none">TOKEN:</span>
+<code class="font-code-md text-code-md text-on-surface font-semibold tracking-wider truncate">
+                nwt_test_4c2d••••••••••••••••••••••••7e1a
+              </code>
+</div>
+<div class="flex items-center gap-space-xs self-end sm:self-auto flex-shrink-0">
+<button class="px-space-sm py-1.5 rounded-md bg-surface-container-lowest text-on-surface hover:text-primary font-label-sm text-label-sm font-semibold shadow-sm flex items-center gap-1 transition-colors cursor-pointer" onclick="copyFeedback(this, 'nwt_test_4c2d82910ae88320491048207e1a')" type="button">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+<span>Salin Key</span>
+</button>
+<button class="px-space-sm py-1.5 rounded-md bg-error-container text-on-error-container hover:bg-error hover:text-on-error font-label-sm text-label-sm font-medium transition-colors cursor-pointer flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">delete_sweep</span>
+<span>Cabut Kunci</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Key Card 3: Automated Invoice Script -->
+<div class="group bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col gap-space-md">
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-space-sm">
+<div class="flex items-start gap-space-sm">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low flex items-center justify-center text-primary flex-shrink-0">
+<span class="material-symbols-outlined text-[22px]">receipt_long</span>
+</div>
+<div>
+<div class="flex items-center gap-space-xs flex-wrap">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Automated Invoice Script</h3>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-code-sm text-code-sm bg-surface-container-low text-primary font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                    Production
+                  </span>
+</div>
+<div class="flex items-center gap-2 mt-1 flex-wrap">
+<span class="font-label-sm text-label-sm text-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">outgoing_mail</span>
+                    Send Only
+                  </span>
+<span class="text-secondary text-[10px]">•</span>
+<span class="font-code-sm text-code-sm text-secondary">
+                    Dibuat 15 Agu 2025
+                  </span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-surface-container-low self-start">
+<span class="material-symbols-outlined text-primary text-[14px]">schedule</span>
+<span class="font-code-sm text-code-sm text-on-surface">Terakhir: <strong>1 jam lalu</strong></span>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-space-sm bg-surface-container-low/60 p-space-sm rounded-lg">
+<div class="flex items-center gap-space-sm min-w-0">
+<span class="font-code-sm text-code-sm text-secondary select-none">TOKEN:</span>
+<code class="font-code-md text-code-md text-on-surface font-semibold tracking-wider truncate">
+                nwt_live_1b7e••••••••••••••••••••••••8a4f
+              </code>
+</div>
+<div class="flex items-center gap-space-xs self-end sm:self-auto flex-shrink-0">
+<button class="px-space-sm py-1.5 rounded-md bg-surface-container-lowest text-on-surface hover:text-primary font-label-sm text-label-sm font-semibold shadow-sm flex items-center gap-1 transition-colors cursor-pointer" onclick="copyFeedback(this, 'nwt_live_1b7e829377481940982348988a4f')" type="button">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+<span>Salin Key</span>
+</button>
+<button class="px-space-sm py-1.5 rounded-md bg-error-container text-on-error-container hover:bg-error hover:text-on-error font-label-sm text-label-sm font-medium transition-colors cursor-pointer flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[16px]">delete_sweep</span>
+<span>Cabut Kunci</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Security Insights & Key Rotation Telemetry (4 cols on XL) -->
+<div class="xl:col-span-4 flex flex-col gap-space-md">
+<!-- Telemetry Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold">Tingkat Aktivitas API</span>
+<span class="font-code-sm text-code-sm px-2 py-0.5 rounded bg-surface-container-low text-primary font-medium">Live 24 Jam</span>
+</div>
+<!-- Inline SVG Usage Sparkline -->
+<div class="flex flex-col gap-1">
+<div class="flex items-baseline justify-between">
+<span class="font-display text-display text-on-surface font-bold">148,290</span>
+<span class="font-label-sm text-label-sm text-primary font-semibold flex items-center">
+<span class="material-symbols-outlined text-[16px]">arrow_upward</span> +14.2%
+            </span>
+</div>
+<span class="font-body-sm text-body-sm text-secondary">Total panggilan terautentikasi hari ini</span>
+</div>
+<div class="w-full h-16 pt-2">
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 300 60">
+<defs>
+<lineargradient id="gradientKey" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#008655" stop-opacity="0.25"></stop>
+<stop offset="100%" stop-color="#008655" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,45 Q30,10 60,35 T120,20 T180,40 T240,15 T300,28 L300,60 L0,60 Z" fill="url(#gradientKey)"></path>
+<path d="M0,45 Q30,10 60,35 T120,20 T180,40 T240,15 T300,28" fill="none" stroke="#008655" stroke-linecap="round" stroke-width="2.5"></path>
+<circle cx="300" cy="28" fill="#006a42" r="4"></circle>
+</svg>
+</div>
+<div class="pt-2 grid grid-cols-2 gap-space-sm border-t border-surface-container">
+<div class="flex flex-col">
+<span class="font-code-sm text-code-sm text-secondary">Tingkat Kegagalan Auth</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">0.002%</span>
+</div>
+<div class="flex flex-col">
+<span class="font-code-sm text-code-sm text-secondary">Rata-rata Latensi</span>
+<span class="font-headline-sm text-headline-sm text-primary font-bold">18ms</span>
+</div>
+</div>
+</div>
+<!-- Rotation Policy & IP Whitelist Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">security_update_good</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface font-semibold">Kebijakan Rotasi Kunci</h4>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+          Kunci dianjurkan diganti setiap 90 hari. NyautWa mendukung <i>Zero-Downtime Key Rolling</i> di mana kunci lama tetap valid selama masa transisi 24 jam.
+        </p>
+<div class="flex items-center justify-between p-space-sm rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">verified_user</span>
+<span class="font-label-md text-label-md text-on-surface font-medium">IP Lock Filtering</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-semibold">Aktif (1 IP)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Documentation Reference Card -->
+<div class="bg-inverse-surface rounded-2xl p-space-lg text-inverse-on-surface shadow-xl relative overflow-hidden mb-space-xl">
+<div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-space-lg">
+<div class="flex flex-col gap-2 max-w-xl">
+<div class="flex items-center gap-2 text-primary-fixed">
+<span class="material-symbols-outlined text-[20px]">terminal</span>
+<span class="font-code-sm text-code-sm font-semibold uppercase tracking-wider">Quick Integration</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-surface-container-lowest font-bold">
+          Cara Menggunakan API Key di Header Request
+        </h2>
+<p class="font-body-md text-body-md text-inverse-on-surface/80">
+          Sertakan kunci rahasia Anda pada header Authorization sebagai Bearer token di setiap permintaan HTTP ke endpoint resmi NyautWa.
+        </p>
+<div class="pt-2">
+<a class="inline-flex items-center gap-2 text-primary-fixed font-label-md text-label-md font-semibold hover:underline" data-path="dokumentasi-api" href="#">
+<span>Buka Dokumentasi Autentikasi Lengkap</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Code Snippet Box -->
+<div class="w-full lg:max-w-lg bg-[#131d1a] rounded-xl p-space-md shadow-inner flex flex-col gap-2">
+<div class="flex items-center justify-between pb-2 border-b border-surface-variant/10">
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-error"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-[#fbbc04]"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-primary-fixed"></span>
+<span class="font-code-sm text-code-sm text-outline-variant ml-2">cURL Request</span>
+</div>
+<button class="font-code-sm text-code-sm text-primary-fixed hover:text-surface-container-lowest transition-colors flex items-center gap-1 cursor-pointer" onclick="copyFeedback(this, 'curl -X POST https://api.nyautwa.id/v1/messages \\\n  -H &quot;Authorization: Bearer YOUR_API_KEY&quot; \\\n  -H &quot;Content-Type: application/json&quot;')" type="button">
+<span class="material-symbols-outlined text-[14px]">content_copy</span>
+<span>Salin</span>
+</button>
+</div>
+<pre class="font-code-md text-code-md text-inverse-on-surface overflow-x-auto py-1 leading-relaxed"><code><span class="text-primary-fixed">curl</span> -X POST https://api.nyautwa.id/v1/messages \
+  -H <span class="text-primary-fixed-dim">"Authorization: Bearer YOUR_API_KEY"</span> \
+  -H <span class="text-primary-fixed-dim">"Content-Type: application/json"</span> \
+  -d '{<span class="text-primary-fixed-dim">"to"</span>: <span class="text-surface-container-highest">"628123456789"</span>, <span class="text-primary-fixed-dim">"message"</span>: <span class="text-surface-container-highest">"Halo!"</span>}'</code></pre>
+</div>
+</div>
+</div>
+<!-- One-Time Key Disclosure Modal (Dialog Pattern Preview) -->
+<div class="fixed inset-0 bg-inverse-surface/60 backdrop-blur-sm z-50 flex items-center justify-center p-space-md transition-opacity duration-200" id="keyModalBackdrop">
+<div class="bg-surface-container-lowest w-full max-w-xl rounded-2xl p-space-lg shadow-2xl flex flex-col gap-space-lg animate-in fade-in zoom-in-95 duration-200">
+<!-- Modal Header -->
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-surface-container-low text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">key</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface font-bold">API Key Berhasil Dibuat</h3>
+<span class="font-body-sm text-body-sm text-secondary">Token unik untuk server backend</span>
+</div>
+</div>
+<button class="p-1 rounded-lg text-secondary hover:text-on-surface hover:bg-surface-container transition-colors" onclick="closeGenerateModal()" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Warning Callout Banner (Amber tone from style guide) -->
+<div class="p-space-md rounded-xl bg-[#fef6e7] text-[#935b0b] flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-[22px] text-[#d99124] flex-shrink-0 mt-0.5">warning</span>
+<p class="font-body-md text-body-md leading-relaxed font-medium">
+          Peringatan: Simpan API Key ini sekarang. Demi alasan keamanan, kami tidak akan pernah menampilkan kunci lengkap ini lagi setelah dialog ditutup.
+        </p>
+</div>
+<!-- Full Key Display Box with Copy Action -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm text-secondary font-semibold uppercase tracking-wider">
+          Token Rahasia Baru
+        </label>
+<div class="flex items-center gap-space-xs p-1.5 bg-surface-container-low rounded-xl">
+<input class="flex-1 bg-transparent px-space-sm font-code-md text-code-md text-on-surface font-semibold select-all outline-none" id="modalRawApiKey" readonly="" type="text" value="nwt_live_8f7b2c91a0e4d58823190bce7193d84a"/>
+<button class="h-9 px-space-md rounded-lg bg-primary-container text-on-primary-container font-label-md text-label-md font-semibold flex items-center gap-1.5 hover:bg-primary shadow-sm active:scale-95 transition-all cursor-pointer whitespace-nowrap" id="modalCopyBtn" onclick="copyModalKey()" type="button">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+<span>Salin ke Clipboard</span>
+</button>
+</div>
+</div>
+<!-- Setup Snippet: .env Example -->
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-secondary font-semibold uppercase tracking-wider">
+            Rekomendasi Konfigurasi (.env)
+          </span>
+<span class="font-code-sm text-code-sm text-primary font-medium">Node.js / Python / Go</span>
+</div>
+<div class="bg-inverse-surface rounded-xl p-space-sm font-code-md text-code-md text-surface-container-lowest flex items-center justify-between">
+<code class="text-primary-fixed truncate">NYAUTWA_API_KEY=nwt_live_8f7b2c91a0e4d58823190bce7193d84a</code>
+<button class="text-inverse-on-surface/70 hover:text-inverse-on-surface p-1 rounded transition-colors" onclick="copyFeedback(this, 'NYAUTWA_API_KEY=nwt_live_8f7b2c91a0e4d58823190bce7193d84a')" title="Salin .env snippet" type="button">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+</button>
+</div>
+</div>
+<!-- Modal Footer -->
+<div class="pt-2 flex flex-col sm:flex-row items-center justify-end gap-space-sm">
+<button class="w-full sm:w-auto h-11 px-space-xl rounded-lg bg-primary-container text-on-primary-container font-headline-sm text-headline-sm font-bold shadow-sm hover:bg-primary transition-all cursor-pointer text-center" onclick="closeGenerateModal()" type="button">
+          Saya telah menyimpan kunci ini dengan aman
+        </button>
+</div>
+</div>
+</div>
+<!-- Client-side Interactive Logic -->
+<script>
+    function copyFeedback(btnElement, text) {
+      navigator.clipboard.writeText(text).then(() => {
+        const originalContent = btnElement.innerHTML;
+        btnElement.innerHTML = '<span class="material-symbols-outlined text-[16px] text-primary">check</span><span class="text-primary font-semibold">Tersalin</span>';
+        setTimeout(() => {
+          btnElement.innerHTML = originalContent;
+        }, 1800);
+      }).catch(err => {
+        console.error('Copy failed: ', err);
+      });
+    }
+
+    function copyModalKey() {
+      const input = document.getElementById('modalRawApiKey');
+      const copyBtn = document.getElementById('modalCopyBtn');
+      if (!input || !copyBtn) return;
+      
+      navigator.clipboard.writeText(input.value).then(() => {
+        const originalContent = copyBtn.innerHTML;
+        copyBtn.innerHTML = '<span class="material-symbols-outlined text-[18px]">done_all</span><span>Tersalin!</span>';
+        copyBtn.classList.add('bg-primary');
+        setTimeout(() => {
+          copyBtn.innerHTML = originalContent;
+          copyBtn.classList.remove('bg-primary');
+        }, 2200);
+      });
+    }
+
+    function closeGenerateModal() {
+      const modal = document.getElementById('keyModalBackdrop');
+      if (modal) {
+        modal.classList.add('hidden');
+      }
+    }
+
+    function openGenerateModal() {
+      const modal = document.getElementById('keyModalBackdrop');
+      if (modal) {
+        modal.classList.remove('hidden');
+      }
+    }
+  </script>
+</div></main></div></body></html>

@@ -1,0 +1,18 @@
+{
+  "name": "nyautwa-engine",
+  "version": "1.0.0",
+  "description": "Internal Baileys WhatsApp Gateway Engine for NyautWa SaaS",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.7.9",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "pino": "^9.6.0",
+    "qrcode": "^1.5.4"
+  }
+}
