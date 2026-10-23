@@ -37,6 +37,7 @@ class ApiKeyController {
             'keys' => $keys,
             'primaryWebhook' => $primaryWebhook,
             'newKey' => $_SESSION['just_created_key'] ?? null,
+            'newRawKey' => $_SESSION['just_created_key']['raw_key'] ?? null,
         ], 'app');
 
         unset($_SESSION['just_created_key']);

@@ -15,7 +15,7 @@
                 <span class="material-symbols-outlined text-[20px]">close</span>
             </button>
         </div>
-        <form action="<?= url('/api-keys') ?>" method="POST" class="space-y-4">
+        <form action="<?= url('/api-keys/create') ?>" method="POST" class="space-y-4">
             <?= csrf_field() ?>
             <div>
                 <label for="name" class="block text-xs font-semibold text-on-surface mb-1.5">Nama Identifier Key</label>
@@ -37,7 +37,10 @@
     </div>
 </div>
 
-<?php if (!empty($newRawKey)): ?>
+<?php 
+$secretToken = $newRawKey ?? ($newKey['raw_key'] ?? null); 
+if (!empty($secretToken)): 
+?>
 <!-- One-Time Key Disclosure Modal -->
 <div id="modal-new-key" class="fixed inset-0 bg-inverse-surface/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-surface-container-lowest w-full max-w-xl rounded-2xl p-6 shadow-2xl flex flex-col gap-4 border border-surface-container-high/60">
@@ -62,8 +65,8 @@
         <div class="flex flex-col gap-1.5">
             <label class="text-xs font-mono text-secondary font-semibold uppercase">Token Rahasia Baru</label>
             <div class="flex items-center gap-2 p-1.5 bg-surface-container-low rounded-xl border border-surface-container">
-                <input class="flex-1 bg-transparent px-3 text-xs font-mono text-on-surface font-semibold select-all outline-hidden" id="rawTokenInput" readonly value="<?= e($newRawKey) ?>">
-                <button class="h-8 px-3 rounded-lg bg-primary text-white text-xs font-semibold flex items-center gap-1 hover:bg-primary-container shadow-xs" onclick="copyToClipboard('<?= e($newRawKey) ?>')" type="button">
+                <input class="flex-1 bg-transparent px-3 text-xs font-mono text-on-surface font-semibold select-all outline-hidden" id="rawTokenInput" readonly value="<?= e($secretToken) ?>">
+                <button class="h-8 px-3 rounded-lg bg-primary text-white text-xs font-semibold flex items-center gap-1 hover:bg-primary-container shadow-xs" onclick="copyToClipboard('<?= e($secretToken) ?>')" data-copy="<?= e($secretToken) ?>" type="button">
                     <span class="material-symbols-outlined text-[16px]">content_copy</span>
                     <span>Salin</span>
                 </button>

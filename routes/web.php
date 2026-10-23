@@ -30,6 +30,7 @@ $router->post('/messages/send', [\App\Controllers\MessageController::class, 'sen
 
 // API Keys & Webhooks
 $router->get('/api-keys', [\App\Controllers\ApiKeyController::class, 'index']);
+$router->post('/api-keys', [\App\Controllers\ApiKeyController::class, 'create']);
 $router->post('/api-keys/create', [\App\Controllers\ApiKeyController::class, 'create']);
 $router->post('/api-keys/{id}/revoke', [\App\Controllers\ApiKeyController::class, 'revoke']);
 $router->post('/webhook/update', [\App\Controllers\ApiKeyController::class, 'updateWebhook']);
