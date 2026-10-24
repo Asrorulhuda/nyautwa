@@ -83,5 +83,7 @@ $router->get('/docs', [\App\Controllers\DocsController::class, 'index']);
 // Internal Engine Callback & GitHub Webhook Deploy
 $router->post('/api/v1/internal/callback', [\App\Controllers\Api\InternalCallbackController::class, 'handle']);
 $router->post('/api/v1/internal/deploy', [\App\Controllers\Api\DeployController::class, 'handle']);
+$router->post('/database/update', [\App\Controllers\DatabaseUpdateController::class, 'update']);
+
 
 

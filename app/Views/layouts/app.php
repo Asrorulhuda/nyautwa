@@ -57,6 +57,8 @@
         <main class="w-full flex-1 bg-surface-container-low/40 p-4 sm:p-6 md:p-8">
             <!-- Flash Message Alerts -->
             <?php \App\Core\View::partial('partials/flash'); ?>
+            <?php \App\Core\View::partial('partials/db_update_alert'); ?>
+
 
             <!-- Rendered Dynamic Content -->
             <?= $content ?>

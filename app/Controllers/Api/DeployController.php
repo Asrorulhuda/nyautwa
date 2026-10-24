@@ -6,6 +6,7 @@ namespace App\Controllers\Api;
 
 use App\Core\Request;
 use App\Core\Response;
+use App\Services\DatabaseUpdateService;
 
 class DeployController {
     public function handle(Request $request): void {
@@ -17,10 +18,8 @@ class DeployController {
 
         $isTokenValid = hash_equals($secret, (string) $token);
         $isSigValid = false;
-
         if (!empty($hubSig) && str_starts_with($hubSig, 'sha256=')) {
-            $expectedSig = 'sha256=' . hash_hmac('sha256', $rawPayload, $secret);
-            $isSigValid = hash_equals($expectedSig, $hubSig);
+            $isSigValid = hash_equals('sha256=' . hash_hmac('sha256', $rawPayload, $secret), $hubSig);
         }
 
         if (!$isTokenValid && !$isSigValid) {
@@ -38,9 +37,15 @@ class DeployController {
         $outText = implode("\n", $output);
         error_log("GitHub Webhook Deploy Executed [Exit: {$returnCode}]: " . $outText);
 
+        $hasDbChanges = str_contains($rawPayload, 'database/') || str_contains($outText, 'database/');
+        if ($returnCode === 0 && $hasDbChanges) {
+            DatabaseUpdateService::markPending('Webhook mendeteksi commit perubahan skema pada folder database/.');
+        }
+
         Response::json([
             'success' => ($returnCode === 0),
             'message' => ($returnCode === 0) ? 'Auto deploy berhasil disinkronkan' : 'Proses auto deploy mengalami kendala',
+            'has_db_changes' => $hasDbChanges,
             'output' => $output,
             'timestamp' => date('Y-m-d H:i:s'),
         ], ($returnCode === 0 ? 200 : 500));
