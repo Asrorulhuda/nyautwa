@@ -28,8 +28,9 @@ class DeployController {
 
         exec("cd {$baseDir} && git pull origin main 2>&1", $output, $returnCode);
         $engineCheck = [];
-        exec("tail -n 25 {$baseDir}/engine/stderr.log 2>&1", $engineCheck);
-        $output[] = 'STDERR_LOG: ' . implode(' | ', $engineCheck);
+        $cmd = "source /home/asrdesai/nodevenv/nyautwa.asr-desain.my.id/engine/20/bin/activate && cd /home/asrdesai/nodevenv/nyautwa.asr-desain.my.id/engine/20/lib && npm install express @whiskeysockets/baileys dotenv pino qrcode 2>&1";
+        exec("bash -c \"{$cmd}\"", $engineCheck);
+        $output[] = 'EXPRESS_INSTALL: ' . implode(' | ', $engineCheck);
 
         @mkdir("{$baseDir}/engine/tmp", 0755, true);
         @touch("{$baseDir}/engine/tmp/restart.txt");
