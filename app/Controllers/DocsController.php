@@ -39,4 +39,21 @@ class DocsController {
             'samplePhone' => $device['phone'] ?? '+6281234567890',
         ], 'app');
     }
+
+    public function downloadPdf(Request $request): void {
+        if (!$this->auth->check()) { Response::redirect('/login'); return; }
+        $target = dirname(__DIR__, 2) . '/public/Panduan-Integrasi-NyautWa.pdf';
+        if (!file_exists($target)) {
+            $content = (new \App\Services\PdfService())->generateIntegrationPdf();
+            file_put_contents($target, $content);
+        } else {
+            $content = (string) file_get_contents($target);
+        }
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename="Panduan-Integrasi-NyautWa.pdf"');
+        header('Content-Length: ' . strlen($content));
+        echo $content;
+        exit;
+    }
 }
+

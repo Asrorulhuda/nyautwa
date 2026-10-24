@@ -34,9 +34,11 @@
   "id": "msg_01H9A7K8...",
   "status": "queued"
 }</code></pre>
-            <div class="p-3 rounded-lg bg-surface-container/60 border border-outline-variant/15 text-[11px] text-secondary">
-                <strong class="text-on-surface">Catatan Spintax:</strong> Gunakan sintaks <code class="text-primary font-mono">{Halo|Hai|Pagi}</code> untuk merotasi pembuka pesan secara dinamis guna menurunkan risiko banned.
+            <div class="p-3 rounded-lg bg-surface-container/60 border border-outline-variant/15 text-[11px] text-secondary space-y-1">
+                <div><strong class="text-on-surface">Catatan Spintax:</strong> Gunakan sintaks <code class="text-primary font-mono">{Halo|Hai|Pagi}</code> untuk merotasi pesan.</div>
+                <div><strong class="text-on-surface">Integrasi Mudah:</strong> Menerima endpoint <code class="text-primary font-mono">/send-message</code>, field <code class="text-primary font-mono">number</code>, dan <code class="text-primary font-mono">message</code> (kompatibel langsung dengan Sipanda, Fonnte & MPWA).</div>
             </div>
         </div>
     </div>
 </div>
+

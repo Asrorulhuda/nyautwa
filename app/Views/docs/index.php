@@ -2,8 +2,12 @@
     <!-- Top Header Ribbon -->
     <?php require __DIR__ . '/partials/header.php'; ?>
 
+    <!-- Panduan Integrasi Cepat (Sipanda, Drop-In, PHP, Laravel, Node.js) -->
+    <?php require __DIR__ . '/partials/integration_guide.php'; ?>
+
     <!-- 1. Authentication & Headers -->
     <?php require __DIR__ . '/partials/auth_spec.php'; ?>
+
 
     <!-- 2. Endpoints Summary Table -->
     <?php require __DIR__ . '/partials/endpoints_table.php'; ?>

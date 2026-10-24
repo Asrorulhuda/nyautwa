@@ -79,6 +79,8 @@ $router->get('/invoices/{id}', [\App\Controllers\InvoiceController::class, 'show
 $router->get('/settings/landing', [\App\Controllers\LandingConfigController::class, 'index']);
 $router->post('/settings/landing', [\App\Controllers\LandingConfigController::class, 'update']);
 $router->get('/docs', [\App\Controllers\DocsController::class, 'index']);
+$router->get('/docs/download-pdf', [\App\Controllers\DocsController::class, 'downloadPdf']);
+
 
 // Internal Engine Callback & GitHub Webhook Deploy
 $router->post('/api/v1/internal/callback', [\App\Controllers\Api\InternalCallbackController::class, 'handle']);

@@ -81,4 +81,8 @@
             </tbody>
         </table>
     </div>
+    <div class="mt-3 p-3 rounded-lg bg-surface-container/60 border border-outline-variant/15 text-[11px] text-secondary flex items-center justify-between">
+        <span><strong class="text-on-surface">Alias Kompatibilitas Sistem:</strong> Endpoint <code class="text-primary font-mono font-semibold">POST /send-message</code> dan <code class="text-primary font-mono font-semibold">POST /send-media</code> didukung penuh sebagai drop-in pengganti gateway lain (Sipanda/Fonnte/MPWA).</span>
+    </div>
 </div>
+

@@ -1,6 +1,9 @@
 # 03 — Spesifikasi API Publik (v1)
 
-**Autentikasi:** `Authorization: Bearer <API_KEY>`. Key hanya ditampilkan sekali saat dibuat; yang disimpan hanya hash.
+**Autentikasi:**
+1. Header: `Authorization: Bearer <API_KEY>` (Standar REST)
+2. Header: `X-Api-Key: <API_KEY>`
+3. Body Parameter: `api_key=<API_KEY>` (Kompatibilitas aplikasi legacy seperti Sipanda/MPWA)
 
 ## Endpoint
 
@@ -10,14 +13,18 @@
 | POST | `/api/v1/devices` | Buat device baru |
 | GET | `/api/v1/devices/{id}/qr` | Ambil QR jika menunggu scan |
 | POST | `/api/v1/devices/{id}/logout` | Putuskan sesi |
-| POST | `/api/v1/messages` | Kirim pesan (teks/media) |
-| POST | `/api/v1/messages/bulk` | Kirim ke banyak nomor (masuk antrean) |
+| POST | `/api/v1/messages` | Kirim pesan (teks/media/spintax) |
+| POST | `/send-message` | Alias kirim pesan (Drop-in Sipanda/Fonnte/MPWA) |
+| POST | `/send-media` | Alias kirim media gambar/dokumen |
+| POST | `/api/v1/messages/bulk` | Kirim pesan massal (masuk antrean) |
 | GET | `/api/v1/messages/{id}` | Detail dan status pesan |
-| GET | `/api/v1/messages` | Daftar dengan filter, paginasi kursor |
+| GET | `/api/v1/messages` | Daftar riwayat dengan filter |
 | POST | `/api/v1/numbers/check` | Cek nomor terdaftar di WhatsApp |
 | GET | `/api/v1/usage` | Pemakaian dan sisa kuota |
 
-## Kirim pesan
+## Kirim Pesan (Format Standar & Fleksibel)
+
+Payload menerima: `to` / `phone` / `number`, `text` / `message` / `caption`, serta `url` untuk media.
 
 ```http
 POST /api/v1/messages
@@ -25,19 +32,17 @@ Authorization: Bearer <API_KEY>
 Content-Type: application/json
 
 {
-  "device_id": "dev_01H...",
   "to": "6281234567890",
-  "type": "text",
-  "text": "Pesanan #1042 sudah dikirim.",
+  "text": "{Halo|Hai} Pesanan #1042 sudah dikirim.",
   "idempotency_key": "order-1042-shipped"
 }
 ```
 
 Respons `202 Accepted`:
-
 ```json
-{ "id": "msg_01H...", "status": "queued" }
+{ "id": "msg_01H...", "status": "queued", "success": true }
 ```
+
 
 ## Format error
 

@@ -17,6 +17,10 @@
                 <span class="text-[10px] uppercase font-semibold text-primary">Base URL:</span>
                 <span class="text-on-surface font-semibold select-all"><?= url('/api/v1') ?></span>
             </div>
+            <a href="<?= url('/docs/download-pdf') ?>" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-surface-container border border-outline-variant/30 text-on-surface text-xs font-semibold hover:bg-surface-container-high shadow-xs transition-colors" title="Download Panduan Format PDF">
+                <span class="material-symbols-outlined text-[16px] text-primary">picture_as_pdf</span>
+                <span>Download PDF</span>
+            </a>
             <a href="<?= url('/api-keys') ?>" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-primary text-white text-xs font-semibold hover:bg-primary-container shadow-xs transition-colors">
                 <span class="material-symbols-outlined text-[16px]">key</span>
                 <span>Ambil API Key</span>
@@ -24,3 +28,4 @@
         </div>
     </div>
 </div>
+
