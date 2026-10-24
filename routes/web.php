@@ -80,6 +80,6 @@ $router->get('/settings/landing', [\App\Controllers\LandingConfigController::cla
 $router->post('/settings/landing', [\App\Controllers\LandingConfigController::class, 'update']);
 $router->get('/docs', [\App\Controllers\DocsController::class, 'index']);
 
-// Internal Engine Callback & Webhook Deploy
+// Internal Engine Callback
 $router->post('/api/v1/internal/callback', [\App\Controllers\Api\InternalCallbackController::class, 'handle']);
-$router->post('/api/v1/internal/deploy', [\App\Controllers\Api\DeployController::class, 'handle']);
+

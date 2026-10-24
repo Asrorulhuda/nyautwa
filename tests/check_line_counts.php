@@ -21,7 +21,6 @@ $files = [
     'app/Services/CampaignService.php',
     'app/Controllers/DeviceSessionController.php',
     'app/Controllers/Api/InternalCallbackController.php',
-    'app/Controllers/Api/DeployController.php',
     'app/Controllers/AutoReplyController.php',
     'app/Controllers/ContactController.php',
     'app/Controllers/CampaignController.php',
@@ -54,12 +53,9 @@ $files = [
     'app/Views/messages/partials/type_fields.php',
     'app/Views/messages/partials/preview_bubble.php',
     'app/Views/messages/partials/send_script.php',
-    '.cpanel.yml',
-    '.github/workflows/deploy-cpanel.yml',
     'docs/cpanel/README.md',
     'docs/cpanel/01_database_and_env.md',
-    'docs/cpanel/02_nodejs_engine.md',
-    'docs/cpanel/03_github_actions_ci_cd.md'
+    'docs/cpanel/02_nodejs_engine.md'
 ];
 
 $failed = false;

@@ -1,6 +1,0 @@
-# Ganti @org/maintainers dengan username atau tim GitHub sebenarnya
-*                          @org/maintainers
-/.github/                  @org/maintainers
-/migrations/               @org/maintainers
-/engine/                   @org/maintainers
-/docker/                   @org/maintainers
