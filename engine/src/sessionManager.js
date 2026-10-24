@@ -1,6 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 import { config } from './config.js';
+import { createBaileysSocket } from './baileysSocket.js';
+import { handleConnectionUpdate, handleMessagesUpsert } from './eventHandler.js';
+import { sendBaileysMessage } from './messageSender.js';
 
 class SessionManager {
     constructor() {
@@ -15,54 +18,62 @@ class SessionManager {
             return this.sessions.get(sessionRef);
         }
 
-        const sessionData = {
+        const session = {
             sessionRef,
-            status: 'qr_ready',
+            status: 'initializing',
             phone: null,
             qr: null,
+            sock: null,
             createdAt: new Date(),
         };
+        this.sessions.set(sessionRef, session);
 
-        this.sessions.set(sessionRef, sessionData);
-        return sessionData;
-    }
-
-    async sendCallbackToPhp(event, data) {
-        try {
-            await fetch(config.phpCallbackUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Engine-Secret': config.secret,
-                },
-                body: JSON.stringify({ event, data }),
+        const initSocket = async () => {
+            const { sock } = await createBaileysSocket(sessionRef, {
+                onConnectionUpdate: (update) => handleConnectionUpdate(session, update, sock, initSocket),
+                onMessagesUpsert: (upsert) => handleMessagesUpsert(session, upsert),
             });
-        } catch (err) {
-            console.error(`Gagal mengirim callback ke PHP (${event}):`, err.message);
-        }
+            session.sock = sock;
+        };
+
+        await initSocket();
+        return session;
     }
 
-    async sendMessage(sessionRef, phone, message) {
+    async requestPairingCode(sessionRef, phone) {
         const session = await this.getOrCreateSession(sessionRef);
-        
-        // Format JID WhatsApp (e.g. 6281234567890@s.whatsapp.net)
+        if (!session.sock) {
+            throw new Error('Socket sesi belum siap');
+        }
         const cleanPhone = phone.replace(/[^0-9]/g, '');
-        const jid = `${cleanPhone}@s.whatsapp.net`;
-        const waMessageId = 'BAE5' + Math.random().toString(36).substring(2, 10).toUpperCase();
+        const code = await session.sock.requestPairingCode(cleanPhone);
+        return code;
+    }
 
-        // Simulate async delivery callback
-        setTimeout(() => {
-            this.sendCallbackToPhp('messages.ack', {
-                wa_message_id: waMessageId,
-                status: 'delivered',
-            });
-        }, 1500);
-
+    async sendMessage(sessionRef, phone, payload) {
+        const session = await this.getOrCreateSession(sessionRef);
+        if (!session.sock) {
+            throw new Error(`Perangkat (${sessionRef}) belum aktif`);
+        }
+        const result = await sendBaileysMessage(session.sock, phone, payload);
         return {
             success: true,
-            wa_message_id: waMessageId,
-            jid,
+            wa_message_id: result?.key?.id || ('MSG_' + Date.now()),
+            recipient: phone,
         };
+    }
+
+    async logoutSession(sessionRef) {
+        const session = this.sessions.get(sessionRef);
+        if (session?.sock) {
+            try { await session.sock.logout(); } catch {}
+        }
+        this.sessions.delete(sessionRef);
+        const sessionDir = path.join(config.sessionsDir, sessionRef);
+        if (fs.existsSync(sessionDir)) {
+            fs.rmSync(sessionDir, { recursive: true, force: true });
+        }
+        return { success: true, message: 'Sesi berhasil di-logout dan kredensial dibersihkan' };
     }
 }
 

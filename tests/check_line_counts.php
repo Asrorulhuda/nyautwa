@@ -3,52 +3,54 @@
 declare(strict_types=1);
 
 $files = [
-    'database/migrations/006_create_login_attempts.sql',
-    'database/migrations/007_create_features_and_billing.sql',
-    'database/migrations/008_alter_tenants_add_limits.sql',
-    'database/migrations/009_alter_invoices_add_columns.sql',
-    'app/Core/Request.php',
-    'app/Core/Response.php',
-    'app/Services/RateLimitService.php',
-    'app/Services/AuthService.php',
-    'app/Services/FeatureService.php',
-    'app/Services/BillingService.php',
-    'app/Services/ClientService.php',
-    'app/Controllers/AuthController.php',
-    'app/Controllers/FeatureController.php',
-    'app/Controllers/InvoiceController.php',
-    'app/Controllers/ClientController.php',
-    'app/Views/auth/login.php',
-    'app/Views/auth/register.php',
-    'app/Views/clients/index.php',
-    'app/Views/clients/partials/header.php',
-    'app/Views/clients/partials/table.php',
-    'app/Views/clients/partials/modal_create.php',
-    'app/Views/clients/partials/modal_create_fields.php',
-    'app/Views/clients/partials/modal_create_features.php',
-    'app/Views/clients/partials/modal_delete.php',
-    'app/Views/clients/partials/modal_new_feature.php',
-    'app/Views/invoices/show.php',
-    'app/Views/invoices/partials/receipt_card.php',
-    'public/index.php',
-    'bootstrap.php',
-    'routes/web.php',
-    'database/migrate.php'
+    'database/migrations/010_create_mpwa_features.sql',
+    'engine/server.js',
+    'engine/src/config.js',
+    'engine/src/baileysSocket.js',
+    'engine/src/eventHandler.js',
+    'engine/src/messageSender.js',
+    'engine/src/sessionManager.js',
+    'app/Services/EngineService.php',
+    'app/Services/AutoReplyService.php',
+    'app/Services/ContactService.php',
+    'app/Services/CampaignService.php',
+    'app/Controllers/DeviceSessionController.php',
+    'app/Controllers/Api/InternalCallbackController.php',
+    'app/Controllers/AutoReplyController.php',
+    'app/Controllers/ContactController.php',
+    'app/Controllers/CampaignController.php',
+    'app/Views/autoreplies/index.php',
+    'app/Views/autoreplies/partials/modal_create.php',
+    'app/Views/contacts/index.php',
+    'app/Views/contacts/partials/modal_create.php',
+    'app/Views/campaigns/index.php',
+    'app/Views/campaigns/partials/modal_create.php',
+    'app/Views/devices/connect.php',
+    'app/Views/devices/partials/tab_qr.php',
+    'app/Views/devices/partials/tab_pairing.php',
+    'app/Views/devices/partials/connect_script.php',
+    'app/Views/partials/sidebar_nav_marketing.php',
+    'app/Views/partials/sidebar_nav.php',
+    'routes/web.php'
 ];
 
 $failed = false;
 foreach ($files as $f) {
-    $c = count(file(__DIR__ . '/../' . $f));
-    $status = $c <= 100 ? 'OK' : 'EXCEEDED';
-    echo sprintf("%-58s : %3d baris [%s]\n", $f, $c, $status);
-    if ($c > 100) {
+    $full = __DIR__ . '/../' . $f;
+    if (!file_exists($full)) {
+        echo "FILE NOT FOUND: $f\n";
         $failed = true;
+        continue;
     }
+    $c = count(file($full));
+    $status = $c <= 100 ? 'OK' : 'EXCEEDED';
+    echo sprintf("%-55s : %3d baris [%s]\n", $f, $c, $status);
+    if ($c > 100) $failed = true;
 }
 
 if ($failed) {
     echo "\nADA FILE YANG MELEBIHI 100 BARIS!\n";
     exit(1);
 } else {
-    echo "\nSEMUA FILE TERVERIFIKASI <= 100 BARIS.\n";
+    echo "\nSEMUA FILE FITUR TERBARU TERVERIFIKASI <= 100 BARIS.\n";
 }

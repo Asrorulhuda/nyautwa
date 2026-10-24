@@ -9,6 +9,9 @@ $isAdmin = in_array($userRole, ['admin', 'superadmin'], true);
 <!-- 1. Workspace Section -->
 <?php require __DIR__ . '/sidebar_nav_workspace.php'; ?>
 
+<!-- 2. Marketing & Automation Section -->
+<?php require __DIR__ . '/sidebar_nav_marketing.php'; ?>
+
 <?php if ($isAdmin): ?>
     <!-- Admin Management Section -->
     <?php require __DIR__ . '/sidebar_nav_admin.php'; ?>

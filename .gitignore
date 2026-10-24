@@ -7,5 +7,7 @@
 .env
 *.log
 *.zip
+*.sqlite
+database/*.sqlite
 .DS_Store
 Thumbs.db
