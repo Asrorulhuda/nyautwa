@@ -24,6 +24,9 @@ $router->post('/devices/create', [\App\Controllers\DeviceController::class, 'cre
 $router->get('/devices/{id}/status', [\App\Controllers\DeviceController::class, 'status']);
 $router->post('/devices/disconnect/{id}', [\App\Controllers\DeviceController::class, 'disconnect']);
 $router->post('/devices/{id}/disconnect', [\App\Controllers\DeviceController::class, 'disconnect']);
+$router->post('/devices/delete', [\App\Controllers\DeviceController::class, 'delete']);
+$router->post('/devices/delete/{id}', [\App\Controllers\DeviceController::class, 'delete']);
+$router->post('/devices/{id}/delete', [\App\Controllers\DeviceController::class, 'delete']);
 $router->get('/devices/live-qr/{id}', [\App\Controllers\DeviceSessionController::class, 'qr']);
 $router->post('/devices/live-qr/{id}', [\App\Controllers\DeviceSessionController::class, 'qr']);
 $router->post('/devices/pairing-code/{id}', [\App\Controllers\DeviceSessionController::class, 'pairingCode']);
@@ -50,6 +53,9 @@ $router->get('/campaigns/start/{id}', [\App\Controllers\CampaignController::clas
 $router->get('/messages', [\App\Controllers\MessageController::class, 'index']);
 $router->get('/messages/send', [\App\Controllers\MessageController::class, 'create']);
 $router->post('/messages/send', [\App\Controllers\MessageController::class, 'send']);
+$router->post('/messages/delete', [\App\Controllers\MessageController::class, 'delete']);
+$router->post('/messages/delete/{id}', [\App\Controllers\MessageController::class, 'delete']);
+$router->post('/messages/bulk-delete', [\App\Controllers\MessageController::class, 'deleteBulk']);
 
 // API Keys & Webhooks
 $router->get('/api-keys', [\App\Controllers\ApiKeyController::class, 'index']);

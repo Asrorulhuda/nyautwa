@@ -46,4 +46,6 @@
 
     <!-- Messages Table Partial -->
     <?php require __DIR__ . '/partials/table.php'; ?>
+    <?php require __DIR__ . '/partials/bulk_bar.php'; ?>
 </div>
+<?php require __DIR__ . '/partials/bulk_script.php'; ?>

@@ -33,20 +33,17 @@ class MessageService {
         $normalizedPhone = $this->normalizePhone($to);
         $cleanPhone = ltrim($normalizedPhone, '+');
         $parsedBody = $this->parseSpintax($body);
-
         $dev = Database::fetchOne("SELECT session_ref, status FROM devices WHERE id = :id AND tenant_id = :tid", ['id' => $deviceId, 'tid' => $tenantId]);
-        $initialStatus = 'queued';
 
         Database::query(
             "INSERT INTO messages (id, tenant_id, device_id, direction, to_from, type, body, status, idempotency_key, queued_at) 
-             VALUES (:id, :tenant_id, :device_id, 'outbound', :to, :type, :body, :status, :key, CURRENT_TIMESTAMP)",
-            ['id' => $id, 'tenant_id' => $tenantId, 'device_id' => $deviceId, 'to' => $normalizedPhone, 'type' => $type, 'body' => $parsedBody, 'status' => $initialStatus, 'key' => $key]
+             VALUES (:id, :tenant_id, :device_id, 'outbound', :to, :type, :body, 'queued', :key, CURRENT_TIMESTAMP)",
+            ['id' => $id, 'tenant_id' => $tenantId, 'device_id' => $deviceId, 'to' => $normalizedPhone, 'type' => $type, 'body' => $parsedBody, 'key' => $key]
         );
         Database::query("INSERT INTO message_events (id, message_id, status) VALUES (:id, :mid, 'queued')", ['id' => 'evt_' . bin2hex(random_bytes(8)), 'mid' => $id]);
 
         $payload = array_merge(['message' => $parsedBody, 'type' => $type], $extra);
-        $sessionRef = $dev['session_ref'] ?? 'dev_primary_01';
-        $res = $this->engine->sendMessage($sessionRef, $cleanPhone, $payload);
+        $res = $this->engine->sendMessage($dev['session_ref'] ?? 'dev_primary_01', $cleanPhone, $payload);
 
         if (!empty($res['success'])) {
             $waId = $res['wa_message_id'] ?? ('wamid_' . bin2hex(random_bytes(8)));
@@ -60,6 +57,19 @@ class MessageService {
         $msg = Database::fetchOne("SELECT * FROM messages WHERE id = :id", ['id' => $id]);
         $msg['engine_response'] = $res;
         return $msg;
+    }
+
+    public function deleteMessage(string $id, string $tenantId): bool {
+        Database::query("DELETE FROM message_events WHERE message_id = :id", ['id' => $id]);
+        return Database::execute("DELETE FROM messages WHERE id = :id AND tenant_id = :tid", ['id' => $id, 'tid' => $tenantId]);
+    }
+
+    public function deleteBulkMessages(array $ids, string $tenantId): int {
+        $valid = array_values(array_filter(array_map('strval', $ids)));
+        if (empty($valid)) return 0;
+        $in = implode(',', array_fill(0, count($valid), '?'));
+        Database::query("DELETE FROM message_events WHERE message_id IN ($in)", $valid);
+        return Database::query("DELETE FROM messages WHERE id IN ($in) AND tenant_id = ?", array_merge($valid, [$tenantId]))->rowCount();
     }
 
     public function normalizePhone(string $phone): string {

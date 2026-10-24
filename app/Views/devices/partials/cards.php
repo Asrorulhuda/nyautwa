@@ -43,16 +43,24 @@
             </div>
 
             <!-- Action Controls -->
-            <div class="pt-4 border-t border-surface-container flex items-center justify-between">
+            <div class="pt-4 border-t border-surface-container flex items-center justify-between gap-2 flex-wrap">
                 <a href="<?= url('/devices/connect?id=' . $dev['id']) ?>" class="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline">
                     <span class="material-symbols-outlined text-base">qr_code_scanner</span> Scan QR Sesi
                 </a>
-                <?php if ($dev['status'] === 'connected'): ?>
-                    <form action="<?= url('/devices/disconnect/' . $dev['id']) ?>" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin memutuskan perangkat ini?')">
+                <div class="flex items-center gap-3">
+                    <?php if ($dev['status'] === 'connected'): ?>
+                        <form action="<?= url('/devices/disconnect/' . $dev['id']) ?>" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin memutuskan sesi perangkat ini?')">
+                            <?= csrf_field() ?>
+                            <button type="submit" class="text-xs text-[#D99124] hover:underline font-medium">Putuskan</button>
+                        </form>
+                    <?php endif; ?>
+                    <form action="<?= url('/devices/delete/' . $dev['id']) ?>" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus perangkat ini?')">
                         <?= csrf_field() ?>
-                        <button type="submit" class="text-xs text-error hover:underline font-medium">Putuskan Sesi</button>
+                        <button type="submit" class="text-xs text-error hover:underline font-medium flex items-center gap-0.5">
+                            <span class="material-symbols-outlined text-[14px]">delete</span> Hapus
+                        </button>
                     </form>
-                <?php endif; ?>
+                </div>
             </div>
         </div>
     <?php endforeach; ?>

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Controllers\Concerns\InteractsWithMessagePayload;
 use App\Core\Request;
 use App\Core\Response;
 use App\Core\View;
@@ -12,6 +13,8 @@ use App\Services\DeviceService;
 use App\Services\MessageService;
 
 class MessageController {
+    use InteractsWithMessagePayload;
+
     private AuthService $auth;
     private MessageService $messages;
     private DeviceService $devices;
@@ -37,10 +40,7 @@ class MessageController {
 
     public function create(Request $request): void {
         if (!$this->auth->check()) Response::redirect('/login');
-        View::render('messages/send', [
-            'title' => 'Kirim Pesan WhatsApp Uji',
-            'devices' => $this->devices->getDevices($this->auth->tenantId()),
-        ], 'app');
+        View::render('messages/send', ['title' => 'Kirim Pesan WhatsApp Uji', 'devices' => $this->devices->getDevices($this->auth->tenantId())], 'app');
     }
 
     public function send(Request $request): void {
@@ -59,7 +59,6 @@ class MessageController {
         }
 
         $msg = $this->messages->queueMessage($tenantId, $devId, $phone, $body, $type, $extra);
-
         if (($msg['status'] ?? '') === 'sent') {
             Response::withFlash('success', "Pesan ({$type}) berhasil dikirim langsung ke WhatsApp {$phone}!", '/messages');
         } else {
@@ -68,21 +67,23 @@ class MessageController {
         }
     }
 
-    private function buildExtraPayload(Request $req, string $type, string &$body): array {
-        if ($type === 'image') return ['url' => trim((string)$req->input('media_url', '')), 'caption' => $body];
-        if ($type === 'document') {
-            return ['url' => trim((string)$req->input('doc_url', '')), 'filename' => trim((string)$req->input('filename', 'dokumen.pdf')), 'caption' => $body];
+    public function delete(Request $request, string $id = ''): void {
+        if (!$this->auth->check()) Response::redirect('/login');
+        $msgId = !empty($id) ? $id : (string) $request->input('id', '');
+        if ($request->validateCsrf() && !empty($msgId)) {
+            $this->messages->deleteMessage($msgId, $this->auth->tenantId());
+            Response::withFlash('success', 'Pesan berhasil dihapus dari riwayat.', '/messages');
         }
-        if ($type === 'poll') {
-            $q = trim((string)$req->input('poll_question', $body));
-            $body = $q;
-            $opts = array_values(array_filter(array_map('trim', explode("\n", (string)$req->input('poll_options', '')))));
-            return ['question' => $q, 'options' => count($opts) >= 2 ? $opts : ['Pilihan 1', 'Pilihan 2']];
+        Response::redirect('/messages');
+    }
+
+    public function deleteBulk(Request $request): void {
+        if (!$this->auth->check()) Response::redirect('/login');
+        if ($request->validateCsrf()) {
+            $rawIds = (array) $request->input('ids', []);
+            $count = $this->messages->deleteBulkMessages($rawIds, $this->auth->tenantId());
+            Response::withFlash('success', "Sebanyak {$count} riwayat pesan berhasil dihapus.", '/messages');
         }
-        if ($type === 'button') {
-            $raw = array_values(array_filter(array_map('trim', explode("\n", (string)$req->input('buttons_list', '')))));
-            return ['buttons' => count($raw) > 0 ? $raw : ['Pilihan Ya', 'Pilihan Tidak'], 'footer' => (string)$req->input('footer_text', 'NyautWa Gateway')];
-        }
-        return [];
+        Response::redirect('/messages');
     }
 }
