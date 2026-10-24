@@ -24,7 +24,13 @@ foreach ($migrationFiles as $file) {
     $statements = array_filter(array_map('trim', explode(';', $sql)));
     foreach ($statements as $stmt) {
         if (!empty($stmt)) {
-            $db->exec($stmt);
+            try {
+                $db->exec($stmt);
+            } catch (\PDOException $e) {
+                if (!str_contains(strtolower($e->getMessage()), 'duplicate column')) {
+                    throw $e;
+                }
+            }
         }
     }
     echo "OK\n";

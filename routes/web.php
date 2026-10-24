@@ -40,6 +40,11 @@ $router->get('/clients', [\App\Controllers\ClientController::class, 'index']);
 $router->post('/clients/create', [\App\Controllers\ClientController::class, 'create']);
 $router->post('/clients/{id}', [\App\Controllers\ClientController::class, 'update']);
 $router->post('/clients/{id}/toggle', [\App\Controllers\ClientController::class, 'toggle']);
+$router->post('/clients/{id}/delete', [\App\Controllers\ClientController::class, 'delete']);
+
+// Dynamic Features & Invoices
+$router->post('/features/create', [\App\Controllers\FeatureController::class, 'create']);
+$router->get('/invoices/{id}', [\App\Controllers\InvoiceController::class, 'show']);
 
 // Admin Landing Page Configuration
 $router->get('/settings/landing', [\App\Controllers\LandingConfigController::class, 'index']);

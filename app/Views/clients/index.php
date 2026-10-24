@@ -3,11 +3,12 @@
     <?php require __DIR__ . '/partials/header.php'; ?>
 
     <!-- Client / Tenant Data Table Bento Card -->
-    <div class="p-6 rounded-xl bg-surface-container-lowest shadow-xs border border-surface-container-high/60">
+    <div class="p-6 rounded-2xl bg-white shadow-xs border border-[#E4EAE6]">
         <?php require __DIR__ . '/partials/table.php'; ?>
     </div>
 
     <!-- Modals -->
     <?php require __DIR__ . '/partials/modal_create.php'; ?>
-    <?php require __DIR__ . '/partials/modal_edit.php'; ?>
+    <?php require __DIR__ . '/partials/modal_delete.php'; ?>
+    <?php require __DIR__ . '/partials/modal_new_feature.php'; ?>
 </div>

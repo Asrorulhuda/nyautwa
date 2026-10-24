@@ -1,0 +1,12 @@
+Options -Indexes
+
+# Blokir file tersembunyi dan file sensitif
+<FilesMatch "^\.|\.(env|sql|log|bak|ini|sh|md)$">
+  Require all denied
+</FilesMatch>
+
+# Paksa HTTPS (aktifkan setelah SSL terpasang)
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP_HOST} !^localhost
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]

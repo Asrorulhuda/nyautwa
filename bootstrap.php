@@ -20,9 +20,12 @@ spl_autoload_register(function (string $class): void {
     }
 });
 
-// Load configuration
 $config = require __DIR__ . '/config/app.php';
 date_default_timezone_set($config['timezone'] ?? 'Asia/Jakarta');
+
+$isProd = ($config['env'] ?? 'production') === 'production';
+ini_set('display_errors', $isProd ? '0' : '1');
+ini_set('log_errors', '1');
 
 // Global View & Escape Helpers
 if (!function_exists('e')) {

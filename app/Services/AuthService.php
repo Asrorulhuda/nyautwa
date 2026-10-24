@@ -7,19 +7,29 @@ namespace App\Services;
 use App\Core\Database;
 
 class AuthService {
+    public const DUMMY_HASH = '$2y$10$1aanRZUMz16bQwgn1BkT8eNmCfs8TssP2TxBSgMp5iIuEs2X7pRCS';
+
     public function attempt(string $email, string $password): bool {
-        $user = Database::fetchOne("SELECT * FROM users WHERE email = :email", ['email' => $email]);
-        if (!$user) {
+        $cleanEmail = strtolower(trim($email));
+        $user = Database::fetchOne("SELECT * FROM users WHERE email = :email", ['email' => $cleanEmail]);
+        $hash = $user['password_hash'] ?? self::DUMMY_HASH;
+        $valid = password_verify($password, $hash) && ($user !== null);
+        if (!$valid) {
             return false;
         }
 
-        if (!password_verify($password, $user['password_hash'])) {
-            return false;
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            session_regenerate_id(true);
+        }
+
+        if (password_needs_rehash($user['password_hash'], PASSWORD_DEFAULT)) {
+            Database::query("UPDATE users SET password_hash = :h WHERE id = :id", [
+                'h' => password_hash($password, PASSWORD_DEFAULT),
+                'id' => $user['id'],
+            ]);
         }
 
         $tenant = Database::fetchOne("SELECT * FROM tenants WHERE id = :id", ['id' => $user['tenant_id']]);
-
-        // Store user in session
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_name'] = $user['name'];
         $_SESSION['user_email'] = $user['email'];
@@ -29,12 +39,14 @@ class AuthService {
         $_SESSION['plan_id'] = $tenant['plan_id'] ?? 'starter';
         $_SESSION['user'] = $user;
         $_SESSION['tenant'] = $tenant;
+        $_SESSION['last_activity'] = time();
 
         return true;
     }
 
     public function register(string $tenantName, string $userName, string $email, string $password, string $planId = 'starter'): ?string {
-        $existing = Database::fetchOne("SELECT id FROM users WHERE email = :email", ['email' => $email]);
+        $cleanEmail = strtolower(trim($email));
+        $existing = Database::fetchOne("SELECT id FROM users WHERE email = :email", ['email' => $cleanEmail]);
         if ($existing) {
             return "Email tersebut sudah terdaftar. Silakan gunakan email lain atau masuk.";
         }
@@ -42,33 +54,29 @@ class AuthService {
         $tenantId = 'tenant_' . bin2hex(random_bytes(6));
         $userId = 'usr_' . bin2hex(random_bytes(6));
 
-        // Create tenant and user
         Database::query("INSERT INTO tenants (id, name, plan_id, status) VALUES (:id, :name, :plan, 'active')", [
             'id' => $tenantId,
-            'name' => $tenantName,
+            'name' => trim($tenantName),
             'plan' => $planId,
         ]);
 
         Database::query("INSERT INTO users (id, tenant_id, name, email, password_hash, role) VALUES (:id, :tenant_id, :name, :email, :pass, 'client')", [
             'id' => $userId,
             'tenant_id' => $tenantId,
-            'name' => $userName,
-            'email' => $email,
-            'pass' => password_hash($password, PASSWORD_BCRYPT),
+            'name' => trim($userName),
+            'email' => $cleanEmail,
+            'pass' => password_hash($password, PASSWORD_DEFAULT),
         ]);
 
-        // Auto login
-        $this->attempt($email, $password);
-
+        $this->attempt($cleanEmail, $password);
         return null;
     }
 
     public function logout(): void {
-        unset(
-            $_SESSION['user_id'], $_SESSION['user_name'], $_SESSION['user_email'],
-            $_SESSION['user_role'], $_SESSION['tenant_id'], $_SESSION['tenant_name'],
-            $_SESSION['plan_id'], $_SESSION['user'], $_SESSION['tenant']
-        );
+        $_SESSION = [];
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            session_destroy();
+        }
     }
 
     public function check(): bool {
@@ -76,11 +84,11 @@ class AuthService {
     }
 
     public function tenantId(): string {
-        return $_SESSION['tenant_id'] ?? 'tenant_demo_01';
+        return (string) ($_SESSION['tenant_id'] ?? '');
     }
 
     public function role(): string {
-        return $_SESSION['user_role'] ?? 'client';
+        return (string) ($_SESSION['user_role'] ?? 'client');
     }
 
     public function isAdmin(): bool {
