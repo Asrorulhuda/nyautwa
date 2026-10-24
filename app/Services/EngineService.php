@@ -10,7 +10,7 @@ class EngineService {
 
     public function __construct() {
         $port = $_ENV['ENGINE_PORT'] ?? '3000';
-        $this->baseUrl = 'http://127.0.0.1:' . $port;
+        $this->baseUrl = rtrim($_ENV['ENGINE_URL'] ?? ('http://127.0.0.1:' . $port), '/');
         $this->secret = $_ENV['ENGINE_SECRET'] ?? 'nyautwa_engine_internal_secret_994821';
     }
 
