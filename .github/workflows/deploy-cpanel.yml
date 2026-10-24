@@ -1,0 +1,56 @@
+name: Deploy to cPanel
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+concurrency:
+  group: cpanel-deploy
+  cancel-in-progress: false
+
+jobs:
+  test:
+    name: Run Quality & Security Checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: pdo, pdo_sqlite, curl, json
+      - name: Verify Line Counts & Integrity
+        run: |
+          php tests/check_line_counts.php
+          php tests/verification_test.php
+          php tests/mpwa_features_test.php
+
+  deploy:
+    name: Auto Deploy to cPanel via FTP
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Sync files to cPanel
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.CPANEL_FTP_SERVER }}
+          username: ${{ secrets.CPANEL_FTP_USERNAME }}
+          password: ${{ secrets.CPANEL_FTP_PASSWORD }}
+          server-dir: ${{ secrets.CPANEL_FTP_TARGET_DIR || 'public_html/' }}
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.github/**
+            **/tests/**
+            **/docs/**
+            .env
+            .env.example
+            database/*.sqlite
+            engine/sessions/**
+            engine/node_modules/**
+            storage/logs/**
+            storage/sessions/**

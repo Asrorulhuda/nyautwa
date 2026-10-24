@@ -1,0 +1,17 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/$USER/public_html
+    - /bin/cp -R app $DEPLOYPATH/
+    - /bin/cp -R config $DEPLOYPATH/
+    - /bin/cp -R database $DEPLOYPATH/
+    - /bin/cp -R engine $DEPLOYPATH/
+    - /bin/cp -R public/* $DEPLOYPATH/
+    - /bin/cp -R routes $DEPLOYPATH/
+    - /bin/cp bootstrap.php $DEPLOYPATH/
+    - /bin/cp composer.json $DEPLOYPATH/
+    - /bin/mkdir -p $DEPLOYPATH/storage/logs
+    - /bin/mkdir -p $DEPLOYPATH/storage/sessions
+    - /bin/mkdir -p $DEPLOYPATH/engine/sessions
+    - /bin/chmod 755 $DEPLOYPATH/storage
+    - /bin/chmod 755 $DEPLOYPATH/engine/sessions

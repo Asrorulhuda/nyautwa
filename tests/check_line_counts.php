@@ -31,7 +31,13 @@ $files = [
     'app/Views/devices/partials/connect_script.php',
     'app/Views/partials/sidebar_nav_marketing.php',
     'app/Views/partials/sidebar_nav.php',
-    'routes/web.php'
+    'routes/web.php',
+    '.cpanel.yml',
+    '.github/workflows/deploy-cpanel.yml',
+    'docs/cpanel/README.md',
+    'docs/cpanel/01_database_and_env.md',
+    'docs/cpanel/02_nodejs_engine.md',
+    'docs/cpanel/03_github_actions_ci_cd.md'
 ];
 
 $failed = false;
