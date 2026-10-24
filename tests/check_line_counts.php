@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 $files = [
+    'database/update_database.sql',
     'database/migrations/010_create_mpwa_features.sql',
     'database/migrations/011_alter_contacts_for_groups.sql',
     'engine/server.js',
