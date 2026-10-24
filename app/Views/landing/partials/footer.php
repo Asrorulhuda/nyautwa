@@ -52,7 +52,7 @@
         <div class="pt-8 border-t border-surface-container flex flex-col sm:flex-row items-center justify-between text-xs text-on-surface-variant gap-4">
             <p>© <?= date('Y') ?> NyautWa. Hak Cipta Dilindungi Undang-Undang.</p>
             <div class="flex items-center gap-6 font-mono text-[11px]">
-                <span>v2.14.0-stable</span>
+                <span>v2.15.0-webhook-ready</span>
                 <span>Infrastruktur Jakarta (IDC 3D)</span>
             </div>
         </div>
