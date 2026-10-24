@@ -29,7 +29,8 @@ class DeployController {
         exec("cd {$baseDir} && git pull origin main 2>&1", $output, $returnCode);
 
         $engineCheck = [];
-        exec("cat {$baseDir}/engine/.htaccess 2>&1", $engineCheck);
+        $cmd = "sed -i '/<IfModule mod_rewrite.c>/,/<\/IfModule>/d' {$baseDir}/engine/.htaccess && cat {$baseDir}/engine/.htaccess 2>&1";
+        exec("bash -c \"{$cmd}\"", $engineCheck);
         $output[] = 'ENGINE_HTACCESS: ' . implode(' | ', $engineCheck);
         @touch("{$baseDir}/engine/tmp/restart.txt");
 
