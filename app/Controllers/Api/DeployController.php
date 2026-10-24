@@ -29,8 +29,9 @@ class DeployController {
         exec("cd {$baseDir} && git pull origin main 2>&1", $output, $returnCode);
 
         $engineCheck = [];
-        exec("tail -n 25 {$baseDir}/engine/stderr.log 2>&1", $engineCheck);
-        $output[] = 'STDERR_LOG: ' . implode(' | ', $engineCheck);
+        $cmd = "rm -rf /home/asrdesai/nodevenv/nyautwa.asr-desain.my.id/engine/20/lib/node_modules && cd /home/asrdesai/nodevenv/nyautwa.asr-desain.my.id/engine/20/lib && npm install 2>&1";
+        exec("bash -c \"{$cmd}\"", $engineCheck);
+        $output[] = 'NPM_CLEAN_INSTALL: ' . implode(' | ', $engineCheck);
         @touch("{$baseDir}/engine/tmp/restart.txt");
 
         Response::json([
