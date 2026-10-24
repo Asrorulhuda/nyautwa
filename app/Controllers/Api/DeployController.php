@@ -29,7 +29,7 @@ class DeployController {
         exec("cd {$baseDir} && git pull origin main 2>&1", $output, $returnCode);
 
         $engineCheck = [];
-        $cmd = "rm -rf /home/asrdesai/nodevenv/nyautwa.asr-desain.my.id/engine/20/lib/node_modules && cd /home/asrdesai/nodevenv/nyautwa.asr-desain.my.id/engine/20/lib && npm install 2>&1";
+        $cmd = "rm -rf /home/asrdesai/nodevenv/nyautwa.asr-desain.my.id/engine/20/lib/node_modules && cd /home/asrdesai/nodevenv/nyautwa.asr-desain.my.id/engine/20/lib && /home/asrdesai/nodevenv/nyautwa.asr-desain.my.id/engine/20/bin/npm install 2>&1";
         exec("bash -c \"{$cmd}\"", $engineCheck);
         $output[] = 'NPM_CLEAN_INSTALL: ' . implode(' | ', $engineCheck);
         @touch("{$baseDir}/engine/tmp/restart.txt");
