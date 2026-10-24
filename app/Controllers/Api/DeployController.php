@@ -28,8 +28,8 @@ class DeployController {
 
         exec("cd {$baseDir} && git pull origin main 2>&1", $output, $returnCode);
         $engineCheck = [];
-        exec("tail -n 25 {$baseDir}/engine/stderr.log 2>&1", $engineCheck);
-        $output[] = 'STDERR_LOG: ' . implode(' | ', $engineCheck);
+        exec("cd {$baseDir}/engine && npm install --production 2>&1", $engineCheck);
+        $output[] = 'NPM_INSTALL: ' . implode(' | ', $engineCheck);
 
         Response::json([
             'success' => $returnCode === 0,
