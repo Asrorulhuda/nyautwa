@@ -28,10 +28,7 @@ class DeployController {
 
         exec("cd {$baseDir} && git pull origin main 2>&1", $output, $returnCode);
 
-        $engineCheck = [];
-        $cmd = "cd /home/asrdesai/nodevenv/nyautwa.asr-desain.my.id/engine/20/lib && /home/asrdesai/nodevenv/nyautwa.asr-desain.my.id/engine/20/bin/npm install --ignore-scripts 2>&1";
-        exec("bash -c \"{$cmd}\"", $engineCheck);
-        $output[] = 'NPM_CLEAN_INSTALL: ' . implode(' | ', $engineCheck);
+        @mkdir("{$baseDir}/engine/tmp", 0755, true);
         @touch("{$baseDir}/engine/tmp/restart.txt");
 
         Response::json([
