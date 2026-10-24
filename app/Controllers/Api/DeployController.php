@@ -28,8 +28,8 @@ class DeployController {
 
         exec("cd {$baseDir} && git pull origin main 2>&1", $output, $returnCode);
         $engineCheck = [];
-        exec("which node; node -v; ls -la {$baseDir}/engine 2>&1", $engineCheck);
-        $output[] = 'ENGINE_INFO: ' . implode(' | ', $engineCheck);
+        exec("tail -n 25 {$baseDir}/engine/stderr.log 2>&1", $engineCheck);
+        $output[] = 'STDERR_LOG: ' . implode(' | ', $engineCheck);
 
         Response::json([
             'success' => $returnCode === 0,
