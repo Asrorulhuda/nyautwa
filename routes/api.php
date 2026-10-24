@@ -16,6 +16,12 @@ $router->post('/api/v1/messages/bulk', [\App\Controllers\Api\MessageApiControlle
 $router->get('/api/v1/messages/{id}', [\App\Controllers\Api\MessageApiController::class, 'show']);
 $router->get('/api/v1/messages', [\App\Controllers\Api\MessageApiController::class, 'index']);
 
+// Alias Kompatibilitas Sistem Eksternal (Sipanda, MPWA, Fonnte)
+$router->post('/send-message', [\App\Controllers\Api\MessageApiController::class, 'send']);
+$router->post('/send-media', [\App\Controllers\Api\MessageApiController::class, 'send']);
+$router->post('/api/v1/messages/send-media', [\App\Controllers\Api\MessageApiController::class, 'send']);
+
+
 $router->post('/api/v1/numbers/check', [\App\Controllers\Api\UtilityApiController::class, 'checkNumber']);
 $router->get('/api/v1/usage', [\App\Controllers\Api\UtilityApiController::class, 'usage']);
 

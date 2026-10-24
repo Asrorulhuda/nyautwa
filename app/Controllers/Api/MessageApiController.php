@@ -13,17 +13,12 @@ use App\Services\MessageService;
 use App\Services\QuotaService;
 
 class MessageApiController {
-    private ApiKeyService $apiKeys;
-    private DeviceService $devices;
-    private MessageService $messages;
-    private QuotaService $quota;
-
-    public function __construct() {
-        $this->apiKeys = new ApiKeyService();
-        $this->devices = new DeviceService();
-        $this->messages = new MessageService();
-        $this->quota = new QuotaService();
-    }
+    public function __construct(
+        private ApiKeyService $apiKeys = new ApiKeyService(),
+        private DeviceService $devices = new DeviceService(),
+        private MessageService $messages = new MessageService(),
+        private QuotaService $quota = new QuotaService()
+    ) {}
 
     private function auth(Request $request): array {
         $token = $request->bearerToken();
@@ -39,8 +34,10 @@ class MessageApiController {
     }
 
     private function resolveDev(string $tid, string $reqId): string {
-        if (!empty($reqId)) return $reqId;
         $devs = $this->devices->getDevices($tid);
+        foreach ($devs as $d) {
+            if ($reqId !== '' && ($d['id'] === $reqId || ($d['phone_number'] ?? '') === $reqId)) return $d['id'];
+        }
         foreach ($devs as $d) { if ($d['status'] === 'connected') return $d['id']; }
         return $devs[0]['id'] ?? Response::apiError('no_device', 'Tenant belum memiliki perangkat.', 400);
     }
@@ -51,13 +48,17 @@ class MessageApiController {
         if (!$this->quota->checkQuota($t['id'])['allowed']) Response::apiError('quota_exceeded', 'Kuota pesan bulan ini habis.', 402, $h);
 
         $d = $request->all();
-        $to = trim((string) ($d['to'] ?? $d['phone'] ?? ''));
-        $body = trim((string) ($d['text'] ?? $d['message'] ?? $d['body'] ?? ''));
-        if (!$to || !$body) Response::apiError('validation_error', 'Field to dan text wajib diisi.', 422, $h);
+        $to = trim((string) ($d['to'] ?? $d['phone'] ?? $d['number'] ?? $d['target'] ?? ''));
+        $body = trim((string) ($d['text'] ?? $d['message'] ?? $d['body'] ?? $d['caption'] ?? ''));
+        $mediaUrl = trim((string) ($d['url'] ?? $d['media_url'] ?? ''));
+        if (!$to || (!$body && !$mediaUrl)) Response::apiError('validation_error', 'Field to/number dan text/message wajib diisi.', 422, $h);
 
-        $msg = $this->messages->queueMessage($t['id'], $this->resolveDev($t['id'], (string) ($d['device_id'] ?? '')), $to, $body, $d['idempotency_key'] ?? null);
+        $type = !empty($mediaUrl) ? (string) ($d['media_type'] ?? 'image') : 'text';
+        $extra = !empty($mediaUrl) ? ['media_url' => $mediaUrl, 'url' => $mediaUrl] : [];
+        $devId = $this->resolveDev($t['id'], (string) ($d['device_id'] ?? $d['sender'] ?? ''));
+        $msg = $this->messages->queueMessage($t['id'], $devId, $to, $body ?: $mediaUrl, $type, $extra, $d['idempotency_key'] ?? null);
         $this->quota->recordUsage($t['id'], 1, 1);
-        Response::json(['id' => $msg['id'], 'status' => 'queued'], 202, $h);
+        Response::json(['id' => $msg['id'], 'status' => 'queued', 'success' => true], 202, $h);
     }
 
     public function bulk(Request $request): void {
@@ -67,19 +68,17 @@ class MessageApiController {
         $msgs = $d['messages'] ?? [];
         if (!is_array($msgs) || empty($msgs)) Response::apiError('validation_error', 'Array messages wajib diisi.', 422, $h);
 
-        $devId = $this->resolveDev($t['id'], (string) ($d['device_id'] ?? ''));
+        $devId = $this->resolveDev($t['id'], (string) ($d['device_id'] ?? $d['sender'] ?? ''));
         $queued = 0;
         foreach ($msgs as $m) {
-            $to = trim((string) ($m['to'] ?? ''));
+            $to = trim((string) ($m['to'] ?? $m['phone'] ?? $m['number'] ?? ''));
             $txt = trim((string) ($m['text'] ?? $m['message'] ?? ''));
-            if ($to && $txt) {
-                $this->messages->queueMessage($t['id'], $devId, $to, $txt, $m['idempotency_key'] ?? null);
-                $queued++;
-            }
+            if ($to && $txt && ++$queued) $this->messages->queueMessage($t['id'], $devId, $to, $txt, 'text', [], $m['idempotency_key'] ?? null);
         }
         $this->quota->recordUsage($t['id'], $queued, 1);
-        Response::json(['queued_count' => $queued, 'status' => 'queued'], 202, $h);
+        Response::json(['queued_count' => $queued, 'status' => 'queued', 'success' => true], 202, $h);
     }
+
 
     public function show(Request $request, string $id): void {
         $t = $this->auth($request);
@@ -96,3 +95,4 @@ class MessageApiController {
         Response::json(['data' => $list], 200, $this->headers($t['id']));
     }
 }
+

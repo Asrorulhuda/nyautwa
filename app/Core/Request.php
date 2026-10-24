@@ -68,7 +68,9 @@ class Request {
 
     public function bearerToken(): ?string {
         $auth = $this->header('authorization');
-        return ($auth && preg_match('/Bearer\s+(\S+)/i', $auth, $m)) ? $m[1] : null;
+        if ($auth && preg_match('/Bearer\s+(\S+)/i', $auth, $m)) return $m[1];
+        $alt = $this->header('x-api-key') ?? $this->input('api_key') ?? $this->input('token');
+        return (!empty($alt) && is_string($alt)) ? trim($alt) : null;
     }
 
     public function validateCsrf(): bool {
