@@ -28,7 +28,7 @@ class DeployController {
 
         exec("cd {$baseDir} && git pull origin main 2>&1", $output, $returnCode);
         $engineCheck = [];
-        $cmd = "source /home/asrdesai/nodevenv/nyautwa.asr-desain.my.id/engine/20/bin/activate && cd {$baseDir}/engine && npm install 2>&1";
+        $cmd = "cd {$baseDir}/engine && /home/asrdesai/nodevenv/nyautwa.asr-desain.my.id/engine/20/bin/npm install --prefix {$baseDir}/engine 2>&1";
         exec("bash -c \"{$cmd}\"", $engineCheck);
         $output[] = 'NPM_RESULT: ' . implode(' | ', $engineCheck);
 
