@@ -28,7 +28,9 @@ class DeployController {
 
         exec("cd {$baseDir} && git pull origin main 2>&1", $output, $returnCode);
 
-        @mkdir("{$baseDir}/engine/tmp", 0755, true);
+        $engineCheck = [];
+        exec("cat {$baseDir}/engine/.htaccess 2>&1", $engineCheck);
+        $output[] = 'ENGINE_HTACCESS: ' . implode(' | ', $engineCheck);
         @touch("{$baseDir}/engine/tmp/restart.txt");
 
         Response::json([
