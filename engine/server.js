@@ -6,6 +6,9 @@ const app = express();
 app.use(express.json());
 
 app.use((req, res, next) => {
+    if (req.url.startsWith('/engine')) {
+        req.url = req.url.replace(/^\/engine/, '') || '/';
+    }
     if (req.path === '/health' || req.path === '/') return next();
     const secret = req.headers['x-engine-secret'];
     if (!secret || secret !== config.secret) {
@@ -27,6 +30,12 @@ app.post('/session/start', async (req, res) => {
     if (!session_ref) return res.status(400).json({ error: 'Field session_ref wajib disertakan' });
     try {
         const session = await sessionManager.getOrCreateSession(session_ref);
+        if (!session.qr && session.status !== 'connected') {
+            for (let i = 0; i < 12; i++) {
+                await new Promise((r) => setTimeout(r, 250));
+                if (session.qr || session.status === 'connected') break;
+            }
+        }
         res.json({ success: true, session_ref, status: session.status, phone: session.phone, qr: session.qr });
     } catch (err) {
         res.status(500).json({ error: 'Gagal inisialisasi sesi Baileys: ' + err.message });

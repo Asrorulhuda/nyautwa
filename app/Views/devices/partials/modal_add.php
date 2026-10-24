@@ -14,6 +14,10 @@
                 <input type="text" id="label" name="label" required placeholder="CS WhatsApp Cabang Surabaya" class="w-full px-3 py-2 bg-surface border border-surface-container rounded-md text-xs text-on-surface outline-hidden focus:border-primary">
             </div>
             <div>
+                <label for="phone" class="block text-xs font-semibold text-on-surface mb-1">Nomor WhatsApp (Format: 08xx / 628xx)</label>
+                <input type="text" id="phone" name="phone" required placeholder="contoh: 081234567890" class="w-full px-3 py-2 bg-surface border border-surface-container rounded-md text-xs text-on-surface font-mono outline-hidden focus:border-primary">
+            </div>
+            <div>
                 <label for="daily_limit" class="block text-xs font-semibold text-on-surface mb-1">Batas Kuota Harian (Proteksi Anti-Ban)</label>
                 <input type="number" id="daily_limit" name="daily_limit" value="1000" min="100" max="10000" class="w-full px-3 py-2 bg-surface border border-surface-container rounded-md text-xs text-on-surface font-mono outline-hidden focus:border-primary">
             </div>

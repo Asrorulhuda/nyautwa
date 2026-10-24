@@ -6,6 +6,10 @@
     RewriteCond %{DOCUMENT_ROOT}/public/$1 -d
     RewriteRule ^(.*)$ public/$1 [L]
 
+    # Jangan rewrite Node.js Passenger engine
+    RewriteCond %{REQUEST_URI} ^/engine
+    RewriteRule ^ - [L]
+
     # Route seluruh URL MVC ke front controller public/index.php
     RewriteCond %{REQUEST_URI} !^/public/
     RewriteRule ^(.*)$ public/index.php [L,QSA]

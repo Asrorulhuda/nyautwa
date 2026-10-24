@@ -15,26 +15,25 @@ class EngineService {
     }
 
     private function request(string $endpoint, array $data = []): array {
-        $ch = curl_init($this->baseUrl . $endpoint);
-        curl_setopt_array($ch, [
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => json_encode($data),
-            CURLOPT_TIMEOUT => 15,
-            CURLOPT_HTTPHEADER => [
-                'Content-Type: application/json',
-                'X-Engine-Secret: ' . $this->secret,
-            ],
-        ]);
-        $response = curl_exec($ch);
-        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-
-        if (!$response || $code >= 400) {
-            return ['success' => false, 'error' => 'Engine Baileys tidak merespons atau offline'];
+        $urls = array_unique([$this->baseUrl, 'https://nyautwa.asr-desain.my.id/engine', 'http://127.0.0.1:3000']);
+        foreach ($urls as $base) {
+            $ch = curl_init(rtrim($base, '/') . $endpoint);
+            curl_setopt_array($ch, [
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => json_encode($data),
+                CURLOPT_TIMEOUT => 8,
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_HTTPHEADER => ['Content-Type: application/json', 'X-Engine-Secret: ' . $this->secret],
+            ]);
+            $response = curl_exec($ch);
+            $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            if ($response && $code < 400) {
+                return json_decode((string) $response, true) ?? ['success' => false];
+            }
         }
-
-        return json_decode((string) $response, true) ?? ['success' => false];
+        return ['success' => false, 'error' => 'Engine Baileys tidak merespons atau offline'];
     }
 
     public function startSession(string $sessionRef): array {

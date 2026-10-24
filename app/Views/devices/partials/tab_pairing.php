@@ -7,7 +7,7 @@
     <div class="space-y-3 text-left">
         <div>
             <label class="block text-xs font-semibold text-on-surface mb-1">Nomor WhatsApp Anda (Contoh: 6281234567890)</label>
-            <input type="text" id="pairing-phone" placeholder="6281234567890" class="w-full px-3 py-2 text-sm font-mono border border-surface-container rounded-md focus:border-primary focus:outline-none bg-white">
+            <input type="text" id="pairing-phone" value="<?= e($device['phone'] ?? '') ?>" placeholder="6281234567890" class="w-full px-3 py-2 text-sm font-mono border border-surface-container rounded-md focus:border-primary focus:outline-none bg-white">
         </div>
         <button type="button" onclick="requestPairingCode()" id="btn-request-pairing" class="w-full py-2.5 px-4 text-xs font-semibold text-white bg-primary hover:bg-primary/90 rounded-md transition-colors shadow-sm">
             Dapatkan Kode Sandi 8 Digit

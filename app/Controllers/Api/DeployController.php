@@ -27,10 +27,9 @@ class DeployController {
         $returnCode = 0;
 
         exec("cd {$baseDir} && git pull origin main 2>&1", $output, $returnCode);
-        $engineCheck = [];
-        $cmd = "mkdir -p {$baseDir}/engine/tmp && touch {$baseDir}/engine/tmp/restart.txt && sleep 1 && ps aux | grep -i node | grep -v grep";
-        exec("bash -c \"{$cmd}\"", $engineCheck);
-        $output[] = 'RESTART_RESULT: ' . implode(' | ', $engineCheck);
+
+        @mkdir("{$baseDir}/engine/tmp", 0755, true);
+        @touch("{$baseDir}/engine/tmp/restart.txt");
 
         Response::json([
             'success' => $returnCode === 0,

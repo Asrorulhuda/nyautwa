@@ -40,7 +40,7 @@ class DeviceController {
         $device = $deviceId ? $this->devices->find($deviceId, $tenantId) : null;
         if (!$device) {
             $all = $this->devices->getDevices($tenantId);
-            $device = $all[0] ?? $this->devices->createDevice($tenantId, 'Nomor CS Default');
+            $device = $all[0] ?? $this->devices->createDevice($tenantId, 'Nomor Utama', '6281234567890');
         }
         View::render('devices/connect', [
             'title' => 'Scan QR Perangkat WhatsApp',
@@ -53,14 +53,16 @@ class DeviceController {
         if (!$request->validateCsrf()) {
             Response::withFlash('error', 'Sesi Anda telah kedaluwarsa.', '/devices');
         }
-        $label = trim((string) $request->input('label', 'WhatsApp Node Baru'));
+        $label = trim((string) $request->input('label', 'WhatsApp Node'));
+        $rawPhone = preg_replace('/[^0-9]/', '', (string) $request->input('phone', ''));
+        $phone = str_starts_with($rawPhone, '0') ? ('62' . substr($rawPhone, 1)) : $rawPhone;
         $webhook = trim((string) $request->input('webhook_url', ''));
         $dailyLimit = (int) $request->input('daily_limit', 1000);
-        if (empty($label)) {
-            Response::withFlash('error', 'Nama/Label perangkat wajib diisi.', '/devices');
+        if (empty($label) || empty($phone)) {
+            Response::withFlash('error', 'Nama label dan nomor WhatsApp wajib diisi.', '/devices');
         }
-        $device = $this->devices->createDevice($tenantId, $label, $webhook ?: null, $dailyLimit);
-        Response::withFlash('success', "Perangkat '{$label}' berhasil dibuat. Silakan scan QR.", "/devices/connect?id={$device['id']}");
+        $device = $this->devices->createDevice($tenantId, $label, $phone, $webhook ?: null, $dailyLimit);
+        Response::withFlash('success', "Perangkat '{$label}' ({$phone}) berhasil dibuat.", "/devices/connect?id={$device['id']}");
     }
 
     public function status(Request $request, string $id): void {

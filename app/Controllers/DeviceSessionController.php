@@ -29,6 +29,19 @@ class DeviceSessionController {
     public function qr(Request $request, string $id): void {
         $tenantId = $this->getTenantId();
         if (!$tenantId) return;
+        $device = $this->devices->find($id, $tenantId);
+        if (!$device) {
+            Response::json(['success' => false, 'error' => 'Perangkat tidak ditemukan'], 404);
+            return;
+        }
+        if ($device['status'] === 'connected') {
+            Response::json(['success' => true, 'connected' => true, 'phone' => $device['phone']]);
+            return;
+        }
+        if (!empty($device['qr_code']) && $device['status'] === 'qr_ready') {
+            Response::json(['success' => true, 'status' => $device['status'], 'qr' => $device['qr_code']]);
+            return;
+        }
         $res = $this->devices->getLiveQr($id, $tenantId);
         Response::json($res);
     }

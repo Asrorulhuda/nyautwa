@@ -27,18 +27,19 @@ class DeviceService {
         );
     }
 
-    public function createDevice(string $tenantId, string $label, ?string $webhookUrl = null, int $dailyLimit = 1000): ?array {
+    public function createDevice(string $tenantId, string $label, ?string $phone = null, ?string $webhookUrl = null, int $dailyLimit = 1000): ?array {
         $id = 'dev_' . bin2hex(random_bytes(6));
         $sessionRef = 'sess_' . bin2hex(random_bytes(8));
         $whSecret = 'whsec_' . bin2hex(random_bytes(16));
 
         Database::query(
-            "INSERT INTO devices (id, tenant_id, label, status, session_ref, webhook_url, webhook_secret, daily_limit) 
-             VALUES (:id, :tenant_id, :label, 'pending_qr', :session_ref, :webhook_url, :webhook_secret, :daily_limit)",
+            "INSERT INTO devices (id, tenant_id, label, phone, status, session_ref, webhook_url, webhook_secret, daily_limit) 
+             VALUES (:id, :tenant_id, :label, :phone, 'pending_qr', :session_ref, :webhook_url, :webhook_secret, :daily_limit)",
             [
                 'id' => $id,
                 'tenant_id' => $tenantId,
                 'label' => $label,
+                'phone' => $phone,
                 'session_ref' => $sessionRef,
                 'webhook_url' => $webhookUrl,
                 'webhook_secret' => $whSecret,

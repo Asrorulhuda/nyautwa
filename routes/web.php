@@ -18,10 +18,12 @@ $router->get('/dashboard', [\App\Controllers\DashboardController::class, 'index'
 
 // Devices & Baileys Session
 $router->get('/devices', [\App\Controllers\DeviceController::class, 'index']);
+$router->post('/devices', [\App\Controllers\DeviceController::class, 'create']);
 $router->get('/devices/connect', [\App\Controllers\DeviceController::class, 'connect']);
 $router->post('/devices/create', [\App\Controllers\DeviceController::class, 'create']);
 $router->get('/devices/{id}/status', [\App\Controllers\DeviceController::class, 'status']);
 $router->post('/devices/{id}/disconnect', [\App\Controllers\DeviceController::class, 'disconnect']);
+$router->get('/devices/live-qr/{id}', [\App\Controllers\DeviceSessionController::class, 'qr']);
 $router->post('/devices/live-qr/{id}', [\App\Controllers\DeviceSessionController::class, 'qr']);
 $router->post('/devices/pairing-code/{id}', [\App\Controllers\DeviceSessionController::class, 'pairingCode']);
 $router->get('/devices/poll/{id}', [\App\Controllers\DeviceSessionController::class, 'poll']);
