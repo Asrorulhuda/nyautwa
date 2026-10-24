@@ -16,6 +16,7 @@ $files = [
     'app/Services/CampaignService.php',
     'app/Controllers/DeviceSessionController.php',
     'app/Controllers/Api/InternalCallbackController.php',
+    'app/Controllers/Api/DeployController.php',
     'app/Controllers/AutoReplyController.php',
     'app/Controllers/ContactController.php',
     'app/Controllers/CampaignController.php',
