@@ -28,8 +28,8 @@ class DeployController {
 
         exec("cd {$baseDir} && git pull origin main 2>&1", $output, $returnCode);
         $engineCheck = [];
-        exec("curl -s -m 2 http://127.0.0.1:3000/health 2>&1 || ps aux | grep -i node | grep -v grep", $engineCheck);
-        $output[] = 'ENGINE_STATUS: ' . implode(' | ', $engineCheck);
+        exec("which node; node -v; ls -la {$baseDir}/engine 2>&1", $engineCheck);
+        $output[] = 'ENGINE_INFO: ' . implode(' | ', $engineCheck);
 
         Response::json([
             'success' => $returnCode === 0,
