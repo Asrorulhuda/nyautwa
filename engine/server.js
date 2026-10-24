@@ -6,12 +6,16 @@ const app = express();
 app.use(express.json());
 
 app.use((req, res, next) => {
-    if (req.path === '/health') return next();
+    if (req.path === '/health' || req.path === '/') return next();
     const secret = req.headers['x-engine-secret'];
     if (!secret || secret !== config.secret) {
         return res.status(403).json({ error: 'Akses internal ditolak: Secret token tidak valid' });
     }
     next();
+});
+
+app.get('/', (req, res) => {
+    res.json({ status: 'ok', engine: 'NyautWa Baileys Live Engine v1.0', time: new Date() });
 });
 
 app.get('/health', (req, res) => {
