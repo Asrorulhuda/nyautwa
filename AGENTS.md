@@ -29,10 +29,30 @@ Semua pengerjaan **WAJIB** tunduk 100% pada dokumentasi di dalam folder:
 - Menghasilkan antarmuka generik "AI-slop" (gradasi ungu/biru, glassmorphism, blob neon, ilustrasi kartun 3D, kartu metrik hiasan tanpa aksi).
 - Memakai copywriting robotik atau klise ("Revolusi bisnis Anda", "All-in-one powerful solution", "Oops, something went wrong").
 - **FILE MELEBIHI 100 BARIS**: Seluruh file di dalam repositori (baik PHP Controller, Service, Model, View template, Component, JavaScript, maupun CSS/HTML) **TIDAK BOLEH LEBIH DARI 100 BARIS KODE** (`<= 100 lines per file`). Jika mendekati/melebihi 100 baris, **WAJIB DIPENDEKKAN & DIPECAH** menjadi sub-komponen, partial views, traits, atau sub-services modular.
+- **DILARANG MELAKUKAN GIT COMMIT / PUSH OTOMATIS**: AI Agent **DILARANG KERAS** menjalankan `git commit`, `git push`, atau operasi git remote/staging lainnya secara mandiri. **SEMUA OPERASI COMMIT & PUSH WAJIB MENUNGGU PERINTAH EKSPLISIT DARI USER.**
+- **DILARANG MENGGUNAKAN SQLITE**: Seluruh sistem menggunakan **100% Pure MySQL / MariaDB via PDO**. Tidak ada fallback ke SQLite.
 
 ---
 
-## 2. Design System & Standar UI/UX (Mengacu pada `docs/design/nyautwa/DESIGN.md`)
+## 2. Protokol Deployment Webhook & Pembaruan Database
+
+### A. Alur Auto-Deploy via GitHub Webhook
+- Deployment hosting cPanel berjalan otomatis melalui **GitHub Push Webhook** yang mengarah ke endpoint internal:
+  `POST /api/v1/internal/deploy` (ditangani oleh `DeployController.php` dengan secret token).
+- Ketika user memberikan instruksi dan melakukan `git push`, GitHub akan memanggil webhook ini untuk mengeksekusi `git fetch origin main && git reset --hard origin/main` secara instan di server hosting.
+- Tidak ada dependensi ke runner CI/CD yang berat atau FTP socket yang rapuh.
+
+### B. Protokol Pembaruan Skema Database (Database Update Flow)
+- Setiap kali ada penambahan tabel atau kolom baru:
+  1. Wajib perbarui [database/schema.sql](database/schema.sql) dan [database/full_master_database.sql](database/full_master_database.sql).
+  2. Tambahkan daftar query patch alter tabel di [app/Services/DatabaseUpdateService.php](app/Services/DatabaseUpdateService.php).
+  3. Webhook auto-deploy otomatis mendeteksi perubahan folder `database/` dan mengaktifkan status pending (`storage/db_update_pending.flag`).
+  4. Dashboard Admin & Client akan otomatis menampilkan Alert Peringatan Pembaruan Database.
+  5. Admin dapat mengeksekusi update langsung dari tombol **"Perbarui Database Sekarang"** di dashboard (AJAX realtime dengan summary perubahan lengkap) atau via CLI:
+     `php database/update_db.php`.
+
+
+## 3. Design System & Standar UI/UX (Mengacu pada `docs/design/nyautwa/DESIGN.md`)
 
 ### A. Palet Warna Resmi
 - **Canvas / Background**: `#F6F8F7` (Background aplikasi yang tenang & ergonomis).
@@ -65,7 +85,7 @@ Semua pengerjaan **WAJIB** tunduk 100% pada dokumentasi di dalam folder:
 
 ---
 
-## 3. Standar Arsitektur & Rekayasa Kode (Senior Code Craft)
+## 4. Standar Arsitektur & Rekayasa Kode (Senior Code Craft)
 
 ### A. Backend PHP Native (PHP 8.2+)
 - Menggunakan arsitektur **Clean MVC**:
@@ -93,7 +113,7 @@ Semua pengerjaan **WAJIB** tunduk 100% pada dokumentasi di dalam folder:
 
 ---
 
-## 4. Struktur Direktori Proyek
+## 5. Struktur Direktori Proyek
 
 ```
 c:\laragon\www\nyautwa\
@@ -162,7 +182,7 @@ c:\laragon\www\nyautwa\
 
 ---
 
-## 5. Checklist Verifikasi Sebelum Menyatakan Selesai
+## 6. Checklist Verifikasi Sebelum Menyatakan Selesai
 Setiap task wajib melalui checklist ini:
 - [ ] Apakah desain persis mengikuti tokens di `docs/design/nyautwa/DESIGN.md` dan mockups di `docs/design/`?
 - [ ] Apakah ada elemen dekoratif AI-slop yang melanggar `docs/04-ui-ux.md`? (Jika ada, hapus segera).
@@ -170,3 +190,5 @@ Setiap task wajib melalui checklist ini:
 - [ ] Apakah seluruh query database menggunakan PDO parameter binding?
 - [ ] Apakah copywriting sudah menggunakan Bahasa Indonesia yang manusiawi, informatif, dan jelas?
 - [ ] **Apakah setiap file yang dibuat/dimodifikasi TIDAK MELEBIHI 100 BARIS?** (Wajib split menjadi sub-komponen / partials jika > 100 baris).
+- [ ] **Apakah git commit & push TIDAK dijalankan secara otomatis dan menunggu perintah eksplisit user?**
+
