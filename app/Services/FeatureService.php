@@ -17,7 +17,7 @@ class FeatureService {
         $cleanCode = trim($cleanCode, '_');
 
         Database::query(
-            "INSERT OR IGNORE INTO features (code, name, category, created_at) VALUES (:code, :name, :category, CURRENT_TIMESTAMP)",
+            "INSERT IGNORE INTO features (code, name, category, created_at) VALUES (:code, :name, :category, CURRENT_TIMESTAMP)",
             ['code' => $cleanCode, 'name' => $cleanName, 'category' => $category]
         );
         return $cleanCode;
@@ -29,7 +29,7 @@ class FeatureService {
             $code = trim((string)$code);
             if (!empty($code)) {
                 Database::query(
-                    "INSERT OR IGNORE INTO tenant_features (tenant_id, feature_code, enabled) VALUES (:tid, :code, 1)",
+                    "INSERT IGNORE INTO tenant_features (tenant_id, feature_code, enabled) VALUES (:tid, :code, 1)",
                     ['tid' => $tenantId, 'code' => $code]
                 );
             }

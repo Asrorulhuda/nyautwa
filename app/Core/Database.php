@@ -14,37 +14,26 @@ class Database {
 
     private function __construct() {
         $config = require dirname(__DIR__, 2) . '/config/database.php';
-        $defaultConn = $config['default'] ?? 'mysql';
+        $c = $config['connections']['mysql'] ?? [];
+        $dsn = sprintf(
+            'mysql:host=%s;port=%d;dbname=%s;charset=%s',
+            $c['host'] ?? '127.0.0.1',
+            (int) ($c['port'] ?? 3306),
+            $c['database'] ?? 'nyautwa',
+            $c['charset'] ?? 'utf8mb4'
+        );
 
-        // Try configured primary connection
-        if ($defaultConn === 'mysql') {
-            try {
-                $c = $config['connections']['mysql'];
-                $dsn = sprintf(
-                    'mysql:host=%s;port=%d;dbname=%s;charset=%s',
-                    $c['host'],
-                    $c['port'],
-                    $c['database'],
-                    $c['charset']
-                );
-                $this->connection = new PDO($dsn, $c['username'], $c['password'], $c['options']);
-            } catch (PDOException $e) {
-                // If MySQL connection fails (e.g. database not created yet or service off), try SQLite fallback
-                error_log("MySQL connection failed: " . $e->getMessage() . ". Attempting SQLite fallback.");
-                $sqlitePath = $config['connections']['sqlite']['database'];
-                $sqliteDir = dirname($sqlitePath);
-                if (!is_dir($sqliteDir)) {
-                    mkdir($sqliteDir, 0777, true);
-                }
-                $this->connection = new PDO('sqlite:' . $sqlitePath, null, null, $config['connections']['sqlite']['options']);
-            }
-        } else {
-            $sqlitePath = $config['connections']['sqlite']['database'];
-            $sqliteDir = dirname($sqlitePath);
-            if (!is_dir($sqliteDir)) {
-                mkdir($sqliteDir, 0777, true);
-            }
-            $this->connection = new PDO('sqlite:' . $sqlitePath, null, null, $config['connections']['sqlite']['options']);
+        try {
+            $this->connection = new PDO($dsn, (string)($c['username'] ?? 'root'), (string)($c['password'] ?? ''), $c['options'] ?? [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES => false,
+            ]);
+        } catch (PDOException $e) {
+            $msg = "Koneksi Database MySQL Gagal: " . $e->getMessage() . 
+                   ". Pastikan pengaturan DB_HOST, DB_DATABASE, DB_USERNAME, dan DB_PASSWORD di file .env sudah sesuai.";
+            error_log($msg);
+            throw new RuntimeException($msg, (int) $e->getCode(), $e);
         }
     }
 

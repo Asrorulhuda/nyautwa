@@ -26,7 +26,7 @@ if (!$existingDev) {
 }
 
 // Seed temporary test key
-Database::query("INSERT OR REPLACE INTO api_keys (id, tenant_id, name, key_hash, prefix, created_at) VALUES ('key_test_comp', :tid, 'Comp Key', :kh, 'nyaut_live', CURRENT_TIMESTAMP)", [
+Database::query("REPLACE INTO api_keys (id, tenant_id, name, key_hash, prefix, created_at) VALUES ('key_test_comp', :tid, 'Comp Key', :kh, 'nyaut_live', CURRENT_TIMESTAMP)", [
     'tid' => $tenantId,
     'kh' => $keyHash,
 ]);

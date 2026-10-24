@@ -1,9 +1,9 @@
 -- ========================================================
 -- NYAUTWA - MASTER DATABASE RESMI (SCHEMA + SEEDERS)
--- 100% Identik antara Local dan Hosting cPanel
+-- 100% Pure MySQL / MariaDB (Siap Import ke phpMyAdmin / cPanel)
 -- ========================================================
 
-CREATE TABLE IF NOT EXISTS tenants (id VARCHAR(64) PRIMARY KEY, name VARCHAR(100) NOT NULL, plan_id VARCHAR(50) DEFAULT 'trial', status VARCHAR(20) DEFAULT 'active', max_devices INT DEFAULT 2, max_messages_monthly INT DEFAULT 1000, max_contacts INT DEFAULT 500, webhook_url VARCHAR(255) NULL, is_active TINYINT DEFAULT 1, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS tenants (id VARCHAR(64) PRIMARY KEY, name VARCHAR(100) NOT NULL, plan_id VARCHAR(50) DEFAULT 'trial', status VARCHAR(20) DEFAULT 'active', max_devices INT DEFAULT 2, max_messages_monthly INT DEFAULT 1000, max_contacts INT DEFAULT 500, message_limit INT DEFAULT 1000, device_limit INT DEFAULT 2, subscription_ends_at TIMESTAMP NULL, role VARCHAR(30) DEFAULT 'user', webhook_url VARCHAR(255) NULL, is_active TINYINT DEFAULT 1, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 CREATE TABLE IF NOT EXISTS users (id VARCHAR(64) PRIMARY KEY, tenant_id VARCHAR(64) NOT NULL, name VARCHAR(100) NOT NULL, email VARCHAR(100) UNIQUE NOT NULL, password_hash VARCHAR(255) NOT NULL, role VARCHAR(20) DEFAULT 'owner', created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 CREATE TABLE IF NOT EXISTS devices (id VARCHAR(64) PRIMARY KEY, tenant_id VARCHAR(64) NOT NULL, label VARCHAR(100) NOT NULL, phone VARCHAR(30) NULL, status VARCHAR(20) DEFAULT 'disconnected', session_ref VARCHAR(100) UNIQUE NOT NULL, qr_code TEXT NULL, webhook_url TEXT NULL, webhook_secret VARCHAR(100) NULL, daily_limit INT DEFAULT 1000, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 CREATE TABLE IF NOT EXISTS api_keys (id VARCHAR(64) PRIMARY KEY, tenant_id VARCHAR(64) NOT NULL, name VARCHAR(100) NOT NULL, key_hash VARCHAR(64) NOT NULL, prefix VARCHAR(20) NOT NULL, last_used_at TIMESTAMP NULL, revoked_at TIMESTAMP NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
@@ -12,7 +12,11 @@ CREATE TABLE IF NOT EXISTS webhook_deliveries (id VARCHAR(64) PRIMARY KEY, tenan
 CREATE TABLE IF NOT EXISTS settings (id VARCHAR(64) PRIMARY KEY, tenant_id VARCHAR(64) NOT NULL, `key` VARCHAR(50) NOT NULL, `value` TEXT NOT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 CREATE TABLE IF NOT EXISTS plans (id VARCHAR(50) PRIMARY KEY, name VARCHAR(100) NOT NULL, limits_json TEXT NOT NULL, price_monthly DECIMAL(12,2) DEFAULT 0, price_yearly DECIMAL(12,2) DEFAULT 0, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 CREATE TABLE IF NOT EXISTS subscriptions (id VARCHAR(64) PRIMARY KEY, tenant_id VARCHAR(64) NOT NULL, plan_id VARCHAR(50) NOT NULL, status VARCHAR(20) DEFAULT 'active', starts_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, expires_at TIMESTAMP NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
-CREATE TABLE IF NOT EXISTS invoices (id VARCHAR(64) PRIMARY KEY, tenant_id VARCHAR(64) NOT NULL, amount DECIMAL(12,2) NOT NULL, status VARCHAR(20) DEFAULT 'unpaid', snap_token VARCHAR(255) NULL, payment_method VARCHAR(50) NULL, paid_at TIMESTAMP NULL, plan_name VARCHAR(100) NULL, period VARCHAR(20) DEFAULT 'monthly', created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS invoices (id VARCHAR(64) PRIMARY KEY, invoice_no VARCHAR(50) NULL, tenant_id VARCHAR(64) NOT NULL, plan_id VARCHAR(50) DEFAULT 'starter', amount DECIMAL(12,2) NOT NULL DEFAULT 0, status VARCHAR(20) DEFAULT 'unpaid', payment_method VARCHAR(50) NULL, payment_method_id VARCHAR(50) NULL, snap_token VARCHAR(255) NULL, paid_at TIMESTAMP NULL, plan_name VARCHAR(100) NULL, period VARCHAR(20) DEFAULT 'monthly', notes TEXT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS payment_methods (id VARCHAR(50) PRIMARY KEY, name VARCHAR(100) NOT NULL, account_number VARCHAR(100) NULL, account_name VARCHAR(100) NULL, type VARCHAR(30) DEFAULT 'bank_transfer', is_active INT DEFAULT 1, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS features (code VARCHAR(50) PRIMARY KEY, name VARCHAR(100) NOT NULL, category VARCHAR(50) DEFAULT 'messaging', created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS tenant_features (tenant_id VARCHAR(64) NOT NULL, feature_code VARCHAR(50) NOT NULL, enabled INT DEFAULT 1, PRIMARY KEY (tenant_id, feature_code));
+CREATE TABLE IF NOT EXISTS usage_counters (tenant_id VARCHAR(64) NOT NULL, period VARCHAR(10) NOT NULL, messages_out INT DEFAULT 0, api_calls INT DEFAULT 0, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (tenant_id, period));
 CREATE TABLE IF NOT EXISTS message_events (id VARCHAR(64) PRIMARY KEY, message_id VARCHAR(64) NOT NULL, status VARCHAR(20) NOT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 CREATE TABLE IF NOT EXISTS login_attempts (id VARCHAR(64) PRIMARY KEY, ip_address VARCHAR(45) NOT NULL, email VARCHAR(100) NOT NULL, attempts INT DEFAULT 1, last_attempt_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 CREATE TABLE IF NOT EXISTS saas_features (id VARCHAR(36) PRIMARY KEY, code VARCHAR(50) NOT NULL UNIQUE, name VARCHAR(100) NOT NULL, description TEXT NULL, is_enabled TINYINT(1) DEFAULT 1, min_plan_tier VARCHAR(20) DEFAULT 'starter', created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
@@ -23,9 +27,6 @@ CREATE TABLE IF NOT EXISTS autoreplies (id VARCHAR(36) PRIMARY KEY, tenant_id VA
 CREATE TABLE IF NOT EXISTS campaigns (id VARCHAR(36) PRIMARY KEY, tenant_id VARCHAR(36) NOT NULL, device_id VARCHAR(36) NOT NULL, name VARCHAR(128) NOT NULL, type VARCHAR(32) DEFAULT 'text', message TEXT NOT NULL, media_url VARCHAR(255) NULL, delay_min INT DEFAULT 5, delay_max INT DEFAULT 15, total_recipients INT DEFAULT 0, total_sent INT DEFAULT 0, total_failed INT DEFAULT 0, status VARCHAR(20) DEFAULT 'draft', scheduled_at DATETIME NULL, created_at DATETIME DEFAULT CURRENT_TIMESTAMP);
 CREATE TABLE IF NOT EXISTS blasts (id VARCHAR(36) PRIMARY KEY, tenant_id VARCHAR(36) NOT NULL, campaign_id VARCHAR(36) NOT NULL, receiver VARCHAR(64) NOT NULL, message TEXT NOT NULL, status VARCHAR(20) DEFAULT 'pending', error_message TEXT NULL, sent_at DATETIME NULL, created_at DATETIME DEFAULT CURRENT_TIMESTAMP);
 
-ALTER TABLE contacts MODIFY phone VARCHAR(64) NOT NULL;
-ALTER TABLE blasts MODIFY receiver VARCHAR(64) NOT NULL;
-
 -- SEED DATA PLANS
 REPLACE INTO plans (id, name, limits_json, price_monthly, price_yearly) VALUES
 ('trial', 'Trial 7 Hari', '{"devices":1,"monthly_messages":200,"daily_messages":30,"api_rpm":30,"media":false,"webhooks":true}', 0, 0),
@@ -34,13 +35,15 @@ REPLACE INTO plans (id, name, limits_json, price_monthly, price_yearly) VALUES
 ('reseller', 'Reseller', '{"devices":50,"monthly_messages":150000,"daily_messages":10000,"api_rpm":1200,"media":true,"webhooks":true}', 799000, 7990000);
 
 -- SEED DEMO TENANT & ADMIN USER (admin@nyautwa.test / password123)
-REPLACE INTO tenants (id, name, plan_id, status) VALUES ('tenant_demo_01', 'PT Teknologi Berkah Indonesia', 'business', 'active');
-REPLACE INTO users (id, tenant_id, name, email, password_hash, role) VALUES ('usr_admin_01', 'tenant_demo_01', 'Fikri Baihaqy', 'admin@nyautwa.test', '$2y$10$wE8wBglgU4Z8Xk2p3i0Ksu5tqX5R6j8M/gZ6Jt2o6w4W8m7r5j2tK', 'admin');
+REPLACE INTO tenants (id, name, plan_id, status, message_limit, device_limit, role) VALUES ('tenant_demo_01', 'PT Teknologi Berkah Indonesia', 'business', 'active', 50000, 10, 'admin');
+REPLACE INTO users (id, tenant_id, name, email, password_hash, role) VALUES ('usr_admin_01', 'tenant_demo_01', 'Fikri Baihaqy', 'admin@nyautwa.test', '$2y$10$U7FKKxw5KUgqiNJuk91q3ubbIO.vagx5Itc15Gw6mIExX/GgxrmbG', 'admin');
 
--- SEED DEMO DEVICE, API KEY, TAGS & FEATURES
+-- SEED DEMO DEVICE, API KEY, TAGS, PAYMENT METHODS & FEATURES
 REPLACE INTO devices (id, tenant_id, label, phone, status, session_ref, webhook_url, daily_limit) VALUES ('dev_primary_01', 'tenant_demo_01', 'CS WhatsApp Utama', '+6281288990011', 'connected', 'sess_nyautwa_primary', 'https://api.bisnisanda.com/webhook/whatsapp', 5000);
 REPLACE INTO api_keys (id, tenant_id, name, key_hash, prefix) VALUES ('key_prod_01', 'tenant_demo_01', 'Production ERP Backend', '99c82cbb692bbda24177d704ad52f8546b1be4508922119ef473bca512b93b9c', 'nyaut_live_');
 REPLACE INTO tags (id, tenant_id, name, color) VALUES ('tag_grp_01', 'tenant_demo_01', 'Grup WhatsApp', '#6366F1'), ('tag_pers_01', 'tenant_demo_01', 'Kontak WhatsApp', '#16A36A');
+REPLACE INTO payment_methods (id, name, account_number, account_name, type) VALUES ('bca_transfer', 'Transfer Bank BCA', '8830-1928-11', 'PT NyautWa Digital Indonesia', 'bank_transfer'), ('mandiri_transfer', 'Transfer Bank Mandiri', '137-00-998822-1', 'PT NyautWa Digital Indonesia', 'bank_transfer'), ('qris_instant', 'QRIS Statis / Instan', 'NMID-ID10200392019', 'NyautWa Gateway Official', 'qris');
+REPLACE INTO features (code, name, category) VALUES ('wa_connection', 'Koneksi WhatsApp & Multi-Device', 'device'), ('send_text', 'Kirim Pesan Teks Dashboard', 'messaging'), ('send_media', 'Kirim Media & Dokumen', 'messaging'), ('message_history', 'Riwayat & Log Pesan', 'messaging'), ('anti_ban_queue', 'Antrean Pesan & Anti-Ban', 'security'), ('rest_api', 'Akses REST API Gateway', 'developer'), ('api_keys', 'Manajemen API Key', 'developer'), ('webhooks', 'Webhook Pesan Masuk & Event', 'developer'), ('api_docs', 'Dokumentasi API & SDK', 'developer'), ('analytics_dashboard', 'Dashboard Analitik & Metrik', 'analytics');
 REPLACE INTO saas_features (id, code, name, description, is_enabled, min_plan_tier) VALUES
 ('feat_01', 'autoreply', 'Balas Otomatis AI & Kata Kunci', 'Respon otomatis pesan masuk 24/7', 1, 'starter'),
 ('feat_02', 'campaign', 'Broadcast Massal Anti-Ban', 'Pengiriman pesan massal terkelola dengan delay jitter', 1, 'starter'),

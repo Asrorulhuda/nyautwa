@@ -6,7 +6,7 @@ require dirname(__DIR__) . '/bootstrap.php';
 
 use App\Core\Database;
 
-echo "=== Menjalankan Sinkronisasi Penuh Database NyautWa ===\n";
+echo "=== Menjalankan Sinkronisasi Penuh Database NyautWa (Pure MySQL) ===\n";
 
 $db = Database::getInstance()->getConnection();
 $driver = $db->getAttribute(PDO::ATTR_DRIVER_NAME);
@@ -22,7 +22,6 @@ $executeSql = function(string $sql) use ($db) {
             try {
                 $db->exec($stmt);
             } catch (\PDOException $e) {
-                // Abaikan jika alter column sudah ada di sqlite/mysql
                 if (!str_contains(strtolower($e->getMessage()), 'duplicate column')) {
                     echo "Notice: " . $e->getMessage() . "\n";
                 }
@@ -31,11 +30,11 @@ $executeSql = function(string $sql) use ($db) {
     }
 };
 
-echo "1. Membangun seluruh 19 tabel master... ";
+echo "1. Membangun seluruh 23 tabel master MySQL... ";
 $executeSql($schemaSql);
 echo "[OK]\n";
 
-echo "2. Memasukkan data awal (Plans, Admin, Device, Features)... ";
+echo "2. Memasukkan data awal (Plans, Admin, Device, Features, Payment Methods)... ";
 $executeSql($seedSql);
 echo "[OK]\n";
 
