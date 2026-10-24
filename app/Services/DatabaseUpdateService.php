@@ -55,8 +55,12 @@ class DatabaseUpdateService {
         if (file_exists($schemaFile)) {
             $totalExecuted += $executeSql(file_get_contents($schemaFile));
         }
-        if (file_exists($seedsFile)) {
-            $totalExecuted += $executeSql(file_get_contents($seedsFile));
+        $patchQueries = [
+            "ALTER TABLE login_attempts ADD COLUMN ip VARCHAR(45) NULL AFTER email",
+            "ALTER TABLE login_attempts ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP AFTER ip",
+        ];
+        foreach ($patchQueries as $pq) {
+            try { $db->exec($pq); $totalExecuted++; } catch (\Throwable) {}
         }
 
         self::clearPending();
