@@ -65,17 +65,15 @@ class ApiKeyController {
         Response::withFlash('success', "API Key '{$name}' berhasil dibuat! Segera salin kunci rahasia Anda sekarang.", '/api-keys');
     }
 
-    public function revoke(Request $request, string $id): void {
+    public function revoke(Request $request, string $id = ''): void {
         if (!$this->auth->check()) {
             Response::redirect('/login');
         }
-
-        if ($request->validateCsrf()) {
-            $tenantId = $this->auth->tenantId();
-            $this->apiKeys->revokeKey($id, $tenantId);
-            Response::withFlash('success', 'API Key telah dicabut (revoked) dan tidak dapat digunakan lagi.', '/api-keys');
+        $keyId = !empty($id) ? $id : (string) $request->input('id', '');
+        if ($request->validateCsrf() && !empty($keyId)) {
+            $this->apiKeys->revokeKey($keyId, $this->auth->tenantId());
+            Response::withFlash('success', 'API Key telah dicabut dan tidak dapat digunakan lagi.', '/api-keys');
         }
-
         Response::redirect('/api-keys');
     }
 

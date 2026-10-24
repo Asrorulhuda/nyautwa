@@ -40,6 +40,26 @@ export async function sendBaileysMessage(sock, phone, payload) {
         });
     }
 
+    if (type === 'button') {
+        const rawBtns = Array.isArray(payload.buttons) ? payload.buttons : (payload.options || ['Ya', 'Tidak']);
+        const buttons = rawBtns.map((b, i) => ({
+            buttonId: 'btn_' + i,
+            buttonText: { displayText: typeof b === 'string' ? b : (b.text || `Opsi ${i+1}`) },
+            type: 1
+        }));
+        try {
+            return await sock.sendMessage(jid, {
+                text: payload.message || 'Silakan pilih:',
+                footer: payload.footer || 'NyautWa Gateway',
+                buttons,
+                headerType: 1
+            });
+        } catch {
+            const listText = (payload.message || '') + "\n\n" + buttons.map((b, i) => `[${i+1}] ${b.buttonText.displayText}`).join("\n");
+            return await sock.sendMessage(jid, { text: listText });
+        }
+    }
+
     if (type === 'vcard' || type === 'contact') {
         const vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:${payload.name || 'Kontak'}\nTEL;type=CELL;waid=${payload.phone}:${payload.phone}\nEND:VCARD`;
         return await sock.sendMessage(jid, {

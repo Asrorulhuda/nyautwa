@@ -66,12 +66,10 @@ app.post('/session/logout', async (req, res) => {
 });
 
 app.post('/message/send', async (req, res) => {
-    const { session_ref, phone, message, type, url, caption, options, question } = req.body;
+    const { session_ref, phone, ...payload } = req.body;
     if (!session_ref || !phone) return res.status(400).json({ error: 'Field session_ref dan phone wajib disertakan' });
     try {
-        const result = await sessionManager.sendMessage(session_ref, phone, {
-            message, type, url, caption, options, question
-        });
+        const result = await sessionManager.sendMessage(session_ref, phone, payload);
         res.json({ success: true, wa_message_id: result.wa_message_id, recipient: phone });
     } catch (err) {
         res.status(500).json({ error: 'Gagal mengirim pesan via Baileys: ' + err.message });

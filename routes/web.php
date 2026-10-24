@@ -22,6 +22,7 @@ $router->post('/devices', [\App\Controllers\DeviceController::class, 'create']);
 $router->get('/devices/connect', [\App\Controllers\DeviceController::class, 'connect']);
 $router->post('/devices/create', [\App\Controllers\DeviceController::class, 'create']);
 $router->get('/devices/{id}/status', [\App\Controllers\DeviceController::class, 'status']);
+$router->post('/devices/disconnect/{id}', [\App\Controllers\DeviceController::class, 'disconnect']);
 $router->post('/devices/{id}/disconnect', [\App\Controllers\DeviceController::class, 'disconnect']);
 $router->get('/devices/live-qr/{id}', [\App\Controllers\DeviceSessionController::class, 'qr']);
 $router->post('/devices/live-qr/{id}', [\App\Controllers\DeviceSessionController::class, 'qr']);
@@ -53,6 +54,8 @@ $router->post('/messages/send', [\App\Controllers\MessageController::class, 'sen
 // API Keys & Webhooks
 $router->get('/api-keys', [\App\Controllers\ApiKeyController::class, 'index']);
 $router->post('/api-keys/create', [\App\Controllers\ApiKeyController::class, 'create']);
+$router->post('/api-keys/delete', [\App\Controllers\ApiKeyController::class, 'revoke']);
+$router->post('/api-keys/delete/{id}', [\App\Controllers\ApiKeyController::class, 'revoke']);
 $router->post('/api-keys/{id}/revoke', [\App\Controllers\ApiKeyController::class, 'revoke']);
 $router->post('/webhook/update', [\App\Controllers\ApiKeyController::class, 'updateWebhook']);
 
