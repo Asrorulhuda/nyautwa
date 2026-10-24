@@ -28,9 +28,9 @@ class DeployController {
 
         exec("cd {$baseDir} && git pull origin main 2>&1", $output, $returnCode);
         $engineCheck = [];
-        $cmd = "cp {$baseDir}/engine/package*.json /home/asrdesai/nodevenv/nyautwa.asr-desain.my.id/engine/20/lib/ && /home/asrdesai/nodevenv/nyautwa.asr-desain.my.id/engine/20/bin/npm install 2>&1";
+        $cmd = "ls -la /home/asrdesai/nodevenv/nyautwa.asr-desain.my.id/engine/20/lib/node_modules/ 2>&1";
         exec("bash -c \"{$cmd}\"", $engineCheck);
-        $output[] = 'NPM_RESULT: ' . implode(' | ', $engineCheck);
+        $output[] = 'MODULES: ' . implode(' | ', $engineCheck);
 
         Response::json([
             'success' => $returnCode === 0,
