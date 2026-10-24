@@ -56,4 +56,8 @@ class EngineService {
         $data = array_merge(['session_ref' => $sessionRef, 'phone' => $phone], $payload);
         return $this->request('/message/send', $data);
     }
+
+    public function getContacts(string $sessionRef): array {
+        return $this->request('/session/contacts', ['session_ref' => $sessionRef]);
+    }
 }

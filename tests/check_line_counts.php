@@ -24,6 +24,7 @@ $files = [
     'app/Views/autoreplies/partials/modal_create.php',
     'app/Views/contacts/index.php',
     'app/Views/contacts/partials/modal_create.php',
+    'app/Views/contacts/partials/modal_sync.php',
     'app/Views/campaigns/index.php',
     'app/Views/campaigns/partials/modal_create.php',
     'app/Views/devices/connect.php',

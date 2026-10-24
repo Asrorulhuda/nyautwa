@@ -1,6 +1,9 @@
 export function formatJid(phone) {
-    const clean = phone.replace(/[^0-9]/g, '');
-    return clean.includes('@') ? clean : `${clean}@s.whatsapp.net`;
+    if (typeof phone !== 'string') return '';
+    const trimmed = phone.trim();
+    if (trimmed.endsWith('@g.us') || trimmed.endsWith('@s.whatsapp.net')) return trimmed;
+    const clean = trimmed.replace(/[^0-9]/g, '');
+    return `${clean}@s.whatsapp.net`;
 }
 
 export async function sendBaileysMessage(sock, phone, payload) {

@@ -65,6 +65,17 @@ app.post('/session/logout', async (req, res) => {
     res.json(result);
 });
 
+app.post('/session/contacts', async (req, res) => {
+    const { session_ref } = req.body;
+    if (!session_ref) return res.status(400).json({ error: 'Field session_ref wajib disertakan' });
+    try {
+        const list = await sessionManager.getContactsAndGroups(session_ref);
+        res.json({ success: true, contacts: list });
+    } catch (err) {
+        res.status(500).json({ error: 'Gagal fetch kontak: ' + err.message });
+    }
+});
+
 app.post('/message/send', async (req, res) => {
     const { session_ref, phone, ...payload } = req.body;
     if (!session_ref || !phone) return res.status(400).json({ error: 'Field session_ref dan phone wajib disertakan' });

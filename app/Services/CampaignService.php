@@ -42,7 +42,8 @@ class CampaignService {
         );
 
         foreach ($receivers as $r) {
-            $rClean = preg_replace('/[^0-9]/', '', (string) $r);
+            $rStr = trim((string) $r);
+            $rClean = str_ends_with($rStr, '@g.us') ? $rStr : preg_replace('/[^0-9]/', '', $rStr);
             if (empty($rClean)) continue;
             Database::query(
                 "INSERT INTO blasts (id, tenant_id, campaign_id, receiver, message, status) 

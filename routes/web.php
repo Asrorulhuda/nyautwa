@@ -41,6 +41,7 @@ $router->get('/autoreplies/toggle/{id}', [\App\Controllers\AutoReplyController::
 // Phonebook (Contacts & Tags)
 $router->get('/contacts', [\App\Controllers\ContactController::class, 'index']);
 $router->post('/contacts', [\App\Controllers\ContactController::class, 'create']);
+$router->post('/contacts/sync', [\App\Controllers\ContactController::class, 'sync']);
 $router->post('/contacts/tags', [\App\Controllers\ContactController::class, 'createTag']);
 $router->post('/contacts/delete/{id}', [\App\Controllers\ContactController::class, 'delete']);
 
