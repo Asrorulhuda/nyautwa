@@ -20,6 +20,11 @@ jobs:
         with:
           php-version: '8.2'
           extensions: pdo, pdo_sqlite, curl, json
+      - name: Setup Database for CI Runner
+        run: |
+          php -r "file_put_contents('.env', 'DB_CONNECTION=sqlite' . PHP_EOL . 'SQLITE_PATH=database/nyautwa.sqlite' . PHP_EOL);"
+          php database/migrate.php
+          php database/seed.php
       - name: Verify Line Counts & Integrity
         run: |
           php tests/check_line_counts.php
