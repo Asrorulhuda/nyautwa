@@ -41,18 +41,21 @@ jobs:
         id: webhook
         continue-on-error: true
         run: |
-          URL="${{ secrets.DEPLOY_URL || 'https://nyautwa.asr-desain.my.id/api/v1/internal/deploy' }}"
-          SECRET="${{ secrets.DEPLOY_SECRET || 'nyautwa_engine_internal_secret_994821' }}"
-          echo "Memanggil Webhook Deploy ke $URL..."
-          RESP=$(curl -s -w "\nHTTP_STATUS:%{http_code}" -X POST "$URL" -H "X-Deploy-Token: $SECRET" || true)
-          echo "$RESP"
-          if echo "$RESP" | grep -q "HTTP_STATUS:200"; then
-            echo "Deploy via Webhook Sukses 100%!"
-            exit 0
-          else
-            echo "Webhook tidak merespons 200, mencoba fallback FTP..."
-            exit 1
-          fi
+          SECRET="${{ secrets.DEPLOY_SECRET || 'nyautwa_deploy_secret_994821' }}"
+          TARGETS=("${{ secrets.DEPLOY_URL }}" "https://nyautwa.asr-desain.my.id/api/v1/internal/deploy" "https://nyautwa.asr-desain.my.id/public/api/v1/internal/deploy")
+          DEPLOYED=false
+          for U in "${TARGETS[@]}"; do
+            [ -z "$U" ] && continue
+            echo "Trigger Webhook ke $U..."
+            RESP=$(curl -s -w "\nHTTP_STATUS:%{http_code}" -X POST "$U" -H "X-Deploy-Token: $SECRET" --data "token=$SECRET" || true)
+            echo "$RESP"
+            if echo "$RESP" | grep -q "HTTP_STATUS:200"; then
+              echo "Deploy Webhook Sukses!"
+              DEPLOYED=true
+              break
+            fi
+          done
+          $DEPLOYED && exit 0 || exit 1
 
       - name: Fallback to FTP Deploy
         if: steps.webhook.outcome != 'success'
