@@ -3,7 +3,10 @@
 declare(strict_types=1);
 
 $files = [
-    'database/update_database.sql',
+    'database/full_master_database.sql',
+    'database/schema.sql',
+    'database/seeds.sql',
+    'database/sync_all.php',
     'database/migrations/010_create_mpwa_features.sql',
     'database/migrations/011_alter_contacts_for_groups.sql',
     'engine/server.js',
