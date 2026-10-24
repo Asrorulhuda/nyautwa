@@ -27,6 +27,9 @@ class DeployController {
         $returnCode = 0;
 
         exec("cd {$baseDir} && git pull origin main 2>&1", $output, $returnCode);
+        $engineCheck = [];
+        exec("tail -n 25 {$baseDir}/engine/stderr.log 2>&1", $engineCheck);
+        $output[] = 'STDERR_LOG: ' . implode(' | ', $engineCheck);
 
         @mkdir("{$baseDir}/engine/tmp", 0755, true);
         @touch("{$baseDir}/engine/tmp/restart.txt");
