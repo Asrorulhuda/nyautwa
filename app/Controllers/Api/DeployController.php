@@ -28,9 +28,9 @@ class DeployController {
 
         exec("cd {$baseDir} && git pull origin main 2>&1", $output, $returnCode);
         $engineCheck = [];
-        $cmd = "ls -la /home/asrdesai/nodevenv/nyautwa.asr-desain.my.id/engine/20/lib/node_modules/ 2>&1";
+        $cmd = "mkdir -p {$baseDir}/engine/tmp && touch {$baseDir}/engine/tmp/restart.txt && sleep 1 && ps aux | grep -i node | grep -v grep";
         exec("bash -c \"{$cmd}\"", $engineCheck);
-        $output[] = 'MODULES: ' . implode(' | ', $engineCheck);
+        $output[] = 'RESTART_RESULT: ' . implode(' | ', $engineCheck);
 
         Response::json([
             'success' => $returnCode === 0,
