@@ -28,8 +28,9 @@ class DeployController {
 
         exec("cd {$baseDir} && git pull origin main 2>&1", $output, $returnCode);
         $engineCheck = [];
-        exec("ls -la /home/asrdesai/nodevenv/nyautwa.asr-desain.my.id/engine/20/bin/ 2>&1 || which /opt/alt/alt-nodejs20/root/usr/bin/npm", $engineCheck);
-        $output[] = 'BIN_CHECK: ' . implode(' | ', $engineCheck);
+        $cmd = "source /home/asrdesai/nodevenv/nyautwa.asr-desain.my.id/engine/20/bin/activate && cd {$baseDir}/engine && npm install 2>&1";
+        exec("bash -c \"{$cmd}\"", $engineCheck);
+        $output[] = 'NPM_RESULT: ' . implode(' | ', $engineCheck);
 
         Response::json([
             'success' => $returnCode === 0,
