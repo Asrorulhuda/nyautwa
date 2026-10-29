@@ -20,21 +20,35 @@ class AdminDashboardService {
 
         $sentToday = (int) (Database::fetchOne("SELECT COUNT(*) as c FROM messages WHERE created_at >= :t AND status IN ('sent','delivered','read')", ['t' => $todayStart])['c'] ?? 0);
         $failedToday = (int) (Database::fetchOne("SELECT COUNT(*) as c FROM messages WHERE created_at >= :t AND status = 'failed'", ['t' => $todayStart])['c'] ?? 0);
-        $queuedToday = (int) (Database::fetchOne("SELECT COUNT(*) as c FROM messages WHERE status = 'queued'")['c'] ?? 0);
+        $queuedToday = (int) (Database::fetchOne("SELECT COUNT(*) as c FROM messages WHERE status IN ('queued','pending')")['c'] ?? 0);
         $totalMessagesAllTime = (int) (Database::fetchOne("SELECT COUNT(*) as c FROM messages")['c'] ?? 0);
 
         $totalTodayProcessed = $sentToday + $failedToday;
-        $successRate = $totalTodayProcessed > 0 ? round(($sentToday / $totalTodayProcessed) * 100, 1) : 99.2;
+        $successRate = $totalTodayProcessed > 0 ? round(($sentToday / $totalTodayProcessed) * 100, 1) : null;
 
-        $planCounts = ['starter' => 0, 'pro' => 0, 'enterprise' => 0];
+        $availablePlans = (new PlanService())->getAvailablePlans();
+        $planCounts = array_fill_keys(array_keys($availablePlans), 0);
         $estimatedMrr = 0;
-        $planPrices = ['starter' => 99000, 'pro' => 249000, 'enterprise' => 799000];
+
         foreach ($tenants as $t) {
-            $p = $t['plan_id'] ?? 'starter';
-            if (isset($planCounts[$p])) $planCounts[$p]++;
+            $pid = $t['plan_id'] ?? 'starter';
+            if (!isset($planCounts[$pid])) $planCounts[$pid] = 0;
+            $planCounts[$pid]++;
             if ($t['status'] === 'active') {
-                $estimatedMrr += $planPrices[$p] ?? 99000;
+                $estimatedMrr += (int) ($availablePlans[$pid]['price'] ?? 149000);
             }
+        }
+
+        $planDistribution = [];
+        foreach ($availablePlans as $pid => $pl) {
+            $count = $planCounts[$pid] ?? 0;
+            $planDistribution[] = [
+                'id' => $pid,
+                'name' => $pl['name'] ?? ucfirst($pid),
+                'devices' => $pl['devices'] ?? 1,
+                'count' => $count,
+                'percentage' => $totalClients > 0 ? round(($count / $totalClients) * 100) : 0,
+            ];
         }
 
         $recentTenants = array_slice($tenants, 0, 5);
@@ -60,13 +74,10 @@ class AdminDashboardService {
             'success_rate' => $successRate,
             'estimated_mrr' => $estimatedMrr,
             'plan_counts' => $planCounts,
+            'plan_distribution' => $planDistribution,
             'recent_tenants' => $recentTenants,
-            'engine_status' => [
-                'online' => true,
-                'name' => 'Baileys v6.7.8',
-                'latency' => '12ms',
-                'uptime' => '99.98%'
-            ]
+            'engine_status' => (new AdminEngineHealthService())->getHealth(),
+            'chart_data' => (new AdminHourlyChartService())->getChartData($todayStart),
         ];
     }
 }

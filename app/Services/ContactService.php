@@ -7,19 +7,12 @@ namespace App\Services;
 use App\Core\Database;
 
 class ContactService {
-    private EngineService $engine;
-
-    public function __construct() {
-        $this->engine = new EngineService();
-    }
+    public function __construct(private EngineService $engine = new EngineService()) {}
 
     public function getContacts(string $tenantId, ?string $tagId = null): array {
         $sql = "SELECT c.*, t.name as tag_name, t.color as tag_color FROM contacts c LEFT JOIN tags t ON c.tag_id = t.id WHERE c.tenant_id = :tenant_id";
         $params = ['tenant_id' => $tenantId];
-        if ($tagId) {
-            $sql .= " AND c.tag_id = :tag_id";
-            $params['tag_id'] = $tagId;
-        }
+        if ($tagId) { $sql .= " AND c.tag_id = :tag_id"; $params['tag_id'] = $tagId; }
         $sql .= " ORDER BY c.created_at DESC";
         return Database::fetchAll($sql, $params);
     }
@@ -41,19 +34,29 @@ class ContactService {
         return $id;
     }
 
+    public function normalizePhone(string $phone): string {
+        $p = trim($phone);
+        if (str_ends_with($p, '@g.us') || str_ends_with($p, '@lid')) return $p;
+        $num = preg_replace('/[^0-9]/', '', $p);
+        if (str_starts_with($num, '08')) return '628' . substr($num, 2);
+        if (str_starts_with($num, '8')) return '628' . substr($num, 1);
+        return $num;
+    }
+
     public function createContact(string $tenantId, array $data): bool {
         $id = 'cnt_' . bin2hex(random_bytes(6));
+        $phone = $this->normalizePhone((string) ($data['phone'] ?? ''));
         return Database::execute(
             "INSERT INTO contacts (id, tenant_id, tag_id, name, phone, email, notes) VALUES (:id, :tid, :tag_id, :name, :phone, :email, :notes)",
-            ['id' => $id, 'tid' => $tenantId, 'tag_id' => $data['tag_id'] ?: null, 'name' => trim($data['name']), 'phone' => trim($data['phone']), 'email' => $data['email'] ?: null, 'notes' => $data['notes'] ?: null]
+            ['id' => $id, 'tid' => $tenantId, 'tag_id' => $data['tag_id'] ?? null, 'name' => trim((string)$data['name']), 'phone' => $phone, 'email' => $data['email'] ?? null, 'notes' => $data['notes'] ?? null]
         );
     }
 
     public function syncFromDevice(string $tenantId, string $deviceId): array {
         $dev = Database::fetchOne("SELECT * FROM devices WHERE id = :id AND tenant_id = :tid", ['id' => $deviceId, 'tid' => $tenantId]);
         if (!$dev || $dev['status'] !== 'connected') return ['success' => false, 'error' => 'Perangkat belum terhubung ke WhatsApp'];
-
         $res = $this->engine->getContacts($dev['session_ref']);
+        if (empty($res['success'])) return ['success' => false, 'error' => $res['error'] ?? 'Engine WhatsApp tidak merespons'];
         $raw = $res['contacts'] ?? [];
         if (empty($raw)) return ['success' => false, 'error' => 'Belum ada data kontak atau grup yang ditemukan di perangkat'];
 
@@ -62,10 +65,12 @@ class ContactService {
         $synced = 0; $groups = 0;
 
         foreach ($raw as $c) {
-            $isGrp = !empty($c['is_group']) || str_ends_with($c['phone'], '@g.us');
+            $isGrp = !empty($c['is_group']) || str_ends_with((string)$c['phone'], '@g.us');
+            $phone = $isGrp ? trim((string)$c['phone']) : $this->normalizePhone((string)$c['phone']);
+            if (!$isGrp && (strlen($phone) < 8 || !str_starts_with($phone, '628'))) continue;
+
             $tagId = $isGrp ? $tagGroup : $tagPersonal;
             $name = trim($c['name'] ?? ($isGrp ? 'Grup WA' : 'Kontak WA'));
-            $phone = trim($c['phone']);
             $existing = Database::fetchOne("SELECT id FROM contacts WHERE tenant_id = :tid AND phone = :p", ['tid' => $tenantId, 'p' => $phone]);
 
             if ($existing) {

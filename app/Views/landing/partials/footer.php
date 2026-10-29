@@ -4,15 +4,37 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
             <!-- Brand identity -->
             <div class="lg:col-span-2">
-                <div class="flex items-center gap-2.5 mb-4">
-                    <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white shadow-sm">
-                        <span class="material-symbols-outlined text-lg">chat</span>
+                <div class="flex items-center gap-3 mb-4">
+                    <img src="<?= url('/assets/images/logo.png') ?>" alt="NyautWa Logo" class="h-11 w-11 object-contain drop-shadow-xs">
+                    <div class="flex flex-col">
+                        <span class="text-xl font-black text-on-surface leading-tight">Nyaut<span class="text-primary font-bold">Wa</span></span>
+                        <span class="text-[10px] text-amber-600 font-mono font-bold tracking-wider">WA GATEWAY + CRM • by asr_production</span>
                     </div>
-                    <span class="text-xl font-bold text-on-surface">Nyaut<span class="text-primary font-semibold">Wa</span></span>
                 </div>
-                <p class="text-xs text-on-surface-variant max-w-sm mb-6 leading-relaxed">
-                    <?= e($settings['footer_tagline'] ?? 'Infrastruktur WhatsApp Gateway API berkecepatan tinggi untuk kebutuhan notifikasi aplikasi, sistem verifikasi OTP, dan automasi obrolan bisnis.') ?>
+                <p class="text-xs text-on-surface-variant max-w-sm mb-4 leading-relaxed">
+                    <?= e($settings['footer_tagline'] ?? 'WhatsApp Gateway berkecepatan tinggi & Live Chat CRM Pelanggan. Pesan masuk langsung nyaut, komunikasi bisnis makin lancar dan loyal.') ?>
                 </p>
+                <div class="space-y-1.5 text-xs text-secondary mb-4">
+                    <?php if (!empty($settings['footer_contact_phone'])): ?>
+                        <?php $cleanPhone = preg_replace('/[^0-9]/', '', $settings['footer_contact_phone']); ?>
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[15px] text-primary">chat</span>
+                            <a href="https://wa.me/<?= e($cleanPhone) ?>" target="_blank" class="font-mono hover:text-primary transition-colors"><?= e($settings['footer_contact_phone']) ?></a>
+                        </div>
+                    <?php endif; ?>
+                    <?php if (!empty($settings['footer_contact_email'])): ?>
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[15px] text-primary">mail</span>
+                            <a href="mailto:<?= e($settings['footer_contact_email']) ?>" class="hover:text-primary transition-colors"><?= e($settings['footer_contact_email']) ?></a>
+                        </div>
+                    <?php endif; ?>
+                    <?php if (!empty($settings['footer_address'])): ?>
+                        <div class="flex items-start gap-2 text-[11px]">
+                            <span class="material-symbols-outlined text-[15px] text-primary mt-0.5">location_on</span>
+                            <span><?= e($settings['footer_address']) ?></span>
+                        </div>
+                    <?php endif; ?>
+                </div>
                 <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container-low text-primary text-xs font-mono border border-surface-container">
                     <span class="w-2 h-2 rounded-full bg-primary"></span>
                     <span>Semua Sistem Operasional</span>
@@ -42,10 +64,10 @@
             <div>
                 <h4 class="text-xs font-semibold text-on-surface uppercase tracking-wider mb-4">Legal & Kontak</h4>
                 <ul class="space-y-3 text-xs">
-                    <li><a class="hover:text-primary transition-colors" href="#">Syarat & Ketentuan</a></li>
-                    <li><a class="hover:text-primary transition-colors" href="#">Kebijakan Privasi</a></li>
-                    <li><a class="hover:text-primary transition-colors" href="#">Jaminan Layanan (SLA)</a></li>
-                    <li><a class="hover:text-primary transition-colors" href="#">Hubungi Support</a></li>
+                    <li><a class="hover:text-primary transition-colors" href="<?= url('/terms') ?>">Syarat & Ketentuan</a></li>
+                    <li><a class="hover:text-primary transition-colors" href="<?= url('/privacy') ?>">Kebijakan Privasi</a></li>
+                    <li><a class="hover:text-primary transition-colors" href="<?= url('/sla') ?>">Jaminan Layanan (SLA)</a></li>
+                    <li><a class="hover:text-primary transition-colors" href="<?= url('/contact') ?>">Hubungi Support</a></li>
                 </ul>
             </div>
         </div>

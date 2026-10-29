@@ -11,6 +11,7 @@ use App\Core\View;
 use App\Services\AuthService;
 use App\Services\DeviceService;
 use App\Services\MessageService;
+use App\Services\QuotaService;
 
 class MessageController {
     use InteractsWithMessagePayload;
@@ -40,7 +41,12 @@ class MessageController {
 
     public function create(Request $request): void {
         if (!$this->auth->check()) Response::redirect('/login');
-        View::render('messages/send', ['title' => 'Kirim Pesan WhatsApp Uji', 'devices' => $this->devices->getDevices($this->auth->tenantId())], 'app');
+        $tenantId = $this->auth->tenantId();
+        if (!(new \App\Services\SubscriptionService())->canAccess($tenantId, 'send_message')) {
+            Response::withFlash('error', 'Fitur Kirim Pesan terkunci pada paket Anda. Silakan upgrade paket.', '/onboarding/plan');
+            return;
+        }
+        View::render('messages/send', ['title' => 'Kirim Pesan WhatsApp Uji', 'devices' => $this->devices->getDevices($tenantId)], 'app');
     }
 
     public function send(Request $request): void {
@@ -48,11 +54,15 @@ class MessageController {
         if (!$request->validateCsrf()) Response::withFlash('error', 'Sesi form Anda telah kedaluwarsa.', '/messages/send');
 
         $tenantId = $this->auth->tenantId();
+        if (!(new QuotaService())->checkQuota($tenantId)['allowed']) {
+            Response::withFlash('error', 'Kuota pesan bulan ini sudah habis. Silakan upgrade paket untuk melanjutkan pengiriman.', '/messages/send');
+        }
         $devId = (string) $request->input('device_id', '');
         $phone = trim((string) $request->input('phone', ''));
         $type = (string) $request->input('type', 'text');
         $body = trim((string) $request->input('body', ''));
         $extra = $this->buildExtraPayload($request, $type, $body);
+        unset($extra['is_system']);
 
         if (empty($devId) || empty($phone) || (empty($body) && empty($extra['url']) && empty($extra['question']))) {
             Response::withFlash('error', 'Perangkat, nomor tujuan, dan pesan wajib diisi.', '/messages/send', $request->all());

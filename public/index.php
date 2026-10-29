@@ -38,7 +38,7 @@ try {
     http_response_code(500);
     error_log("NyautWa Server Error: " . $e->getMessage() . " in " . $e->getFile() . ":" . $e->getLine());
     $debug = env('APP_DEBUG', false);
-    if ($debug || !empty($_GET['debug'])) {
+    if ($debug) {
         echo "<div style='font-family:sans-serif;padding:24px;background:#fff1f0;border:1px solid #ffa39e;border-radius:8px;max-width:800px;margin:40px auto;'>";
         echo "<h2 style='color:#cf1322;margin-top:0;'>Terjadi Kesalahan Sistem (500)</h2>";
         echo "<p><strong>Pesan:</strong> " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8') . "</p>";

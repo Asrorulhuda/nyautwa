@@ -11,6 +11,9 @@
 <!-- Product Benefits (4 Grid Cards) -->
 <?php require __DIR__ . '/partials/features.php'; ?>
 
+<!-- Client & Business Showcase -->
+<?php require __DIR__ . '/partials/client_showcase.php'; ?>
+
 <!-- Authentic Dashboard Demonstration -->
 <?php require __DIR__ . '/partials/dashboard_preview.php'; ?>
 
@@ -43,14 +46,4 @@
             }
         });
     });
-
-    // Copy Code Snippet Interaction
-    const copyBtn = document.getElementById('copy-btn');
-    if (copyBtn) {
-        copyBtn.addEventListener('click', () => {
-            const orig = copyBtn.innerHTML;
-            copyBtn.innerHTML = '<span class="material-symbols-outlined text-[16px] text-primary">check</span><span class="text-primary font-semibold">Tersalin!</span>';
-            setTimeout(() => { copyBtn.innerHTML = orig; }, 2000);
-        });
-    }
 </script>

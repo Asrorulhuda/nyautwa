@@ -4,38 +4,30 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Core\Request;
-use App\Core\Response;
-use App\Core\View;
-use App\Services\AuthService;
-use App\Services\CampaignService;
-use App\Services\DeviceService;
-use App\Services\ContactService;
+use App\Core\{Request, Response, View};
+use App\Services\{AuthService, CampaignService, DeviceService, ContactService, QuotaService, SubscriptionService};
 
 class CampaignController {
-    private AuthService $auth;
-    private CampaignService $service;
-    private DeviceService $devices;
-    private ContactService $contacts;
-
-    public function __construct() {
-        $this->auth = new AuthService();
-        $this->service = new CampaignService();
-        $this->devices = new DeviceService();
-        $this->contacts = new ContactService();
-    }
+    public function __construct(
+        private AuthService $auth = new AuthService(),
+        private CampaignService $service = new CampaignService(),
+        private DeviceService $devices = new DeviceService(),
+        private ContactService $contacts = new ContactService(),
+        private SubscriptionService $subs = new SubscriptionService()
+    ) {}
 
     private function requireAuth(): string {
-        if (!$this->auth->check()) {
-            Response::redirect('/login');
-            return '';
-        }
+        if (!$this->auth->check()) { Response::redirect('/login'); return ''; }
         return $this->auth->tenantId();
     }
 
     public function index(Request $request): void {
         $tenantId = $this->requireAuth();
         if (!$tenantId) return;
+        if (!$this->subs->canAccess($tenantId, 'broadcast')) {
+            Response::withFlash('error', 'Fitur Broadcast Blast terkunci pada paket Anda. Silakan upgrade paket.', '/onboarding/plan');
+            return;
+        }
         View::render('campaigns/index', [
             'title' => 'Broadcast Massal (Campaign Blast)',
             'campaigns' => $this->service->getCampaigns($tenantId),
@@ -88,6 +80,14 @@ class CampaignController {
     public function start(Request $request, string $id): void {
         $tenantId = $this->requireAuth();
         if (!$tenantId) return;
+        if (!$request->validateCsrf()) {
+            Response::withFlash('error', 'Sesi tidak valid atau kedaluwarsa.', '/campaigns');
+            return;
+        }
+        if (!(new QuotaService())->checkQuota($tenantId)['allowed']) {
+            Response::withFlash('error', 'Kuota pesan bulan ini sudah habis. Blast tidak dapat dijalankan. Silakan upgrade paket.', '/campaigns');
+            return;
+        }
         $result = $this->service->executeBlast($id, $tenantId);
         if ($result['success']) {
             Response::withFlash('success', "Berhasil mengirim {$result['sent']} pesan. Sisa antrean: {$result['remaining']}", '/campaigns');

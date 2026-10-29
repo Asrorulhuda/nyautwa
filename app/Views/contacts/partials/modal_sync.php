@@ -1,12 +1,12 @@
 <!-- Modal Tarik Kontak & Grup dari WhatsApp -->
-<div id="modal-sync-contacts" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+<div id="modal-sync-contacts" class="hidden fixed inset-0 z-50 overflow-y-auto bg-black/50 backdrop-blur-xs items-center justify-center p-4">
     <div class="bg-white rounded-xl max-w-md w-full p-6 shadow-xl border border-[#E4EAE6] space-y-4">
         <div class="flex items-center justify-between border-b border-[#E4EAE6] pb-3">
             <div class="flex items-center gap-2 text-[#17211F]">
                 <span class="material-symbols-outlined text-[#16A36A]">sync_saved_locally</span>
                 <h3 class="text-base font-bold">Tarik Kontak & Grup dari WhatsApp</h3>
             </div>
-            <button type="button" onclick="document.getElementById('modal-sync-contacts').classList.add('hidden')" class="text-[#697570] hover:text-[#17211F]">
+            <button type="button" onclick="if(typeof closeModal==='function'){closeModal('modal-sync-contacts')}else{const m=document.getElementById('modal-sync-contacts');m.classList.add('hidden');m.classList.remove('flex');}" class="text-[#697570] hover:text-[#17211F] cursor-pointer">
                 <span class="material-symbols-outlined text-lg">close</span>
             </button>
         </div>
@@ -15,8 +15,8 @@
             Sistem akan membaca daftar kontak pelanggan dan seluruh grup WhatsApp yang terdaftar pada perangkat aktif yang dipilih, lalu menyimpannya ke buku kontak secara otomatis.
         </p>
 
-        <form method="POST" action="/contacts/sync" class="space-y-4">
-            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
+        <form method="POST" action="<?= url('/contacts/sync') ?>" class="space-y-4">
+            <?= csrf_field() ?>
             <div>
                 <label class="block text-xs font-semibold text-[#17211F] mb-1.5">Pilih Perangkat WhatsApp Terhubung</label>
                 <select name="device_id" required class="w-full px-3 py-2 bg-white border border-[#E4EAE6] rounded-md text-xs text-[#17211F] focus:border-[#16A36A] outline-hidden">
@@ -45,7 +45,7 @@
             </div>
 
             <div class="flex items-center justify-end gap-3 pt-2">
-                <button type="button" onclick="document.getElementById('modal-sync-contacts').classList.add('hidden')" class="px-3 py-2 text-xs font-medium text-[#697570] hover:text-[#17211F]">
+                <button type="button" onclick="if(typeof closeModal==='function'){closeModal('modal-sync-contacts')}else{const m=document.getElementById('modal-sync-contacts');m.classList.add('hidden');m.classList.remove('flex');}" class="px-3 py-2 text-xs font-medium text-[#697570] hover:text-[#17211F] cursor-pointer">
                     Batal
                 </button>
                 <button type="submit" <?= !$hasConnected ? 'disabled' : '' ?> class="px-4 py-2 text-xs font-semibold text-white bg-[#16A36A] hover:bg-[#128557] disabled:opacity-50 rounded-md transition-colors shadow-sm flex items-center gap-1.5 cursor-pointer">

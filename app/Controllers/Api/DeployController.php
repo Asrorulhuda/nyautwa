@@ -10,9 +10,13 @@ use App\Services\DatabaseUpdateService;
 
 class DeployController {
     public function handle(Request $request): void {
-        $secret = (string) env('DEPLOY_SECRET', 'nyautwa_deploy_secret_994821');
+        $secret = (string) env('DEPLOY_SECRET', '');
+        if (empty($secret)) {
+            error_log('[Security] DEPLOY_SECRET belum dikonfigurasi di .env.');
+            Response::json(['error' => 'Konfigurasi webhook deploy belum diatur'], 500);
+            return;
+        }
         $rawPayload = file_get_contents('php://input') ?: '';
-        
         $token = $_SERVER['HTTP_X_DEPLOY_TOKEN'] ?? ($request->input('token') ?? ($_POST['token'] ?? ''));
         $hubSig = $_SERVER['HTTP_X_HUB_SIGNATURE_256'] ?? '';
 

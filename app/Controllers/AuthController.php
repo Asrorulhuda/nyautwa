@@ -63,8 +63,7 @@ class AuthController {
         $email = strtolower(trim((string) $request->input('email', '')));
         $password = (string) $request->input('password', '');
         $confirm = (string) $request->input('password_confirmation', '');
-        $plan = (string) $request->input('plan', 'starter');
-        $old = ['company' => $company, 'name' => $name, 'email' => $email, 'plan' => $plan];
+        $old = ['company' => $company, 'name' => $name, 'email' => $email];
 
         if (empty($company) || empty($name) || empty($email) || empty($password)) {
             Response::withFlash('error', 'Seluruh kolom pendaftaran wajib diisi dengan lengkap.', '/register', $old); return;
@@ -79,14 +78,19 @@ class AuthController {
             Response::withFlash('error', 'Konfirmasi kata sandi tidak cocok. Silakan ketik ulang.', '/register', $old); return;
         }
 
-        $validPlan = in_array($plan, ['starter', 'pro', 'enterprise'], true) ? $plan : 'starter';
-        $error = $this->auth->register($company, $name, $email, $password, $validPlan);
+        $industry = trim((string) $request->input('industry', 'Bisnis'));
+        $logo = \App\Services\LogoUploadService::handle($_FILES['logo'] ?? null);
+        $error = $this->auth->register($company, $name, $email, $password, 'trial', $logo, $industry);
         if ($error) { Response::withFlash('error', $error, '/register', $old); return; }
-        Response::withFlash('success', 'Pendaftaran akun berhasil! Selamat datang di NyautWa.', '/dashboard');
+        Response::withFlash('success', 'Akun berhasil dibuat! Silakan pilih paket layanan bisnis Anda.', '/onboarding/plan');
     }
 
     public function logout(Request $request): void {
-        if ($request->validateCsrf()) { $this->auth->logout(); }
+        if (!$request->validateCsrf()) {
+            Response::withFlash('error', 'Permintaan tidak valid. Sesi masih aktif.', '/login');
+            return;
+        }
+        $this->auth->logout();
         Response::withFlash('success', 'Anda telah berhasil keluar dari akun.', '/login');
     }
 }

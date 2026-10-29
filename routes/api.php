@@ -26,4 +26,4 @@ $router->post('/api/v1/numbers/check', [\App\Controllers\Api\UtilityApiControlle
 $router->get('/api/v1/usage', [\App\Controllers\Api\UtilityApiController::class, 'usage']);
 
 // Internal Callback from Baileys Engine
-$router->post('/api/v1/internal/callback', [\App\Controllers\Api\CallbackApiController::class, 'handle']);
+$router->post('/api/v1/internal/callback', [\App\Controllers\Api\InternalCallbackController::class, 'handle']);

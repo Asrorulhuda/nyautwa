@@ -23,12 +23,14 @@ class Database {
             $c['charset'] ?? 'utf8mb4'
         );
 
+        $options = array_replace((array)($c['options'] ?? []), [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES => false,
+        ]);
+
         try {
-            $this->connection = new PDO($dsn, (string)($c['username'] ?? 'root'), (string)($c['password'] ?? ''), $c['options'] ?? [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES => false,
-            ]);
+            $this->connection = new PDO($dsn, (string)($c['username'] ?? 'root'), (string)($c['password'] ?? ''), $options);
         } catch (PDOException $e) {
             $msg = "Koneksi Database MySQL Gagal: " . $e->getMessage() . 
                    ". Pastikan pengaturan DB_HOST, DB_DATABASE, DB_USERNAME, dan DB_PASSWORD di file .env sudah sesuai.";
@@ -49,9 +51,14 @@ class Database {
     }
 
     public static function query(string $sql, array $params = []): \PDOStatement {
-        $stmt = self::getInstance()->getConnection()->prepare($sql);
-        $stmt->execute($params);
-        return $stmt;
+        try {
+            $stmt = self::getInstance()->getConnection()->prepare($sql);
+            $stmt->execute($params);
+            return $stmt;
+        } catch (PDOException $e) {
+            error_log("[Database Query Error] " . $e->getMessage() . " | SQL: " . $sql);
+            throw $e;
+        }
     }
 
     public static function fetchAll(string $sql, array $params = []): array {

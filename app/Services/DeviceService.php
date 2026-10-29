@@ -14,7 +14,13 @@ class DeviceService {
     }
 
     public function getDevices(string $tenantId): array {
-        return Database::fetchAll("SELECT * FROM devices WHERE tenant_id = :tenant_id ORDER BY created_at DESC", ['tenant_id' => $tenantId]);
+        $devs = Database::fetchAll("SELECT * FROM devices WHERE tenant_id = :tenant_id ORDER BY created_at DESC", ['tenant_id' => $tenantId]);
+        foreach ($devs as &$d) {
+            $did = $d['id'];
+            $d['today_sent'] = (int) (Database::fetchOne("SELECT COUNT(*) AS c FROM messages WHERE device_id = :did AND DATE(created_at) = CURDATE() AND status IN ('sent','delivered')", ['did' => $did])['c'] ?? 0);
+            $d['inbound_count'] = (int) (Database::fetchOne("SELECT COUNT(*) AS c FROM messages WHERE device_id = :did AND direction = 'inbound'", ['did' => $did])['c'] ?? 0);
+        }
+        return $devs;
     }
 
     public function find(string $id, string $tenantId): ?array {
@@ -47,10 +53,10 @@ class DeviceService {
 
     public function disconnect(string $id, string $tenantId): bool {
         $device = $this->find($id, $tenantId);
-        if ($device) {
-            try { $this->engine->logout($device['session_ref']); } catch (\Throwable) {}
-        }
-        return Database::execute("UPDATE devices SET status = 'disconnected', phone = NULL WHERE id = :id AND tenant_id = :tenant_id", ['id' => $id, 'tenant_id' => $tenantId]);
+        if (!$device) return false;
+        try { $this->engine->logout($device['session_ref']); } catch (\Throwable) {}
+        Database::query("UPDATE devices SET status = 'disconnected', phone = NULL WHERE id = :id AND tenant_id = :tenant_id", ['id' => $id, 'tenant_id' => $tenantId]);
+        return true;
     }
 
     public function deleteDevice(string $id, string $tenantId): bool {

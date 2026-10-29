@@ -12,10 +12,14 @@ class LandingController {
     public function index(Request $request): void {
         $settingsService = new LandingSettingsService();
         $settings = $settingsService->getAll();
+        $clients = \App\Core\Database::fetchAll(
+            "SELECT id, name, logo, industry, created_at FROM tenants WHERE status = 'active' ORDER BY created_at DESC LIMIT 16"
+        );
 
         View::render('landing/index', [
             'title' => 'WhatsApp Gateway SaaS untuk Developer & Bisnis Indonesia',
             'settings' => $settings,
+            'clients' => $clients,
         ], 'landing');
     }
 }

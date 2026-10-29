@@ -1,16 +1,11 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # Jika file fisik ada di folder public (css, js, gambar)
-    RewriteCond %{DOCUMENT_ROOT}/public/$1 -f [OR]
-    RewriteCond %{DOCUMENT_ROOT}/public/$1 -d
-    RewriteRule ^(.*)$ public/$1 [L]
-
     # Jangan rewrite Node.js Passenger engine
     RewriteCond %{REQUEST_URI} ^/engine
     RewriteRule ^ - [L]
 
-    # Route seluruh URL MVC ke front controller public/index.php
+    # Route seluruh request ke folder public/
     RewriteCond %{REQUEST_URI} !^/public/
-    RewriteRule ^(.*)$ public/index.php [L,QSA]
+    RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>

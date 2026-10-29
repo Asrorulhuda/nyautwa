@@ -40,6 +40,10 @@ if (!function_exists('csrf_field')) {
     function csrf_field(): string { return \App\Core\Request::csrfField(); }
 }
 
+if (!function_exists('csrf_token')) {
+    function csrf_token(): string { return \App\Core\Request::csrfToken(); }
+}
+
 if (!function_exists('old')) {
     function old(string $key, mixed $default = ''): mixed {
         return $_SESSION['old_inputs'][$key] ?? $default;

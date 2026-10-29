@@ -10,13 +10,11 @@ $tenant = \App\Core\Session::get('tenant');
 
         <!-- Header Logo & Version -->
         <div class="relative h-16 px-4 flex items-center justify-between border-b border-white/5 backdrop-blur-md bg-white/[0.02]">
-            <a href="<?= url('/dashboard') ?>" class="flex items-center gap-2.5">
-                <div class="relative p-1.5 rounded-xl bg-gradient-to-b from-emerald-500/25 to-emerald-700/15 border border-emerald-500/30 flex items-center justify-center shadow-[0_0_12px_rgba(16,185,129,0.2)]">
-                    <span class="material-symbols-outlined text-emerald-400 text-xl">chat</span>
-                </div>
+            <a href="<?= url('/dashboard') ?>" class="flex items-center gap-2.5 group">
+                <img src="<?= url('/assets/images/logo.png') ?>" alt="NyautWa Logo" class="h-9 w-9 rounded-lg object-contain bg-white/5 p-0.5 border border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.2)] group-hover:scale-105 transition-transform">
                 <div class="flex flex-col">
-                    <span class="text-[16px] tracking-tight text-white font-bold leading-none">NyautWa</span>
-                    <span class="text-[10px] text-emerald-400/80 font-mono font-medium tracking-wide mt-1">WA GATEWAY</span>
+                    <span class="text-[15px] tracking-tight text-white font-bold leading-none">Nyaut<span class="text-emerald-400">Wa</span></span>
+                    <span class="text-[9px] text-emerald-400/80 font-mono font-medium tracking-wider mt-0.5">GATEWAY &bull; CRM</span>
                 </div>
             </a>
             <div class="flex items-center gap-1.5">
@@ -30,27 +28,12 @@ $tenant = \App\Core\Session::get('tenant');
             </div>
         </div>
 
-        <!-- Navigation Sections (Scrollable) -->
-        <div class="flex-1 overflow-y-auto px-3 py-3.5 space-y-3">
+        <!-- Navigation Sections (Scrollable without visible scrollbar) -->
+        <div class="flex-1 overflow-y-auto no-scrollbar px-3 py-2.5 space-y-2.5" style="scrollbar-width: none; -ms-overflow-style: none;">
             <?php require __DIR__ . '/sidebar_nav.php'; ?>
 
-            <!-- Mini Quota Summary Card -->
-            <div class="p-3 rounded-xl bg-white/[0.03] border border-white/5 backdrop-blur-sm space-y-2 mt-2">
-                <div class="flex items-center justify-between text-xs">
-                    <span class="text-white font-medium flex items-center gap-1.5">
-                        <span class="material-symbols-outlined text-[14px] text-emerald-400">database</span>
-                        Kuota Pesan
-                    </span>
-                    <span class="font-mono text-[10px] text-emerald-400 font-semibold">120 / 10.000</span>
-                </div>
-                <div class="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
-                    <div class="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full shadow-[0_0_8px_rgba(52,211,153,0.8)]" style="width: 12%;"></div>
-                </div>
-                <div class="flex items-center justify-between pt-0.5 text-[10.5px] text-outline-variant">
-                    <span>1.2% terpakai</span>
-                    <span class="text-emerald-300 font-medium">Pro Tier</span>
-                </div>
-            </div>
+            <!-- Dynamic Quota Summary Card -->
+            <?php require __DIR__ . '/sidebar_quota.php'; ?>
         </div>
 
         <!-- Bottom Gateway Status & User Profile -->

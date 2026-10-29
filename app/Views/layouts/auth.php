@@ -28,14 +28,15 @@
 <body class="bg-[#F6F8F7] text-[#17211F] min-h-screen flex items-center justify-center p-4">
     <div class="w-full max-w-md">
         <!-- Logo Header -->
-        <div class="text-center mb-8">
-            <a href="<?= url('/') ?>" class="inline-flex items-center gap-2.5">
-                <div class="w-10 h-10 rounded-lg bg-[#16A36A] flex items-center justify-center text-white shadow-sm">
-                    <span class="material-symbols-outlined text-2xl">chat</span>
+        <div class="text-center mb-6">
+            <a href="<?= url('/') ?>" class="inline-flex flex-col items-center">
+                <img src="<?= url('/assets/images/logo.png') ?>" alt="NyautWa Logo" class="h-16 w-auto object-contain mb-2 drop-shadow-sm">
+                <div class="flex items-center gap-1.5">
+                    <span class="text-2xl font-black tracking-tight text-[#17211F]">Nyaut<span class="text-[#16A36A]">Wa</span></span>
+                    <span class="text-[9.5px] bg-amber-500/10 text-amber-700 border border-amber-500/30 px-2 py-0.5 rounded-full font-mono font-bold tracking-wide">GATEWAY + CRM</span>
                 </div>
-                <span class="text-2xl font-bold tracking-tight text-[#17211F]">NyautWa</span>
             </a>
-            <p class="text-xs text-[#697570] mt-1.5 font-medium">WhatsApp Gateway SaaS untuk Developer & Bisnis</p>
+            <p class="text-xs text-[#697570] mt-1 font-medium">WhatsApp Gateway & Live CRM Pelanggan Terpadu</p>
         </div>
 
         <!-- Flash messages -->

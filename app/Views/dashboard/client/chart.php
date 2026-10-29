@@ -29,14 +29,24 @@
             <line x1="0" y1="90" x2="700" y2="90" stroke="#E4EAE6" stroke-dasharray="3 3"/>
             <line x1="0" y1="140" x2="700" y2="140" stroke="#E4EAE6" stroke-dasharray="3 3"/>
 
-            <path d="M 0,145 Q 120,130 220,110 T 420,80 T 560,50 T 700,35 L 700,180 L 0,180 Z" fill="url(#clientChartGrad)"/>
-            <path d="M 0,145 Q 120,130 220,110 T 420,80 T 560,50 T 700,35" fill="none" stroke="#16A36A" stroke-width="2.5" stroke-linecap="round"/>
-
-            <circle cx="220" cy="110" r="4" fill="#FFFFFF" stroke="#16A36A" stroke-width="2"/>
-            <circle cx="420" cy="80" r="4" fill="#FFFFFF" stroke="#16A36A" stroke-width="2"/>
-            <circle cx="560" cy="50" r="4" fill="#FFFFFF" stroke="#16A36A" stroke-width="2"/>
-            <circle cx="700" cy="35" r="5" fill="#16A36A" stroke="#FFFFFF" stroke-width="2"/>
+            <?php if (!empty($chart_data['has_data'])): ?>
+                <path d="<?= $chart_data['area_path'] ?>" fill="url(#clientChartGrad)"/>
+                <path d="<?= $chart_data['line_path'] ?>" fill="none" stroke="#16A36A" stroke-width="2.5" stroke-linecap="round"/>
+                <?php foreach ($chart_data['points'] as $pt): ?>
+                    <?php if ($pt['count'] > 0): ?>
+                        <circle cx="<?= $pt['x'] ?>" cy="<?= $pt['y'] ?>" r="4" fill="#FFFFFF" stroke="#16A36A" stroke-width="2"/>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <line x1="0" y1="160" x2="700" y2="160" stroke="#E4EAE6" stroke-width="1.5"/>
+            <?php endif; ?>
         </svg>
+
+        <?php if (empty($chart_data['has_data'])): ?>
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <span class="px-3 py-1.5 rounded-lg bg-surface-container/90 text-secondary text-xs font-mono">Belum ada pengiriman pesan hari ini</span>
+            </div>
+        <?php endif; ?>
     </div>
     
     <div class="flex justify-between text-[11px] text-secondary font-mono pt-3 border-t border-outline-variant/20 mt-2">

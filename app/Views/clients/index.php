@@ -9,6 +9,7 @@
 
     <!-- Modals -->
     <?php require __DIR__ . '/partials/modal_create.php'; ?>
+    <?php require __DIR__ . '/partials/modal_edit.php'; ?>
     <?php require __DIR__ . '/partials/modal_delete.php'; ?>
     <?php require __DIR__ . '/partials/modal_new_feature.php'; ?>
 </div>

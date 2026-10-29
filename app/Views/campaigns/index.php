@@ -50,7 +50,7 @@
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <?php if ($c['status'] !== 'completed'): ?>
-                                    <a href="/campaigns/start/<?= $c['id'] ?>" class="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold text-white bg-[#16A36A] hover:bg-[#128557] rounded-md transition-colors">
+                                    <a href="<?= url('/campaigns/start/' . $c['id']) ?>" class="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold text-white bg-[#16A36A] hover:bg-[#128557] rounded-md transition-colors">
                                         ▶ Kirim Sekarang
                                     </a>
                                 <?php else: ?>

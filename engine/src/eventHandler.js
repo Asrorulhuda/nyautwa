@@ -1,6 +1,8 @@
 import QRCode from 'qrcode';
 import { config } from './config.js';
-import { isSessionLoggedOut } from './baileysSocket.js';
+import { isSessionLoggedOut, sentMessageStore } from './baileysSocket.js';
+import { handlePollVote } from './pollHandler.js';
+import { extractText } from './messageTextExtractor.js';
 
 export async function sendCallbackToPhp(event, data) {
     try {
@@ -58,18 +60,31 @@ export function handleConnectionUpdate(session, update, sock, onRestart) {
 export function handleMessagesUpsert(session, upsert) {
     if (upsert.type !== 'notify') return;
     for (const msg of upsert.messages) {
+        if (msg.key?.id && msg.message) sentMessageStore.set(msg.key.id, msg.message);
         if (!msg.key.fromMe && msg.message) {
-            const sender = (msg.key.remoteJid || '').split('@')[0];
-            const text = msg.message.conversation ||
-                         msg.message.extendedTextMessage?.text ||
-                         msg.message.imageMessage?.caption || '';
+            const raw = msg.key.remoteJid || '';
+            if (raw === 'status@broadcast') continue;
+            let sender = raw.split('@')[0].split(':')[0];
+            if (raw.endsWith('@g.us')) sender = raw;
+            else if (raw.endsWith('@lid')) sender = session.lidMap?.get(raw) || session.lidMap?.get(raw.split('@')[0]) || raw;
+            const text = extractText(msg.message);
+            if (!text) continue;
+            console.log(`[Pesan Masuk] Dari ${sender} (raw: ${raw}): "${text}"`);
             sendCallbackToPhp('messages.incoming', {
                 session_ref: session.sessionRef,
                 sender,
+                raw_sender: raw,
                 text,
                 message_id: msg.key.id,
                 timestamp: msg.messageTimestamp,
             });
         }
+    }
+}
+
+export function handleMessagesUpdate(session, updates) {
+    if (!Array.isArray(updates)) return;
+    for (const u of updates) {
+        if (u.update?.pollUpdates) handlePollVote(session, u);
     }
 }

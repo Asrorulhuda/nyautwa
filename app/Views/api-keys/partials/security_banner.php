@@ -10,12 +10,12 @@
                 Praktik Keamanan Kunci Rahasia
             </span>
             <p class="text-xs text-on-surface-variant mt-0.5 leading-relaxed">
-                Jaga kerahasiaan API Key Anda. Jangan pernah membagikan atau menyimpan kunci rahasia ini di kode frontend publik (seperti GitHub client-side repository). Gunakan environment variable pada server backend Anda.
+                Jaga kerahasiaan API Key Anda. Jangan pernah membagikan atau menyimpan kunci rahasia ini di kode frontend publik (seperti repositori GitHub publik). Gunakan environment variable pada server backend Anda.
             </p>
         </div>
     </div>
-    <a class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-surface-container-lowest text-primary text-xs font-semibold hover:bg-surface-container transition-colors shadow-xs shrink-0 whitespace-nowrap self-end sm:self-auto" href="#">
-        <span>Security Guide</span>
+    <a class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-surface-container-lowest text-primary text-xs font-semibold hover:bg-surface-container transition-colors shadow-xs shrink-0 whitespace-nowrap self-end sm:self-auto" href="<?= url('/docs') ?>">
+        <span>Dokumentasi API</span>
         <span class="material-symbols-outlined text-[16px]">north_east</span>
     </a>
 </div>

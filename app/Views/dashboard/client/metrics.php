@@ -1,12 +1,12 @@
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-    <!-- Card 1: Kuota Pesan Hari Ini -->
+    <!-- Card 1: Kuota Pesan Bulan Ini -->
     <div class="relative overflow-hidden p-5 rounded-xl bg-surface-container-lowest border border-outline-variant/30 shadow-xs flex flex-col justify-between">
         <div class="flex items-start justify-between">
             <div>
-                <span class="text-xs uppercase tracking-wider text-secondary font-medium">Kuota Pesan Hari Ini</span>
+                <span class="text-xs uppercase tracking-wider text-secondary font-medium">Kuota Pesan Bulan Ini</span>
                 <div class="mt-2 flex items-baseline gap-2">
-                    <span class="text-3xl text-on-surface font-bold tracking-tight font-mono"><?= number_format($sent_today, 0, ',', '.') ?></span>
-                    <span class="text-xs text-secondary font-mono">/ <?= number_format($daily_limit, 0, ',', '.') ?></span>
+                    <span class="text-3xl text-on-surface font-bold tracking-tight font-mono"><?= number_format($sent_month, 0, ',', '.') ?></span>
+                    <span class="text-xs text-secondary font-mono">/ <?= number_format($message_limit, 0, ',', '.') ?></span>
                 </div>
             </div>
             <div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary">
@@ -18,7 +18,7 @@
             <span class="font-mono text-primary font-semibold"><?= $quota_percentage ?>% terpakai</span>
         </div>
         <div class="absolute -bottom-1 left-0 right-0 h-1 bg-surface-container-high overflow-hidden">
-            <div class="h-full bg-primary rounded-r" style="width: <?= $quota_percentage ?>%"></div>
+            <div class="h-full bg-primary rounded-r" style="width: <?= min(100, $quota_percentage) ?>%"></div>
         </div>
     </div>
 
@@ -60,7 +60,11 @@
         </div>
         <div class="mt-4 pt-3 flex items-center justify-between text-xs">
             <span class="text-secondary">Delivered & Read</span>
-            <span class="px-1.5 py-0.5 rounded bg-surface-container-low text-primary font-mono text-[11px] font-semibold"><?= $success_rate ?>% SLA</span>
+            <?php if ($success_rate !== null): ?>
+                <span class="px-1.5 py-0.5 rounded bg-surface-container-low text-primary font-mono text-[11px] font-semibold"><?= $success_rate ?>% SLA</span>
+            <?php else: ?>
+                <span class="px-1.5 py-0.5 rounded bg-surface-container-low text-secondary font-mono text-[11px] font-medium">Belum Ada Trafik</span>
+            <?php endif; ?>
         </div>
     </div>
 

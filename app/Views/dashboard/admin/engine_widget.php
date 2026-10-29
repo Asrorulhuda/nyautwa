@@ -6,33 +6,17 @@
         </div>
 
         <div class="space-y-3">
-            <div>
-                <div class="flex justify-between text-xs mb-1">
-                    <span class="font-medium text-on-surface">Starter (1 Device)</span>
-                    <span class="font-mono text-secondary"><?= $plan_counts['starter'] ?> Klien</span>
+            <?php foreach ($plan_distribution as $plan): ?>
+                <div>
+                    <div class="flex justify-between text-xs mb-1">
+                        <span class="font-medium text-on-surface"><?= htmlspecialchars($plan['name']) ?> (<?= $plan['devices'] ?> Device)</span>
+                        <span class="font-mono text-secondary"><?= $plan['count'] ?> Klien</span>
+                    </div>
+                    <div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+                        <div class="bg-primary h-full rounded-full transition-all" style="width: <?= $plan['percentage'] ?>%"></div>
+                    </div>
                 </div>
-                <div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
-                    <div class="bg-primary/70 h-full rounded-full" style="width: <?= $total_clients > 0 ? ($plan_counts['starter'] / $total_clients) * 100 : 0 ?>%"></div>
-                </div>
-            </div>
-            <div>
-                <div class="flex justify-between text-xs mb-1">
-                    <span class="font-medium text-on-surface">Professional (5 Devices)</span>
-                    <span class="font-mono text-secondary"><?= $plan_counts['pro'] ?> Klien</span>
-                </div>
-                <div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
-                    <div class="bg-primary h-full rounded-full" style="width: <?= $total_clients > 0 ? ($plan_counts['pro'] / $total_clients) * 100 : 0 ?>%"></div>
-                </div>
-            </div>
-            <div>
-                <div class="flex justify-between text-xs mb-1">
-                    <span class="font-medium text-on-surface">Enterprise (20 Devices)</span>
-                    <span class="font-mono text-secondary"><?= $plan_counts['enterprise'] ?> Klien</span>
-                </div>
-                <div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
-                    <div class="bg-emerald-600 h-full rounded-full" style="width: <?= $total_clients > 0 ? ($plan_counts['enterprise'] / $total_clients) * 100 : 0 ?>%"></div>
-                </div>
-            </div>
+            <?php endforeach; ?>
         </div>
     </div>
 
@@ -40,17 +24,17 @@
     <div class="mt-6 pt-4 border-t border-outline-variant/20">
         <div class="flex items-center justify-between mb-2">
             <span class="text-xs font-semibold text-secondary">Baileys Cluster Engine</span>
-            <span class="inline-flex items-center gap-1 text-[11px] font-mono text-primary font-semibold">
-                <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-                <?= $engine_status['latency'] ?>
+            <span class="inline-flex items-center gap-1 text-[11px] font-mono <?= !empty($engine_status['online']) ? 'text-primary' : 'text-error' ?> font-semibold">
+                <span class="w-2 h-2 rounded-full <?= !empty($engine_status['online']) ? 'bg-primary animate-pulse' : 'bg-error' ?>"></span>
+                <?= htmlspecialchars((string)($engine_status['latency'] ?? '-')) ?>
             </span>
         </div>
         <div class="p-3 rounded-xl bg-surface-container flex items-center justify-between text-xs">
             <div class="flex items-center gap-2">
-                <span class="material-symbols-outlined text-primary text-[18px]">dns</span>
-                <span class="font-mono text-on-surface font-medium"><?= $engine_status['name'] ?></span>
+                <span class="material-symbols-outlined <?= !empty($engine_status['online']) ? 'text-primary' : 'text-error' ?> text-[18px]">dns</span>
+                <span class="font-mono text-on-surface font-medium"><?= htmlspecialchars((string)($engine_status['name'] ?? 'Engine')) ?></span>
             </div>
-            <span class="text-secondary font-mono text-[11px]"><?= $engine_status['uptime'] ?> SLA</span>
+            <span class="text-secondary font-mono text-[11px]"><?= htmlspecialchars((string)($engine_status['uptime'] ?? '-')) ?></span>
         </div>
     </div>
 </div>

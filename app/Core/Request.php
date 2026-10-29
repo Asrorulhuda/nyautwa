@@ -34,6 +34,7 @@ class Request {
         } elseif ($path === '/public') {
             $path = '/';
         }
+        $path = preg_replace('#/{2,}#', '/', (string)$path);
         return ($path !== '/' && str_ends_with($path, '/')) ? rtrim($path, '/') : $path;
     }
 
@@ -75,7 +76,8 @@ class Request {
 
     public function validateCsrf(): bool {
         if (in_array($this->getMethod(), ['GET', 'HEAD', 'OPTIONS'], true)) return true;
-        return Csrf::validate($this->input('_csrf_token') ?? $this->header('x-csrf-token'));
+        $t = $this->input('_csrf_token') ?? $this->input('csrf_token') ?? $this->header('x-csrf-token');
+        return Csrf::validate(is_string($t) ? $t : null);
     }
 
     public static function csrfToken(): string { return Csrf::token(); }

@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { config } from './config.js';
 import { createBaileysSocket } from './baileysSocket.js';
-import { handleConnectionUpdate, handleMessagesUpsert } from './eventHandler.js';
+import { handleConnectionUpdate, handleMessagesUpsert, handleMessagesUpdate } from './eventHandler.js';
 import { sendBaileysMessage } from './messageSender.js';
 
 class SessionManager {
@@ -13,15 +13,26 @@ class SessionManager {
 
     async getOrCreateSession(sessionRef) {
         if (this.sessions.has(sessionRef)) return this.sessions.get(sessionRef);
-        const session = { sessionRef, status: 'initializing', phone: null, qr: null, sock: null, contacts: new Map() };
+        const session = { sessionRef, status: 'initializing', phone: null, qr: null, sock: null, contacts: new Map(), lidMap: new Map() };
         this.sessions.set(sessionRef, session);
+
+        const mapLid = (c) => {
+            if (c?.id && c.id.endsWith('@s.whatsapp.net') && c.lid) {
+                const p = c.id.split('@')[0].split(':')[0];
+                session.lidMap.set(c.lid, p);
+                session.lidMap.set(c.lid.split('@')[0], p);
+            }
+        };
 
         const initSocket = async () => {
             const { sock } = await createBaileysSocket(sessionRef, {
                 onConnectionUpdate: (update) => handleConnectionUpdate(session, update, sock, initSocket),
                 onMessagesUpsert: (upsert) => handleMessagesUpsert(session, upsert),
+                onMessagesUpdate: (updates) => handleMessagesUpdate(session, updates),
             });
-            sock.ev.on('contacts.upsert', (cs) => cs.forEach(c => c.id && session.contacts.set(c.id, c)));
+            sock.ev.on('contacts.set', ({ contacts }) => contacts && contacts.forEach(c => { if (c.id) { session.contacts.set(c.id, c); mapLid(c); } }));
+            sock.ev.on('contacts.upsert', (cs) => cs && cs.forEach(c => { if (c.id) { session.contacts.set(c.id, Object.assign(session.contacts.get(c.id) || {}, c)); mapLid(c); } }));
+            sock.ev.on('contacts.update', (cs) => cs && cs.forEach(c => { if (c.id) { session.contacts.set(c.id, Object.assign(session.contacts.get(c.id) || {}, c)); mapLid(c); } }));
             session.sock = sock;
         };
 
@@ -53,11 +64,19 @@ class SessionManager {
             }
         } catch {}
         if (session.contacts) {
+            const lidMap = new Map();
             for (const [jid, c] of session.contacts.entries()) {
-                if (!jid.endsWith('@g.us')) {
-                    const phone = jid.split('@')[0].split(':')[0];
-                    list.push({ jid, phone, name: c.name || c.notify || ('Kontak ' + phone), is_group: false });
+                if (jid.endsWith('@s.whatsapp.net') && c?.lid) {
+                    lidMap.set(c.lid, jid.split('@')[0].split(':')[0]);
                 }
+            }
+            for (const [jid, c] of session.contacts.entries()) {
+                if (jid.endsWith('@g.us')) continue;
+                let phone = jid.endsWith('@s.whatsapp.net') ? jid.split('@')[0].split(':')[0] : (lidMap.get(jid) || null);
+                if (!phone || phone.length < 8) continue;
+                if (phone.startsWith('08')) phone = '628' + phone.slice(2);
+                else if (phone.startsWith('8')) phone = '628' + phone.slice(1);
+                list.push({ jid: `${phone}@s.whatsapp.net`, phone, name: c.name || c.notify || ('Kontak ' + phone), is_group: false });
             }
         }
         return list;

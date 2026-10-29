@@ -29,8 +29,10 @@ class EngineService {
             $response = curl_exec($ch);
             $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
-            if ($response && $code < 400) {
-                return json_decode((string) $response, true) ?? ['success' => false];
+            if ($response) {
+                $dec = json_decode((string) $response, true);
+                if ($code < 400 && is_array($dec)) return $dec;
+                if ($code >= 400 && is_array($dec) && !empty($dec['error'])) return ['success' => false, 'error' => $dec['error']];
             }
         }
         return ['success' => false, 'error' => 'Engine Baileys tidak merespons atau offline'];

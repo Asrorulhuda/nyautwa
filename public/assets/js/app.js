@@ -86,7 +86,7 @@ function closeModal(modalId) {
 
 function copyToClipboard(text) {
     if (!text) return;
-    navigator.clipboard.writeText(text).then(() => {
-        alert('Kunci API berhasil disalin ke clipboard!');
-    }).catch(err => console.error('Gagal menyalin:', err));
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).catch(err => console.error('Gagal menyalin:', err));
+    }
 }

@@ -73,21 +73,18 @@ class CampaignService {
 
         $sent = 0;
         foreach ($blasts as $b) {
+            if (!(new QuotaService())->checkQuota($tenantId)['allowed']) break;
             $res = $this->engine->sendMessage($device['session_ref'], $b['receiver'], [
-                'type' => $campaign['type'] ?? 'text',
-                'message' => $b['message'],
-                'url' => $campaign['media_url'] ?? null,
+                'type' => $campaign['type'] ?? 'text', 'message' => $b['message'], 'url' => $campaign['media_url'] ?? null,
             ]);
             $status = ($res['success'] ?? false) ? 'sent' : 'failed';
             Database::query("UPDATE blasts SET status = :status, sent_at = CURRENT_TIMESTAMP WHERE id = :id", ['status' => $status, 'id' => $b['id']]);
-            $sent++;
+            if ($status === 'sent') $sent++;
         }
+        if ($sent > 0) (new QuotaService())->recordUsage($tenantId, $sent, 0);
 
         $rem = (int) Database::fetchOne("SELECT COUNT(*) as c FROM blasts WHERE campaign_id = :id AND status = 'pending'", ['id' => $campaignId])['c'];
-        if ($rem === 0) {
-            Database::query("UPDATE campaigns SET status = 'completed' WHERE id = :id", ['id' => $campaignId]);
-        }
-
+        if ($rem === 0) Database::query("UPDATE campaigns SET status = 'completed' WHERE id = :id", ['id' => $campaignId]);
         return ['success' => true, 'sent' => $sent, 'remaining' => $rem];
     }
 }

@@ -5,13 +5,16 @@ import { sessionManager } from './src/sessionManager.js';
 const app = express();
 app.use(express.json());
 
+process.on('uncaughtException', (err) => console.error('[Engine UncaughtException]:', err?.message || err));
+process.on('unhandledRejection', (reason) => console.error('[Engine UnhandledRejection]:', reason?.message || reason));
+
 app.use((req, res, next) => {
     if (req.url.startsWith('/engine')) {
         req.url = req.url.replace(/^\/engine/, '') || '/';
     }
     if (req.path === '/health' || req.path === '/') return next();
     const secret = req.headers['x-engine-secret'];
-    if (!secret || secret !== config.secret) {
+    if (!config.secret || !secret || secret !== config.secret) {
         return res.status(403).json({ error: 'Akses internal ditolak: Secret token tidak valid' });
     }
     next();

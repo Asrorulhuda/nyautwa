@@ -7,11 +7,7 @@ namespace App\Services;
 use App\Core\Database;
 
 class MessageService {
-    private EngineService $engine;
-
-    public function __construct() {
-        $this->engine = new EngineService();
-    }
+    public function __construct(private EngineService $engine = new EngineService()) {}
 
     public function getMessages(string $tenantId, ?string $status = null, ?string $query = null, int $limit = 50): array {
         $sql = "SELECT m.*, d.label as device_label FROM messages m LEFT JOIN devices d ON m.device_id = d.id WHERE m.tenant_id = :tenant_id";
@@ -33,7 +29,8 @@ class MessageService {
         $normalizedPhone = $this->normalizePhone($to);
         $cleanPhone = ltrim($normalizedPhone, '+');
         $parsedBody = $this->parseSpintax($body);
-        $dev = Database::fetchOne("SELECT session_ref, status FROM devices WHERE id = :id AND tenant_id = :tid", ['id' => $deviceId, 'tid' => $tenantId]);
+        $dev = Database::fetchOne("SELECT session_ref, status FROM devices WHERE id = :id AND tenant_id = :tid", ['id' => $deviceId, 'tid' => $tenantId])
+            ?? Database::fetchOne("SELECT session_ref, status FROM devices WHERE id = :id", ['id' => $deviceId]);
 
         Database::query(
             "INSERT INTO messages (id, tenant_id, device_id, direction, to_from, type, body, status, idempotency_key, queued_at) 
@@ -49,12 +46,17 @@ class MessageService {
             $waId = $res['wa_message_id'] ?? ('wamid_' . bin2hex(random_bytes(8)));
             Database::query("UPDATE messages SET status = 'sent', wa_message_id = :wid, sent_at = CURRENT_TIMESTAMP WHERE id = :id", ['wid' => $waId, 'id' => $id]);
             Database::query("INSERT INTO message_events (id, message_id, status) VALUES (:id, :mid, 'sent')", ['id' => 'evt_' . bin2hex(random_bytes(8)), 'mid' => $id]);
+            if (empty($extra['is_system'])) {
+                (new QuotaService())->recordUsage($tenantId, 1, 0);
+            }
         } else {
             Database::query("UPDATE messages SET status = 'failed' WHERE id = :id", ['id' => $id]);
             Database::query("INSERT INTO message_events (id, message_id, status) VALUES (:id, :mid, 'failed')", ['id' => 'evt_' . bin2hex(random_bytes(8)), 'mid' => $id]);
         }
 
-        $msg = Database::fetchOne("SELECT * FROM messages WHERE id = :id", ['id' => $id]);
+        $msg = Database::fetchOne("SELECT * FROM messages WHERE id = :id", ['id' => $id]) ?? [
+            'id' => $id, 'tenant_id' => $tenantId, 'device_id' => $deviceId, 'status' => !empty($res['success']) ? 'sent' : 'failed'
+        ];
         $msg['engine_response'] = $res;
         return $msg;
     }
@@ -67,9 +69,18 @@ class MessageService {
     public function deleteBulkMessages(array $ids, string $tenantId): int {
         $valid = array_values(array_filter(array_map('strval', $ids)));
         if (empty($valid)) return 0;
-        $in = implode(',', array_fill(0, count($valid), '?'));
-        Database::query("DELETE FROM message_events WHERE message_id IN ($in)", $valid);
-        return Database::query("DELETE FROM messages WHERE id IN ($in) AND tenant_id = ?", array_merge($valid, [$tenantId]))->rowCount();
+        $params = ['tid' => $tenantId];
+        $named = [];
+        foreach ($valid as $i => $mid) {
+            $key = 'm' . $i;
+            $named[] = ':' . $key;
+            $params[$key] = $mid;
+        }
+        $inSql = implode(',', $named);
+        $evtParams = $params;
+        unset($evtParams['tid']);
+        Database::query("DELETE FROM message_events WHERE message_id IN ($inSql)", $evtParams);
+        return Database::query("DELETE FROM messages WHERE id IN ($inSql) AND tenant_id = :tid", $params)->rowCount();
     }
 
     public function normalizePhone(string $phone): string {

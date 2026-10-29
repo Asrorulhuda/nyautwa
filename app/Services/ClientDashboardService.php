@@ -11,10 +11,9 @@ class ClientDashboardService {
         $todayStart = date('Y-m-d 00:00:00');
         $tenant = Database::fetchOne("SELECT * FROM tenants WHERE id = :id", ['id' => $tenantId]);
         $planId = $tenant['plan_id'] ?? 'starter';
-        $plan = Database::fetchOne("SELECT * FROM plans WHERE id = :p", ['p' => $planId]);
         
-        $limits = json_decode($plan['limits_json'] ?? '{"devices":1,"daily_messages":1000}', true);
-        $dailyLimit = (int) ($limits['daily_messages'] ?? 1000);
+        $plan = (new PlanService())->getPlan($planId);
+        $quota = (new QuotaService())->checkQuota($tenantId);
 
         $sentToday = (int) (Database::fetchOne(
             "SELECT COUNT(*) as c FROM messages WHERE tenant_id = :tid AND created_at >= :t AND status IN ('sent','delivered','read')",
@@ -27,12 +26,7 @@ class ClientDashboardService {
         )['c'] ?? 0);
 
         $queuedCount = (int) (Database::fetchOne(
-            "SELECT COUNT(*) as c FROM messages WHERE tenant_id = :tid AND status = 'queued'",
-            ['tid' => $tenantId]
-        )['c'] ?? 0);
-
-        $totalSentPeriod = (int) (Database::fetchOne(
-            "SELECT COUNT(*) as c FROM messages WHERE tenant_id = :tid AND status IN ('sent','delivered','read')",
+            "SELECT COUNT(*) as c FROM messages WHERE tenant_id = :tid AND status IN ('queued','pending')",
             ['tid' => $tenantId]
         )['c'] ?? 0);
 
@@ -48,21 +42,19 @@ class ClientDashboardService {
         $apiKey = Database::fetchOne("SELECT * FROM api_keys WHERE tenant_id = :tid AND revoked_at IS NULL ORDER BY created_at DESC LIMIT 1", ['tid' => $tenantId]);
         $webhook = Database::fetchOne("SELECT webhook_url FROM devices WHERE tenant_id = :tid AND webhook_url IS NOT NULL LIMIT 1", ['tid' => $tenantId]);
 
-        $remainingQuota = max(0, $dailyLimit - $sentToday);
-        $quotaPercentage = $dailyLimit > 0 ? min(100.0, round(($sentToday / $dailyLimit) * 100, 1)) : 0.0;
         $totalProcessed = $sentToday + $failedToday;
-        $successRate = $totalProcessed > 0 ? round(($sentToday / $totalProcessed) * 100, 1) : 100.0;
+        $successRate = $totalProcessed > 0 ? round(($sentToday / $totalProcessed) * 100, 1) : null;
 
         return [
             'tenant' => $tenant,
-            'plan_name' => $plan['name'] ?? 'Starter',
-            'daily_limit' => $dailyLimit,
+            'plan_name' => $plan['name'] ?? ucfirst($planId),
+            'message_limit' => $quota['limit'] ?? 10000,
+            'sent_month' => $quota['sent_month'] ?? 0,
+            'remaining_quota' => $quota['remaining'] ?? 0,
+            'quota_percentage' => $quota['percentage'] ?? 0.0,
             'sent_today' => $sentToday,
             'failed_today' => $failedToday,
             'queued_count' => $queuedCount,
-            'total_sent_period' => $totalSentPeriod,
-            'remaining_quota' => $remainingQuota,
-            'quota_percentage' => $quotaPercentage,
             'success_rate' => $successRate,
             'devices' => $devices,
             'total_devices' => count($devices),
@@ -71,6 +63,7 @@ class ClientDashboardService {
             'recent_messages' => $recentMessages,
             'api_key' => $apiKey,
             'webhook' => $webhook,
+            'chart_data' => (new ClientHourlyChartService())->getChartData($tenantId, $todayStart),
         ];
     }
 }

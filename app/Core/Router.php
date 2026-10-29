@@ -66,9 +66,8 @@ class Router {
                 // Run middlewares
                 foreach ($route['middleware'] as $mw) {
                     $mwInstance = is_string($mw) ? new $mw() : $mw;
-                    $result = $mwInstance->handle($request);
-                    if ($result === false) {
-                        return; // Stopped by middleware
+                    if (is_object($mwInstance) && method_exists($mwInstance, 'handle')) {
+                        if ($mwInstance->handle($request) === false) return;
                     }
                 }
 

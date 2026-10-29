@@ -4,7 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= e($title ?? 'NyautWa — WhatsApp Gateway SaaS Indonesia') ?></title>
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet" crossorigin="anonymous">
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script>
         tailwind.config = {
@@ -18,6 +20,7 @@
                         "primary": "#006a42", "primary-container": "#008655", "on-primary": "#ffffff",
                         "primary-fixed-dim": "#62dd9e", "primary-fixed": "#80fab9",
                         "on-surface": "#131e1a", "on-surface-variant": "#3d4a41",
+                        "brand-amber": "#f59e0b", "brand-amber-dark": "#d97706", "brand-amber-tint": "#fef3c7",
                         "outline": "#6d7a70", "outline-variant": "#bccabf",
                         "inverse-surface": "#28332f", "inverse-on-surface": "#e7f4ed",
                         "secondary": "#56615e", "secondary-fixed": "#dae5e1", "secondary-fixed-dim": "#bec9c5",
@@ -47,14 +50,15 @@
     <header class="sticky top-0 z-50 w-full bg-surface-container-lowest/95 backdrop-blur-md border-b border-surface-container-high/60 shadow-sm">
         <div class="max-w-7xl mx-auto px-6 md:px-12 h-16 flex items-center justify-between">
             <div class="flex items-center gap-10">
-                <a class="flex items-center gap-2.5" href="<?= url('/') ?>">
-                    <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white shadow-sm">
-                        <span class="material-symbols-outlined text-lg">chat</span>
+                <a class="flex items-center gap-3" href="<?= url('/') ?>">
+                    <img src="<?= url('/assets/images/logo.png') ?>" alt="NyautWa Mascot Logo" class="h-10 w-10 object-contain drop-shadow-xs">
+                    <div class="flex flex-col">
+                        <span class="text-lg font-black tracking-tight text-on-surface font-sans leading-none">Nyaut<span class="text-[#16A36A]">Wa</span></span>
+                        <span class="text-[9.5px] font-bold tracking-wider text-amber-600 font-mono mt-0.5">GATEWAY + CRM</span>
                     </div>
-                    <span class="text-lg font-bold tracking-tight text-on-surface font-sans">Nyaut<span class="text-primary font-semibold">Wa</span></span>
                 </a>
-                <nav class="hidden md:flex items-center gap-8">
-                    <a class="text-sm text-on-surface-variant hover:text-primary transition-colors font-medium" href="#fitur">Fitur</a>
+                <nav class="hidden md:flex items-center gap-7">
+                    <a class="text-sm text-on-surface-variant hover:text-primary transition-colors font-medium" href="#fitur">Fitur & CRM</a>
                     <a class="text-sm text-on-surface-variant hover:text-primary transition-colors font-medium" href="#api">Dokumentasi API</a>
                     <a class="text-sm text-on-surface-variant hover:text-primary transition-colors font-medium" href="#harga">Harga</a>
                     <a class="text-sm text-on-surface-variant hover:text-primary transition-colors font-medium" href="#faq">FAQ</a>
@@ -83,6 +87,7 @@
     </header>
 
     <main class="w-full">
+        <div class="max-w-4xl mx-auto px-6 pt-4"><?php require dirname(__DIR__) . '/partials/flash.php'; ?></div>
         <?= $content ?>
     </main>
 

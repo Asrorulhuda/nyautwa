@@ -1,0 +1,11 @@
+﻿kata_kunci,kecocokan,tipe,pesan_balasan,pilihan_menu,jeda_detik
+halo,contain,text,"Halo! Selamat datang di Layanan CS Kami.
+Ketik *menu* untuk melihat daftar layanan.",,1
+menu,exact,button,"Silakan pilih salah satu menu di bawah:","1: Info Produk: info | 2: Lokasi Kantor: lokasi | 3: Hubungi Admin: cs",1
+info,exact,text,"Produk kami melayani WhatsApp Gateway SAAS untuk notifikasi bisnis dan OTP instan.",,1
+lokasi,exact,text,"Kantor operasional kami berlokasi di Jakarta Pusat.
+Buka Senin - Jumat pukul 08:00 - 17:00 WIB.",,1
+survey,exact,poll,"Bagaimana kualitas respon layanan kami?","Sangat Puas
+Puas
+Cukup
+Kurang Puas",2

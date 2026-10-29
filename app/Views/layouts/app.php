@@ -65,6 +65,9 @@
         </main>
     </div>
 
+    <!-- Upsell Modal for Locked Features -->
+    <?php \App\Core\View::partial('partials/upsell_modal'); ?>
+
     <!-- Application Vanilla JS -->
     <script src="<?= url('/assets/js/app.js') ?>"></script>
 </body>

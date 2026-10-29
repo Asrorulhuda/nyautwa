@@ -53,6 +53,13 @@ class DatabaseUpdateService {
             "ALTER TABLE invoices ADD COLUMN invoice_no VARCHAR(50) NULL" => "Patch kolom 'invoice_no' pada tabel invoices",
             "ALTER TABLE invoices ADD COLUMN plan_id VARCHAR(50) DEFAULT 'starter'" => "Patch kolom 'plan_id' pada tabel invoices",
             "ALTER TABLE invoices ADD COLUMN payment_method_id VARCHAR(50) NULL" => "Patch kolom 'payment_method_id' pada tabel invoices",
+            "ALTER TABLE autoreplies ADD COLUMN options TEXT NULL AFTER media_url" => "Patch kolom 'options' pada tabel autoreplies",
+            "ALTER TABLE tenants ADD COLUMN logo VARCHAR(255) NULL AFTER name" => "Patch kolom 'logo' pada tabel tenants",
+            "ALTER TABLE tenants ADD COLUMN industry VARCHAR(64) NULL DEFAULT 'Bisnis' AFTER logo" => "Patch kolom 'industry' pada tabel tenants",
+            "ALTER TABLE users ADD COLUMN phone VARCHAR(32) NULL AFTER email" => "Patch kolom 'phone' pada tabel users",
+            "ALTER TABLE invoices ADD COLUMN payment_proof VARCHAR(255) NULL AFTER notes" => "Patch kolom 'payment_proof' pada tabel invoices",
+            "ALTER TABLE tenants ADD COLUMN messages_used INT DEFAULT 0 AFTER message_limit" => "Patch kolom 'messages_used' pada tabel tenants",
+            "ALTER TABLE messages ADD COLUMN is_read TINYINT(1) DEFAULT 0 AFTER error" => "Patch kolom 'is_read' pada tabel messages",
         ];
 
         foreach ($patches as $sql => $desc) {

@@ -15,7 +15,6 @@ class PdfService {
         $this->stream .= sprintf("%.2f %.2f %.2f rg BT /%s %d Tf %.2f %.2f Td (%s) Tj ET\n", $r, $g, $b, $font, $size, $x, $y, $safe);
     }
 
-
     public function generateIntegrationPdf(): string {
         $this->newPage();
         $this->rect(0, 800, 595.28, 41.89, 0.086, 0.639, 0.415);
@@ -63,19 +62,19 @@ class PdfService {
         return $this->buildPdf();
     }
 
-
     private function buildPdf(): string {
         $this->newPage();
         $count = count($this->pages);
         $kids = array_map(fn($i) => (5 + ($i * 2)) . " 0 R", range(0, $count - 1));
         $out = "%PDF-1.4\n";
-        $offsets = [
-            1 => strlen($out), 2 => strlen($out) + 48,
-            3 => strlen($out) + 115, 4 => strlen($out) + 195
-        ];
+        $offsets = [];
+        $offsets[1] = strlen($out);
         $out .= "1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n";
+        $offsets[2] = strlen($out);
         $out .= "2 0 obj\n<< /Type /Pages /Kids [" . implode(' ', $kids) . "] /Count {$count} >>\nendobj\n";
+        $offsets[3] = strlen($out);
         $out .= "3 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n";
+        $offsets[4] = strlen($out);
         $out .= "4 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>\nendobj\n";
 
         for ($i = 0; $i < $count; $i++) {
@@ -93,4 +92,3 @@ class PdfService {
         return $out . "trailer\n<< /Size " . ($total + 1) . " /Root 1 0 R >>\nstartxref\n{$xref}\n%%EOF\n";
     }
 }
-

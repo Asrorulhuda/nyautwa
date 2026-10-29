@@ -5,13 +5,13 @@
             <p class="text-sm text-[#697570] mt-1">Kelola data nomor WhatsApp pelanggan dan grup untuk pengiriman broadcast terarah.</p>
         </div>
         <div class="flex items-center gap-2 flex-wrap">
-            <button type="button" onclick="document.getElementById('modal-sync-contacts').classList.remove('hidden')" class="px-3 py-2 text-sm font-medium text-[#16A36A] bg-[#EAF7F0] hover:bg-[#16A36A] hover:text-white rounded-md transition-colors shadow-xs flex items-center gap-1.5 cursor-pointer">
+            <button type="button" onclick="if(typeof openModal==='function'){openModal('modal-sync-contacts')}else{const m=document.getElementById('modal-sync-contacts');m.classList.remove('hidden');m.classList.add('flex');}" class="px-3 py-2 text-sm font-medium text-[#16A36A] bg-[#EAF7F0] hover:bg-[#16A36A] hover:text-white rounded-md transition-colors shadow-xs flex items-center gap-1.5 cursor-pointer">
                 <span class="material-symbols-outlined text-[18px]">sync</span> Tarik Kontak & Grup WA
             </button>
-            <button type="button" onclick="document.getElementById('modal-create-tag').classList.remove('hidden')" class="px-3 py-2 text-sm font-medium text-[#17211F] bg-white border border-[#E4EAE6] hover:bg-[#F6F8F7] rounded-md transition-colors shadow-xs">
+            <button type="button" onclick="if(typeof openModal==='function'){openModal('modal-create-tag')}else{const m=document.getElementById('modal-create-tag');m.classList.remove('hidden');m.classList.add('flex');}" class="px-3 py-2 text-sm font-medium text-[#17211F] bg-white border border-[#E4EAE6] hover:bg-[#F6F8F7] rounded-md transition-colors shadow-xs cursor-pointer">
                 + Tambah Tag
             </button>
-            <button type="button" onclick="document.getElementById('modal-create-contact').classList.remove('hidden')" class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-white bg-[#16A36A] hover:bg-[#128557] rounded-md transition-colors shadow-xs">
+            <button type="button" onclick="if(typeof openModal==='function'){openModal('modal-create-contact')}else{const m=document.getElementById('modal-create-contact');m.classList.remove('hidden');m.classList.add('flex');}" class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-white bg-[#16A36A] hover:bg-[#128557] rounded-md transition-colors shadow-xs cursor-pointer">
                 + Tambah Kontak
             </button>
         </div>
@@ -19,11 +19,11 @@
 
     <!-- Tag Filter Pills -->
     <div class="flex items-center gap-2 overflow-x-auto pb-1">
-        <a href="/contacts" class="px-3 py-1.5 text-xs font-medium rounded-full transition-colors <?= empty($activeTag) ? 'bg-[#17211F] text-white' : 'bg-white border border-[#E4EAE6] text-[#697570] hover:text-[#17211F]' ?>">
+        <a href="<?= url('/contacts') ?>" class="px-3 py-1.5 text-xs font-medium rounded-full transition-colors <?= empty($activeTag) ? 'bg-[#17211F] text-white' : 'bg-white border border-[#E4EAE6] text-[#697570] hover:text-[#17211F]' ?>">
             Semua Kontak (<?= count($contacts) ?>)
         </a>
         <?php foreach ($tags as $t): ?>
-            <a href="/contacts?tag=<?= $t['id'] ?>" class="px-3 py-1.5 text-xs font-medium rounded-full transition-colors <?= $activeTag === $t['id'] ? 'bg-[#16A36A] text-white' : 'bg-white border border-[#E4EAE6] text-[#697570] hover:text-[#17211F]' ?>">
+            <a href="<?= url('/contacts?tag=' . $t['id']) ?>" class="px-3 py-1.5 text-xs font-medium rounded-full transition-colors <?= $activeTag === $t['id'] ? 'bg-[#16A36A] text-white' : 'bg-white border border-[#E4EAE6] text-[#697570] hover:text-[#17211F]' ?>">
                 <?= htmlspecialchars($t['name']) ?>
             </a>
         <?php endforeach; ?>
@@ -72,9 +72,9 @@
                             </td>
                             <td class="px-5 py-3 text-xs text-[#697570]"><?= htmlspecialchars($c['notes'] ?? '-') ?></td>
                             <td class="px-5 py-3 text-right">
-                                <form method="POST" action="/contacts/delete/<?= $c['id'] ?>" onsubmit="return confirm('Hapus kontak ini?')">
-                                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
-                                    <button type="submit" class="text-xs text-[#D84B4B] hover:underline font-medium">Hapus</button>
+                                <form method="POST" action="<?= url('/contacts/delete/' . $c['id']) ?>" onsubmit="return confirm('Hapus kontak ini?')">
+                                    <?= csrf_field() ?>
+                                    <button type="submit" class="text-xs text-[#D84B4B] hover:underline font-medium cursor-pointer">Hapus</button>
                                 </form>
                             </td>
                         </tr>

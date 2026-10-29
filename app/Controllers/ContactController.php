@@ -80,9 +80,10 @@ class ContactController {
         Response::redirect('/contacts');
     }
 
-    public function delete(Request $request, string $id): void {
+    public function delete(Request $request, ?string $id = null): void {
         $tid = $this->requireAuth();
-        if ($request->validateCsrf()) {
+        $id = $id ?? (string) $request->input('id', '');
+        if ($request->validateCsrf() && !empty($id)) {
             $this->service->deleteContact($id, $tid);
             Response::withFlash('success', 'Kontak berhasil dihapus.', '/contacts');
         }

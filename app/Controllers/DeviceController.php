@@ -4,29 +4,31 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Core\Request;
-use App\Core\Response;
-use App\Core\View;
-use App\Services\AuthService;
-use App\Services\DeviceService;
+use App\Core\{Database, Request, Response, View};
+use App\Services\{AuthService, DeviceService};
 
 class DeviceController {
-    private AuthService $auth;
-    private DeviceService $devices;
-
-    public function __construct() {
-        $this->auth = new AuthService();
-        $this->devices = new DeviceService();
-    }
+    public function __construct(
+        private AuthService $auth = new AuthService(),
+        private DeviceService $devices = new DeviceService()
+    ) {}
 
     private function requireAuth(): string {
-        if (!$this->auth->check()) Response::redirect('/login');
+        if (!$this->auth->check()) { Response::redirect('/login'); return ''; }
         return $this->auth->tenantId();
     }
 
     public function index(Request $request): void {
         $tenantId = $this->requireAuth();
-        View::render('devices/index', ['title' => 'Koneksi Perangkat WhatsApp', 'devices' => $this->devices->getDevices($tenantId)], 'app');
+        $tenant = Database::fetchOne("SELECT device_limit FROM tenants WHERE id = :id", ['id' => $tenantId]);
+        $deviceLimit = (int) ($tenant['device_limit'] ?? 2);
+        $devices = $this->devices->getDevices($tenantId);
+        View::render('devices/index', [
+            'title' => 'Koneksi Perangkat WhatsApp',
+            'devices' => $devices,
+            'deviceLimit' => $deviceLimit,
+            'canAdd' => count($devices) < $deviceLimit,
+        ], 'app');
     }
 
     public function connect(Request $request): void {
@@ -35,7 +37,11 @@ class DeviceController {
         $device = $deviceId ? $this->devices->find($deviceId, $tenantId) : null;
         if (!$device) {
             $all = $this->devices->getDevices($tenantId);
-            $device = $all[0] ?? $this->devices->createDevice($tenantId, 'Nomor Utama', '6281234567890');
+            $device = $all[0] ?? null;
+            if (!$device) {
+                Response::withFlash('error', 'Silakan daftarkan perangkat WhatsApp terlebih dahulu.', '/devices');
+                return;
+            }
         }
         View::render('devices/connect', ['title' => 'Scan QR Perangkat WhatsApp', 'device' => $device], 'app');
     }
@@ -43,6 +49,13 @@ class DeviceController {
     public function create(Request $request): void {
         $tenantId = $this->requireAuth();
         if (!$request->validateCsrf()) Response::withFlash('error', 'Sesi Anda telah kedaluwarsa.', '/devices');
+
+        $tenant = Database::fetchOne("SELECT device_limit FROM tenants WHERE id = :id", ['id' => $tenantId]);
+        $deviceLimit = (int) ($tenant['device_limit'] ?? 2);
+        if (count($this->devices->getDevices($tenantId)) >= $deviceLimit) {
+            Response::withFlash('error', "Batas perangkat pada paket Anda ({$deviceLimit} perangkat) telah tercapai. Silakan upgrade paket.", '/devices');
+            return;
+        }
 
         $label = trim((string) $request->input('label', 'WhatsApp Node'));
         $rawPhone = preg_replace('/[^0-9]/', '', (string) $request->input('phone', ''));
@@ -52,6 +65,7 @@ class DeviceController {
 
         if (empty($label) || empty($phone)) {
             Response::withFlash('error', 'Nama label dan nomor WhatsApp wajib diisi.', '/devices');
+            return;
         }
         $device = $this->devices->createDevice($tenantId, $label, $phone, $webhook ?: null, $dailyLimit);
         Response::withFlash('success', "Perangkat '{$label}' ({$phone}) berhasil dibuat.", "/devices/connect?id={$device['id']}");

@@ -18,7 +18,10 @@ class AuthService {
             return false;
         }
 
-        if (session_status() === PHP_SESSION_ACTIVE) {
+        if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
+            session_start();
+        }
+        if (session_status() === PHP_SESSION_ACTIVE && !headers_sent()) {
             session_regenerate_id(true);
         }
 
@@ -30,46 +33,43 @@ class AuthService {
         }
 
         $tenant = Database::fetchOne("SELECT * FROM tenants WHERE id = :id", ['id' => $user['tenant_id']]);
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['user_name'] = $user['name'];
-        $_SESSION['user_email'] = $user['email'];
-        $_SESSION['user_role'] = $user['role'];
-        $_SESSION['tenant_id'] = $user['tenant_id'];
-        $_SESSION['tenant_name'] = $tenant['name'] ?? 'Akun Bisnis';
-        $_SESSION['plan_id'] = $tenant['plan_id'] ?? 'starter';
-        $_SESSION['user'] = $user;
-        $_SESSION['tenant'] = $tenant;
-        $_SESSION['last_activity'] = time();
+        if (!isset($_SESSION) || !is_array($_SESSION)) {
+            $_SESSION = [];
+        }
+        $_SESSION = array_merge($_SESSION, [
+            'user_id' => $user['id'], 'user_name' => $user['name'], 'user_email' => $user['email'],
+            'user_role' => $user['role'], 'tenant_id' => $user['tenant_id'],
+            'tenant_name' => $tenant['name'] ?? 'Akun Bisnis', 'plan_id' => $tenant['plan_id'] ?? 'starter',
+            'user' => $user, 'tenant' => $tenant, 'last_activity' => time(),
+        ]);
 
         return true;
     }
 
-    public function register(string $tenantName, string $userName, string $email, string $password, string $planId = 'starter'): ?string {
+    public function register(string $tenantName, string $userName, string $email, string $password, string $planId = 'trial', ?string $logo = null, string $industry = 'Bisnis'): ?string {
         $cleanEmail = strtolower(trim($email));
-        $existing = Database::fetchOne("SELECT id FROM users WHERE email = :email", ['email' => $cleanEmail]);
-        if ($existing) {
+        if (Database::fetchOne("SELECT id FROM users WHERE email = :email", ['email' => $cleanEmail])) {
             return "Email tersebut sudah terdaftar. Silakan gunakan email lain atau masuk.";
         }
 
         $tenantId = 'tenant_' . bin2hex(random_bytes(6));
         $userId = 'usr_' . bin2hex(random_bytes(6));
+        $p = (new PlanService())->getPlan($planId) ?? [];
+        $dur = (int)($p['duration_days'] ?? 7);
+        $dlim = (int)($p['devices'] ?? 1);
+        $mlim = (int)(preg_replace('/[^0-9]/', '', (string)($p['quota'] ?? '200')) ?: 200);
+        $subEnd = date('Y-m-d H:i:s', strtotime("+{$dur} days"));
 
-        Database::query("INSERT INTO tenants (id, name, plan_id, status) VALUES (:id, :name, :plan, 'active')", [
-            'id' => $tenantId,
-            'name' => trim($tenantName),
-            'plan' => $planId,
+        Database::query("INSERT INTO tenants (id, name, logo, industry, plan_id, device_limit, message_limit, subscription_ends_at, status) VALUES (:id, :name, :logo, :ind, :plan, :d, :m, :end, 'active')", [
+            'id' => $tenantId, 'name' => trim($tenantName), 'logo' => $logo, 'ind' => trim($industry) ?: 'Bisnis',
+            'plan' => $planId, 'd' => $dlim, 'm' => $mlim, 'end' => $subEnd
         ]);
 
         Database::query("INSERT INTO users (id, tenant_id, name, email, password_hash, role) VALUES (:id, :tenant_id, :name, :email, :pass, 'client')", [
-            'id' => $userId,
-            'tenant_id' => $tenantId,
-            'name' => trim($userName),
-            'email' => $cleanEmail,
-            'pass' => password_hash($password, PASSWORD_DEFAULT),
+            'id' => $userId, 'tenant_id' => $tenantId, 'name' => trim($userName), 'email' => $cleanEmail, 'pass' => password_hash($password, PASSWORD_DEFAULT),
         ]);
 
-        $this->attempt($cleanEmail, $password);
-        return null;
+        return $this->attempt($cleanEmail, $password) ? null : "Gagal masuk otomatis.";
     }
 
     public function logout(): void {

@@ -2,7 +2,7 @@
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
         <div>
             <h2 class="text-base font-bold text-on-surface">Aktivitas & Trafik Gateway Seluruh Klien</h2>
-            <p class="text-xs text-secondary mt-0.5">Volume throughput pesan real-time 24 jam terakhir pada engine cluster.</p>
+            <p class="text-xs text-secondary mt-0.5">Volume throughput pesan real-time 24 jam hari ini pada engine cluster.</p>
         </div>
         <div class="flex items-center gap-2">
             <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface-container text-xs font-mono text-secondary">
@@ -30,16 +30,24 @@
             <line x1="0" y1="90" x2="700" y2="90" stroke="#E4EAE6" stroke-dasharray="3 3"/>
             <line x1="0" y1="140" x2="700" y2="140" stroke="#E4EAE6" stroke-dasharray="3 3"/>
 
-            <!-- Area & Path -->
-            <path d="M 0,140 Q 100,110 200,95 T 400,60 T 550,45 T 700,30 L 700,180 L 0,180 Z" fill="url(#adminChartGrad)"/>
-            <path d="M 0,140 Q 100,110 200,95 T 400,60 T 550,45 T 700,30" fill="none" stroke="#16A36A" stroke-width="2.5" stroke-linecap="round"/>
-
-            <!-- Interactive Points -->
-            <circle cx="200" cy="95" r="4" fill="#FFFFFF" stroke="#16A36A" stroke-width="2"/>
-            <circle cx="400" cy="60" r="4" fill="#FFFFFF" stroke="#16A36A" stroke-width="2"/>
-            <circle cx="550" cy="45" r="4" fill="#FFFFFF" stroke="#16A36A" stroke-width="2"/>
-            <circle cx="700" cy="30" r="5" fill="#16A36A" stroke="#FFFFFF" stroke-width="2"/>
+            <?php if (!empty($chart_data['has_data'])): ?>
+                <path d="<?= $chart_data['area_path'] ?>" fill="url(#adminChartGrad)"/>
+                <path d="<?= $chart_data['line_path'] ?>" fill="none" stroke="#16A36A" stroke-width="2.5" stroke-linecap="round"/>
+                <?php foreach ($chart_data['points'] as $pt): ?>
+                    <?php if ($pt['count'] > 0): ?>
+                        <circle cx="<?= $pt['x'] ?>" cy="<?= $pt['y'] ?>" r="4" fill="#FFFFFF" stroke="#16A36A" stroke-width="2"/>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <line x1="0" y1="160" x2="700" y2="160" stroke="#E4EAE6" stroke-width="1.5"/>
+            <?php endif; ?>
         </svg>
+
+        <?php if (empty($chart_data['has_data'])): ?>
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <span class="px-3 py-1.5 rounded-lg bg-surface-container/90 text-secondary text-xs font-mono">Belum ada trafik pengiriman pesan hari ini</span>
+            </div>
+        <?php endif; ?>
     </div>
     
     <div class="flex justify-between text-[11px] text-secondary font-mono pt-3 border-t border-outline-variant/20 mt-2">

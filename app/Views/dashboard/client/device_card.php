@@ -20,12 +20,12 @@
 
                 <div class="space-y-2 text-xs">
                     <div class="flex justify-between py-1 border-b border-outline-variant/15">
-                        <span class="text-secondary">Batas Harian</span>
-                        <span class="font-mono text-on-surface"><?= number_format($daily_limit, 0, ',', '.') ?> pesan</span>
+                        <span class="text-secondary">Batas Kuota Langganan</span>
+                        <span class="font-mono text-on-surface"><?= number_format($message_limit, 0, ',', '.') ?> pesan</span>
                     </div>
                     <div class="flex justify-between py-1 border-b border-outline-variant/15">
-                        <span class="text-secondary">Sesi Baileys</span>
-                        <span class="font-mono text-primary">Live Active</span>
+                        <span class="text-secondary">Status Sesi Gateway</span>
+                        <span class="font-mono text-primary font-semibold">Terhubung (Online)</span>
                     </div>
                 </div>
             </div>

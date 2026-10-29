@@ -2,7 +2,7 @@
     <!-- Header -->
     <div class="flex items-center justify-between">
         <div>
-            <a href="/devices" class="text-xs font-semibold text-primary hover:underline flex items-center gap-1 mb-2">
+            <a href="<?= url('/devices') ?>" class="text-xs font-semibold text-primary hover:underline flex items-center gap-1 mb-2">
                 ← Kembali ke Daftar Perangkat
             </a>
             <h1 class="text-2xl font-bold text-on-surface tracking-tight font-sans">Hubungkan WhatsApp</h1>

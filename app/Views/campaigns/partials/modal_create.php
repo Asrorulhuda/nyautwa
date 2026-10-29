@@ -5,8 +5,8 @@
             <button type="button" onclick="document.getElementById('modal-create-campaign').classList.add('hidden')" class="text-[#697570] hover:text-[#17211F]">✕</button>
         </div>
 
-        <form method="POST" action="/campaigns" class="space-y-3">
-            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
+        <form method="POST" action="<?= url('/campaigns') ?>" class="space-y-3">
+            <?= csrf_field() ?>
             <div>
                 <label class="block text-xs font-semibold text-[#17211F] mb-1">Nama Kampanye</label>
                 <input type="text" name="name" required placeholder="Contoh: Promo Gajian Oktober" class="w-full px-3 py-2 text-sm border border-[#E4EAE6] rounded-md focus:border-[#16A36A] focus:outline-none">

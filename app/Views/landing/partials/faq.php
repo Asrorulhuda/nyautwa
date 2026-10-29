@@ -35,20 +35,20 @@
             </div>
             <div class="rounded-xl bg-surface shadow-sm overflow-hidden border border-surface-container-high/60">
                 <button class="faq-toggle w-full px-6 py-5 flex items-center justify-between text-left text-base text-on-surface font-medium hover:text-primary transition-colors">
-                    <span>Bagaimana cara memantau status pesan?</span>
+                    <span><?= e($settings['faq_4_q'] ?? 'Bagaimana cara memantau status pesan?') ?></span>
                     <span class="material-symbols-outlined text-on-surface-variant transition-transform duration-200">expand_more</span>
                 </button>
                 <div class="faq-content hidden px-6 pb-5 text-on-surface-variant text-sm leading-relaxed border-t border-surface-container/50 pt-3">
-                    Setiap kali status pesan berubah (dikirim, terkirim ke server, dibaca), server NyautWa akan menembakkan payload Webhook secara real-time ke URL callback yang Anda daftarkan di dashboard. Anda juga dapat memantaunya di tabel Live Log pada dashboard.
+                    <?= e($settings['faq_4_a'] ?? 'Setiap kali status pesan berubah, server NyautWa menembakkan webhook realtime ke URL callback Anda dan otomatis tersinkron ke log Live CRM.') ?>
                 </div>
             </div>
             <div class="rounded-xl bg-surface shadow-sm overflow-hidden border border-surface-container-high/60">
                 <button class="faq-toggle w-full px-6 py-5 flex items-center justify-between text-left text-base text-on-surface font-medium hover:text-primary transition-colors">
-                    <span>Bagaimana sistem paket dan batas penggunaan bekerja?</span>
+                    <span><?= e($settings['faq_5_q'] ?? 'Bagaimana sistem paket dan batas penggunaan bekerja?') ?></span>
                     <span class="material-symbols-outlined text-on-surface-variant transition-transform duration-200">expand_more</span>
                 </button>
                 <div class="faq-content hidden px-6 pb-5 text-on-surface-variant text-sm leading-relaxed border-t border-surface-container/50 pt-3">
-                    Setiap paket memiliki alokasi kuota pesan bulanan dan batas jumlah nomor yang dapat terhubung bersamaan. Jika kuota Anda mendekati batas, sistem memberikan peringatan dan Anda dapat melakukan penyesuaian paket sewaktu-waktu tanpa gangguan layanan.
+                    <?= e($settings['faq_5_a'] ?? 'Setiap paket memiliki alokasi kuota bulanan dan batas device aktif. Peringatan dini otomatis diberikan jika kuota mendekati batas.') ?>
                 </div>
             </div>
         </div>

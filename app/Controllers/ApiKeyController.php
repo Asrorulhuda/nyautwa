@@ -4,38 +4,44 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Core\Request;
-use App\Core\Response;
-use App\Core\View;
-use App\Services\ApiKeyService;
-use App\Services\AuthService;
-use App\Services\DeviceService;
+use App\Core\{Database, Request, Response, View};
+use App\Services\{ApiKeyService, AuthService, DeviceService, SubscriptionService};
 
 class ApiKeyController {
-    private AuthService $auth;
-    private ApiKeyService $apiKeys;
-    private DeviceService $devices;
+    public function __construct(
+        private AuthService $auth = new AuthService(),
+        private ApiKeyService $apiKeys = new ApiKeyService(),
+        private DeviceService $devices = new DeviceService(),
+        private SubscriptionService $subs = new SubscriptionService()
+    ) {}
 
-    public function __construct() {
-        $this->auth = new AuthService();
-        $this->apiKeys = new ApiKeyService();
-        $this->devices = new DeviceService();
+    private function requireAuth(): string {
+        if (!$this->auth->check()) { Response::redirect('/login'); return ''; }
+        return $this->auth->tenantId();
     }
 
     public function index(Request $request): void {
-        if (!$this->auth->check()) {
-            Response::redirect('/login');
+        $tenantId = $this->requireAuth();
+        if (!$this->subs->canAccess($tenantId, 'api_keys')) {
+            Response::withFlash('error', 'Fitur REST API & Webhook terkunci pada paket Anda. Silakan upgrade paket.', '/onboarding/plan');
+            return;
         }
 
-        $tenantId = $this->auth->tenantId();
         $keys = $this->apiKeys->getKeys($tenantId);
         $devices = $this->devices->getDevices($tenantId);
-        $primaryWebhook = $devices[0]['webhook_url'] ?? 'https://api.bisnisanda.com/webhook/whatsapp';
+        $webhookUrl = (string) ($devices[0]['webhook_url'] ?? '');
+        $webhookSecret = (string) ($devices[0]['webhook_secret'] ?? '');
+
+        $apiCallsToday = (int) (Database::fetchOne("SELECT COUNT(*) AS c FROM messages WHERE tenant_id = :tid AND DATE(created_at) = CURDATE()", ['tid' => $tenantId])['c'] ?? 0);
+        $apiCallsTotal = (int) (Database::fetchOne("SELECT COUNT(*) AS c FROM messages WHERE tenant_id = :tid", ['tid' => $tenantId])['c'] ?? 0);
 
         View::render('api-keys/index', [
             'title' => 'API Keys & Webhooks Management',
             'keys' => $keys,
-            'primaryWebhook' => $primaryWebhook,
+            'webhookUrl' => $webhookUrl,
+            'webhookSecret' => $webhookSecret,
+            'apiCallsToday' => $apiCallsToday,
+            'apiCallsTotal' => $apiCallsTotal,
             'newKey' => $_SESSION['just_created_key'] ?? null,
             'newRawKey' => $_SESSION['just_created_key']['raw_key'] ?? null,
         ], 'app');
@@ -44,52 +50,33 @@ class ApiKeyController {
     }
 
     public function create(Request $request): void {
-        if (!$this->auth->check()) {
-            Response::redirect('/login');
-        }
+        $tenantId = $this->requireAuth();
+        if (!$request->validateCsrf()) Response::withFlash('error', 'Sesi form Anda telah kedaluwarsa.', '/api-keys');
 
-        if (!$request->validateCsrf()) {
-            Response::withFlash('error', 'Sesi form Anda telah kedaluwarsa.', '/api-keys');
-        }
-
-        $tenantId = $this->auth->tenantId();
-        $name = trim((string) $request->input('name', 'Backend Integration'));
-
-        if (empty($name)) {
-            Response::withFlash('error', 'Nama API Key wajib diisi.', '/api-keys');
-        }
+        $name = trim((string) $request->input('name', ''));
+        if (empty($name)) Response::withFlash('error', 'Nama identifier API Key wajib diisi.', '/api-keys');
 
         $created = $this->apiKeys->createKey($tenantId, $name);
         $_SESSION['just_created_key'] = $created;
-
-        Response::withFlash('success', "API Key '{$name}' berhasil dibuat! Segera salin kunci rahasia Anda sekarang.", '/api-keys');
+        Response::withFlash('success', "API Key '{$name}' berhasil dibuat. Simpan kunci rahasia sekarang.", '/api-keys');
     }
 
     public function revoke(Request $request, string $id = ''): void {
-        if (!$this->auth->check()) {
-            Response::redirect('/login');
-        }
+        $tenantId = $this->requireAuth();
         $keyId = !empty($id) ? $id : (string) $request->input('id', '');
         if ($request->validateCsrf() && !empty($keyId)) {
-            $this->apiKeys->revokeKey($keyId, $this->auth->tenantId());
+            $this->apiKeys->revokeKey($keyId, $tenantId);
             Response::withFlash('success', 'API Key telah dicabut dan tidak dapat digunakan lagi.', '/api-keys');
         }
         Response::redirect('/api-keys');
     }
 
     public function updateWebhook(Request $request): void {
-        if (!$this->auth->check()) {
-            Response::redirect('/login');
-        }
+        $tenantId = $this->requireAuth();
+        if (!$request->validateCsrf()) Response::withFlash('error', 'Sesi form Anda telah kedaluwarsa.', '/api-keys');
 
-        if (!$request->validateCsrf()) {
-            Response::withFlash('error', 'Sesi form Anda telah kedaluwarsa.', '/api-keys');
-        }
-
-        $tenantId = $this->auth->tenantId();
         $url = trim((string) $request->input('webhook_url', ''));
-
         $this->apiKeys->updateWebhook($tenantId, $url);
-        Response::withFlash('success', 'URL Webhook berhasil diperbarui ke seluruh perangkat aktif.', '/api-keys');
+        Response::withFlash('success', 'URL Webhook berhasil diperbarui untuk perangkat Anda.', '/api-keys');
     }
 }
